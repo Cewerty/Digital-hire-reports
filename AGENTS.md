@@ -25,3 +25,14 @@
 - Не редактировать файлы из read-only списка.
 - После изменений выполнять `npm run format`.
 - Коммитить только после успешного `npm run lint`.
+
+## Validation Workflow (Mandatory)
+
+Before declaring any task complete or presenting changes:
+
+1. Run `npm run verify` in the terminal.
+2. If any TypeScript or Biome errors are returned:
+   - Read the compiler output carefully.
+   - Fix the underlying issues (do not suppress warnings with `@ts-ignore` or `biome-ignore`).
+   - Re-run `npm run verify` until exit code is 0.
+3. Only submit the final result when all checks pass.
