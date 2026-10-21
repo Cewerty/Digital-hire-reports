@@ -9,7 +9,7 @@
     "preview": "vite preview",
     "lint": "biome lint ./src",
     "format": "biome format --write ./src",
-    "verify": "tsc --noEmit && biome check ."
+    "verify": "tsc -b --noEmit && biome check src"
   },
   "dependencies": {
     "@radix-ui/react-slot": "^1.1.0",
