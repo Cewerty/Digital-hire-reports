@@ -9,19 +9,6 @@ export function AppLayout() {
   return (
     <div className="min-h-screen flex flex-col items-center gap-4 bg-background text-foreground">
       <header className="w-full h-16 border-b flex items-center justify-between px-4">
-        <div className="w-10 h-10" />
-        <nav className="flex items-center gap-4">
-          <Link to="/">Главная</Link>
-        </nav>
-      </header>
-
-      <main className="flex-1 w-full flex justify-center px-4">
-        <div className="w-full max-w-5xl bg-card text-card-foreground shadow-md rounded-lg p-6">
-          <Outlet />
-        </div>
-      </main>
-
-      <footer className="w-full border-t py-4 px-4 flex items-center justify-between gap-4">
         <div className="flex items-center gap-2">
           <svg
             className="h-6 w-6 text-primary transition-transform duration-300 hover:-translate-y-1 hover:scale-110"
@@ -42,8 +29,10 @@ export function AppLayout() {
           <span className="text-sm font-medium">Цифровой двойник</span>
         </div>
 
-        <div className="flex items-center gap-3">
-          <span className="text-sm text-muted-foreground">© {year}</span>
+        <div className="flex items-center gap-4">
+          <nav className="flex items-center gap-4">
+            <Link to="/">Главная</Link>
+          </nav>
           <Button
             variant="ghost"
             size="icon"
@@ -90,6 +79,16 @@ export function AppLayout() {
             )}
           </Button>
         </div>
+      </header>
+
+      <main className="flex-1 w-full flex justify-center px-4">
+        <div className="w-full max-w-5xl bg-card text-card-foreground border border-gray-300 dark:border-gray-600 shadow-md rounded-lg p-6">
+          <Outlet />
+        </div>
+      </main>
+
+      <footer className="w-full border-t py-4 px-4 flex items-center justify-between gap-4">
+        <span className="text-sm text-muted-foreground">© {year}</span>
       </footer>
     </div>
   );
