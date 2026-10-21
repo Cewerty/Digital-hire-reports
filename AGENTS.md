@@ -1,8 +1,15 @@
 # Инструкции для AI-агентов
 
-- Использовать TypeScript, React, React Router, TailwindCSS + typography, shadcn/ui.
+- Стек: TypeScript, React, React Router, TailwindCSS + typography, shadcn/ui.
 - Алиасы: `@/*` -> `./src/*`.
-- Компоненты UI импортировать из `@/components/ui`.
-- Для работы с данными на клиенте использовать хук `useMockStore`.
+- Компоненты UI импортировать **только** из `@/components/ui`.  
+  **Запрещено редактировать** файлы в `src/components/ui`.
+- Страницы лежат в `src/pages`, локальные подкомпоненты — рядом с ними.
+- Моки — только в `src/mocks`, файлы именуются `*.mock.ts`.
+- Все типы сущностей — в `src/types/index.ts`.
+- Для работы с данными на клиенте использовать хук `useMockStore`.  
+  Он возвращает кортеж `[data, setData]`; изменения выполнять только через `setData((prev) => ...)`.
+- Для новых UI-компонентов использовать `npx shadcn@latest add <name>`.
+- Перед коммитом выполнять `npm run format`.
 - Команды: `npm run dev`, `npm run build`, `npm run lint`, `npm run format`.
 - Соблюдать структуру каталогов.
