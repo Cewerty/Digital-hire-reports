@@ -140,7 +140,19 @@ export function ReviewPage() {
             </AlertDialogHeader>
             <AlertDialogFooter>
               <AlertDialogCancel>Вернуться к проверке</AlertDialogCancel>
-              <AlertDialogAction>Утвердить документ</AlertDialogAction>
+              <AlertDialogAction
+                onClick={() => {
+                  loaderData.onUpdateReport({
+                    ...workingCopy,
+                    documentState: "approved",
+                  });
+                  navigate("/report", {
+                    state: { message: "Документ утверждён наставником" },
+                  });
+                }}
+              >
+                Утвердить документ
+              </AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialog>
