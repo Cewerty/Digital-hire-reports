@@ -3,6 +3,10 @@
   "files": {
     "ignore": [
       "src/components/ui/**",
+      "backend/**",
+      "django/**",
+      "**/migrations/**",
+      "manage.py",
       "node_modules",
       "dist",
       ".git",
