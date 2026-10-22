@@ -26,6 +26,7 @@ export function ReportSectionEditor({
             type="button"
             variant={mode === "edit" ? "secondary" : "ghost"}
             size="sm"
+            aria-pressed={mode === "edit"}
             onClick={() => setMode("edit")}
           >
             Редактирование
@@ -34,6 +35,7 @@ export function ReportSectionEditor({
             type="button"
             variant={mode === "preview" ? "secondary" : "ghost"}
             size="sm"
+            aria-pressed={mode === "preview"}
             onClick={() => setMode("preview")}
           >
             Предпросмотр
