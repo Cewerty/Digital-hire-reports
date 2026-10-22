@@ -12,6 +12,7 @@ export const REPORT_SECTION_DEFINITIONS: ReadonlyArray<{
   { id: "conclusions", title: "Выводы" },
 ];
 
-export const sectionTitles: Record<ReportSectionId, string> = Object.fromEntries(
-  REPORT_SECTION_DEFINITIONS.map(({ id, title }) => [id, title]),
-) as Record<ReportSectionId, string>;
+export const sectionTitles: Record<ReportSectionId, string> =
+  Object.fromEntries(
+    REPORT_SECTION_DEFINITIONS.map(({ id, title }) => [id, title]),
+  ) as Record<ReportSectionId, string>;

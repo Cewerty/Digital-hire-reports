@@ -20,9 +20,7 @@ export function SectionSources({
 
   if (sources.length === 0) {
     return (
-      <p className="text-sm text-slate-500">
-        Источники раздела не указаны
-      </p>
+      <p className="text-sm text-slate-500">Источники раздела не указаны</p>
     );
   }
 
