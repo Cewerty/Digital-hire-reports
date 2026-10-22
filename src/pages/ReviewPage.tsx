@@ -1,7 +1,10 @@
 import { useState } from "react";
-import { Link, useLoaderData } from "react-router-dom";
+import { useLoaderData, useNavigate } from "react-router-dom";
 
+import { Button } from "@/components/ui/button";
 import { ReportMetadataForm } from "@/components/layout/ReportMetadataForm";
+import { ReportSectionEditor } from "@/components/layout/ReportSectionEditor";
+import { REPORT_SECTION_DEFINITIONS } from "@/data/reportSections";
 import type { CandidateReport } from "@/types/candidateReport";
 
 function createWorkingCopy(report: CandidateReport): CandidateReport {
@@ -20,6 +23,7 @@ export function ReviewPage() {
     report: CandidateReport;
     onUpdateReport: (report: CandidateReport) => void;
   };
+  const navigate = useNavigate();
 
   const [workingCopy, setWorkingCopy] = useState<CandidateReport>(() =>
     createWorkingCopy(loaderData.report),
@@ -33,6 +37,17 @@ export function ReviewPage() {
       ...prev,
       metadata,
       candidateDisplayName,
+    }));
+  };
+
+  const handleSectionChange = (
+    updatedSection: CandidateReport["sections"][number],
+  ) => {
+    setWorkingCopy((prev) => ({
+      ...prev,
+      sections: prev.sections.map((section) =>
+        section.id === updatedSection.id ? updatedSection : section,
+      ),
     }));
   };
 
@@ -52,12 +67,46 @@ export function ReviewPage() {
         onChange={handleMetadataChange}
       />
 
-      <Link
-        to="/report"
-        className="inline-flex items-center rounded-md border border-slate-300 px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-100"
-      >
-        ← К отчёту
-      </Link>
+      <div className="space-y-6">
+        {REPORT_SECTION_DEFINITIONS.map((definition) => {
+          const section = workingCopy.sections.find(
+            (item) => item.id === definition.id,
+          );
+          if (!section) return null;
+          return (
+            <ReportSectionEditor
+              key={definition.id}
+              section={section}
+              title={definition.title}
+              onChange={handleSectionChange}
+            />
+          );
+        })}
+      </div>
+
+      <div className="flex flex-wrap gap-3">
+        <Button
+          type="button"
+          variant="outline"
+          onClick={() => navigate("/report")}
+        >
+          Отменить
+        </Button>
+        <Button
+          type="button"
+          onClick={() => {
+            loaderData.onUpdateReport({
+              ...workingCopy,
+              documentState: "draft",
+            });
+            navigate("/report", {
+              state: { message: "Черновик сохранён в текущей сессии" },
+            });
+          }}
+        >
+          Сохранить черновик
+        </Button>
+      </div>
     </div>
   );
 }

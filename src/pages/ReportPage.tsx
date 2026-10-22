@@ -1,14 +1,23 @@
-import { Link } from "react-router-dom";
+import { Link, useLoaderData, useLocation } from "react-router-dom";
 import { DocumentStateBadge } from "@/components/layout/DocumentStateBadge";
 import { ReportDocument } from "@/components/layout/ReportDocument";
-import { candidateReport, interviewEntries } from "@/data/demoData";
+import { interviewEntries } from "@/data/demoData";
+import type { CandidateReport } from "@/types/candidateReport";
 
 export function ReportPage() {
-  const report = candidateReport;
+  const { report } = useLoaderData() as { report: CandidateReport };
+  const location = useLocation();
+  const message = (location.state as { message?: string } | null)?.message;
   const isApproved = report.documentState === "approved";
 
   return (
     <div className="space-y-6">
+      {message && (
+        <div className="rounded-md border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800">
+          {message}
+        </div>
+      )}
+
       <div className="flex flex-wrap items-center justify-between gap-3">
         <h1 className="text-xl font-semibold">Отчёт</h1>
         <DocumentStateBadge state={report.documentState} />
