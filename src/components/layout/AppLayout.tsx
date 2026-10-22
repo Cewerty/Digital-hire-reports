@@ -1,6 +1,7 @@
+import { NavLink, Outlet } from "react-router-dom";
+
 import { DocumentStateBadge } from "@/components/DocumentStateBadge";
 import type { DocumentState } from "@/types/candidateReport";
-import { NavLink, Outlet } from "react-router-dom";
 
 const NAV_ITEMS = [
   { to: "/", label: "Профиль и интервью", end: true },
