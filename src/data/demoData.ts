@@ -173,7 +173,6 @@ const reportSections: ReportSection[] = [
 export const candidateReport: CandidateReport = {
   candidateId: candidate.id,
   candidateDisplayName: candidate.fullName,
-  candidatePreferredName: candidate.preferredName,
   metadata: {
     recipients: "Команда найма",
     interviewer: "Мария Прототипова",

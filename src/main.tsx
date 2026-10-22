@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import ReactDOM from "react-dom/client";
 import { RouterProvider } from "react-router-dom";
 
@@ -10,11 +10,16 @@ import "@/index.css";
 function App() {
   const [report, setReport] = useState<CandidateReport>(candidateReport);
 
-  const handleUpdateReport = (updatedReport: CandidateReport) => {
+  const handleUpdateReport = useCallback((updatedReport: CandidateReport) => {
     setReport(updatedReport);
-  };
+  }, []);
 
-  return <RouterProvider router={createRouter(report, handleUpdateReport)} />;
+  const router = useMemo(
+    () => createRouter(report, handleUpdateReport),
+    [report, handleUpdateReport],
+  );
+
+  return <RouterProvider router={router} />;
 }
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(

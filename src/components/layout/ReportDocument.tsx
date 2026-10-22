@@ -5,6 +5,7 @@ import type {
 import { REPORT_SECTION_DEFINITIONS } from "@/data/reportSections";
 import { MarkdownContent } from "@/components/layout/MarkdownContent";
 import { SectionSources } from "@/components/layout/SectionSources";
+import { candidate } from "@/data/demoData";
 
 interface ReportDocumentProps {
   report: CandidateReport;
@@ -32,7 +33,7 @@ export function ReportDocument({
       <header className="space-y-4">
         <h2 className="text-2xl font-semibold text-slate-900">
           Отчёт по кандидату: {report.candidateDisplayName} (
-          {report.candidatePreferredName})
+          {candidate.preferredName})
         </h2>
 
         <dl className="grid gap-3 sm:grid-cols-2">
