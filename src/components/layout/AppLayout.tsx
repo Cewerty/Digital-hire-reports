@@ -39,10 +39,11 @@ export function AppLayout({ documentState = "draft" }: AppLayoutProps) {
                 to={item.to}
                 end={item.end}
                 className={({ isActive }) =>
-                  "rounded-md px-3 py-1.5 text-sm font-medium transition-colors " +
-                  (isActive
-                    ? "bg-slate-900 text-white"
-                    : "text-slate-600 hover:bg-slate-100 hover:text-slate-900")
+                  `rounded-md px-3 py-1.5 text-sm font-medium transition-colors ${
+                    isActive
+                      ? "bg-slate-900 text-white"
+                      : "text-slate-600 hover:bg-slate-100 hover:text-slate-900"
+                  }`
                 }
               >
                 {item.label}
