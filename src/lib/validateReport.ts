@@ -6,7 +6,9 @@ export type ReportValidationError = {
   message: string;
 };
 
-export function validateReport(report: CandidateReport): ReportValidationError[] {
+export function validateReport(
+  report: CandidateReport,
+): ReportValidationError[] {
   const errors: ReportValidationError[] = [];
 
   if (!report.candidateDisplayName.trim()) {

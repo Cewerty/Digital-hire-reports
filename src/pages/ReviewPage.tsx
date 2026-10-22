@@ -91,10 +91,7 @@ export function ReviewPage() {
     }));
   };
 
-  const handleSave = (
-    documentState: "draft" | "approved",
-    message: string,
-  ) => {
+  const handleSave = (documentState: "draft" | "approved", message: string) => {
     const errors = validateReport(workingCopy);
     if (errors.length > 0) {
       setValidationErrors(errors);
