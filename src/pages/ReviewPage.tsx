@@ -15,10 +15,10 @@ function createWorkingCopy(report: CandidateReport): CandidateReport {
 }
 
 export function ReviewPage() {
-  const loaderData = useLoaderData<{
+  const loaderData = useLoaderData() as {
     report: CandidateReport;
     onUpdateReport: (report: CandidateReport) => void;
-  }>();
+  };
 
   const [workingCopy] = useState<CandidateReport>(() =>
     createWorkingCopy(loaderData.report),
