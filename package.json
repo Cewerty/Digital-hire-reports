@@ -7,7 +7,7 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "preview": "vite preview",
-    "verify": "tsc -b --noEmit && biome check src",
+    "verify": "tsc -b --noEmit && biome check --write src",
     "fix": "biome check --write src",
     "check": "biome check src",
     "format": "biome format --write src",
