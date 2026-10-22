@@ -1,12 +1,24 @@
-import React from "react";
+import React, { useState } from "react";
 import ReactDOM from "react-dom/client";
 import { RouterProvider } from "react-router-dom";
 
-import { router } from "@/router";
+import { candidateReport } from "@/data/demoData";
+import { createRouter } from "@/router";
+import type { CandidateReport } from "@/types/candidateReport";
 import "@/index.css";
+
+function App() {
+  const [report, setReport] = useState<CandidateReport>(candidateReport);
+
+  const handleUpdateReport = (updatedReport: CandidateReport) => {
+    setReport(updatedReport);
+  };
+
+  return <RouterProvider router={createRouter(report, handleUpdateReport)} />;
+}
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <App />
   </React.StrictMode>,
 );
