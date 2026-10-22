@@ -67,7 +67,12 @@ App
 
 Хранится в `main.tsx` через `useState<CandidateReport>`.
 
-Роуты создаются в main.tsx либо получают элементы страниц с необходимыми props. Context не используется.
+Роуты создаются в main.tsx. Данные и callback могут передаваться в страницы двумя способами:
+
+- через props элемента страницы;
+- через loader data, если это улучшает производительность (например, при ленивой загрузке страниц через `lazy`).
+
+Context не используется.
 
 Используется для:
 
@@ -107,7 +112,7 @@ App
 
 ## 6. Поток данных
 
-1. `main.tsx` хранит `CandidateReport` и передаёт его в страницы через props.
+1. `main.tsx` хранит `CandidateReport` и передаёт его в страницы через props или loader data.
 2. `ProfilePage` получает `candidate` и `interviewEntries` из демоданных.
 3. `ReportPage` получает `report` и отображает его через `ReportDocument`.
 4. `ReviewPage` при монтировании создаёт рабочую копию `report`.
