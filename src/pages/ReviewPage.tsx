@@ -67,6 +67,11 @@ export function ReviewPage() {
         onChange={handleMetadataChange}
       />
 
+      <p className="rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-600">
+        Поддерживается Markdown: <strong>жирный</strong>, <em>курсив</em>,
+        списки, цитаты и ссылки. Заголовки разделов добавляются автоматически.
+      </p>
+
       <div className="space-y-6">
         {REPORT_SECTION_DEFINITIONS.map((definition) => {
           const section = workingCopy.sections.find(

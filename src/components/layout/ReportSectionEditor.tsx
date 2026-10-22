@@ -47,6 +47,7 @@ export function ReportSectionEditor({
           onChange={(event) =>
             onChange({ ...section, markdown: event.target.value })
           }
+          aria-label={`Markdown раздела «${title}»`}
           className="min-h-[160px]"
         />
       ) : (
