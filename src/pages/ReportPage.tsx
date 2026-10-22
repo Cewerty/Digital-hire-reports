@@ -27,7 +27,9 @@ export function ReportPage() {
           to="/review"
           className="inline-flex items-center rounded-md bg-slate-900 px-3 py-1.5 text-sm font-medium text-white hover:bg-slate-800"
         >
-          {isApproved ? "Повторная проверка и правка →" : "Перейти к проверке →"}
+          {isApproved
+            ? "Повторная проверка и правка →"
+            : "Перейти к проверке →"}
         </Link>
       </div>
     </div>
