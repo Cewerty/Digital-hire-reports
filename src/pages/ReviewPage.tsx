@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useLoaderData } from "react-router-dom";
 
+import { ReportMetadataForm } from "@/components/layout/ReportMetadataForm";
 import type { CandidateReport } from "@/types/candidateReport";
 
 function createWorkingCopy(report: CandidateReport): CandidateReport {
@@ -20,9 +21,20 @@ export function ReviewPage() {
     onUpdateReport: (report: CandidateReport) => void;
   };
 
-  const [workingCopy] = useState<CandidateReport>(() =>
+  const [workingCopy, setWorkingCopy] = useState<CandidateReport>(() =>
     createWorkingCopy(loaderData.report),
   );
+
+  const handleMetadataChange = (
+    metadata: CandidateReport["metadata"],
+    candidateDisplayName: string,
+  ) => {
+    setWorkingCopy((prev) => ({
+      ...prev,
+      metadata,
+      candidateDisplayName,
+    }));
+  };
 
   return (
     <div className="space-y-6">
@@ -33,6 +45,12 @@ export function ReviewPage() {
           влияют на сохранённый документ до сохранения.
         </p>
       </div>
+
+      <ReportMetadataForm
+        metadata={workingCopy.metadata}
+        candidateDisplayName={workingCopy.candidateDisplayName}
+        onChange={handleMetadataChange}
+      />
 
       <Link
         to="/report"
