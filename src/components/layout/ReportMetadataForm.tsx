@@ -1,4 +1,5 @@
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import type { ReportMetadata } from "@/types/candidateReport";
 
@@ -23,12 +24,9 @@ export function ReportMetadataForm({
   return (
     <div className="space-y-4">
       <div>
-        <label
-          htmlFor="candidateDisplayName"
-          className="block text-sm font-medium"
-        >
+        <Label htmlFor="candidateDisplayName" className="block">
           Имя в документе
-        </label>
+        </Label>
         <Input
           id="candidateDisplayName"
           value={candidateDisplayName}
@@ -37,9 +35,9 @@ export function ReportMetadataForm({
       </div>
 
       <div>
-        <label htmlFor="recipients" className="block text-sm font-medium">
+        <Label htmlFor="recipients" className="block">
           Кому
-        </label>
+        </Label>
         <Input
           id="recipients"
           value={metadata.recipients}
@@ -50,9 +48,9 @@ export function ReportMetadataForm({
       </div>
 
       <div>
-        <label htmlFor="interviewer" className="block text-sm font-medium">
+        <Label htmlFor="interviewer" className="block">
           Интервьюер
-        </label>
+        </Label>
         <Input
           id="interviewer"
           value={metadata.interviewer}
@@ -63,9 +61,9 @@ export function ReportMetadataForm({
       </div>
 
       <div>
-        <label htmlFor="contact" className="block text-sm font-medium">
+        <Label htmlFor="contact" className="block">
           Контакт
-        </label>
+        </Label>
         <Input
           id="contact"
           value={metadata.contact}
@@ -76,9 +74,9 @@ export function ReportMetadataForm({
       </div>
 
       <div>
-        <label htmlFor="contactDate" className="block text-sm font-medium">
+        <Label htmlFor="contactDate" className="block">
           Дата контакта
-        </label>
+        </Label>
         <Input
           id="contactDate"
           type="date"
@@ -90,9 +88,9 @@ export function ReportMetadataForm({
       </div>
 
       <div>
-        <label htmlFor="direction" className="block text-sm font-medium">
+        <Label htmlFor="direction" className="block">
           Направление
-        </label>
+        </Label>
         <Input
           id="direction"
           value={metadata.direction}
@@ -103,9 +101,9 @@ export function ReportMetadataForm({
       </div>
 
       <div>
-        <label htmlFor="curator" className="block text-sm font-medium">
+        <Label htmlFor="curator" className="block">
           Куратор
-        </label>
+        </Label>
         <Input
           id="curator"
           value={metadata.curator}
@@ -116,9 +114,9 @@ export function ReportMetadataForm({
       </div>
 
       <div>
-        <label htmlFor="candidateStatus" className="block text-sm font-medium">
+        <Label htmlFor="candidateStatus" className="block">
           Статус кандидата
-        </label>
+        </Label>
         <Textarea
           id="candidateStatus"
           value={metadata.candidateStatus}
