@@ -15,7 +15,7 @@ export function DocumentStateBadge({ state }: DocumentStateBadgeProps) {
           : "border-amber-200 bg-amber-50 text-amber-700"
       }`}
     >
-      {isApproved ? "Документ утверждён" : "Черновик документа"}
+      {isApproved ? "Документ утверждён наставником" : "Черновик документа"}
     </span>
   );
 }
