@@ -16,6 +16,10 @@ import {
 import { ReportMetadataForm } from "@/components/layout/ReportMetadataForm";
 import { ReportSectionEditor } from "@/components/layout/ReportSectionEditor";
 import { REPORT_SECTION_DEFINITIONS } from "@/data/reportSections";
+import {
+  validateReport,
+  type ReportValidationError,
+} from "@/lib/validateReport";
 import type { CandidateReport } from "@/types/candidateReport";
 
 function createWorkingCopy(report: CandidateReport): CandidateReport {
@@ -29,6 +33,27 @@ function createWorkingCopy(report: CandidateReport): CandidateReport {
   };
 }
 
+function focusField(field: string) {
+  requestAnimationFrame(() => {
+    const candidates = [
+      `[data-field="${field}"]`,
+      `[data-field="section-${field}"]`,
+      `[data-field="sections.${field}"]`,
+    ];
+    for (const selector of candidates) {
+      const container = document.querySelector(selector);
+      if (!(container instanceof HTMLElement)) continue;
+      const target =
+        container.querySelector<HTMLElement>(
+          "input, textarea, select, [contenteditable='true']",
+        ) ?? container;
+      target.focus();
+      target.scrollIntoView({ behavior: "smooth", block: "center" });
+      return;
+    }
+  });
+}
+
 export function ReviewPage() {
   const loaderData = useLoaderData() as {
     report: CandidateReport;
@@ -40,6 +65,9 @@ export function ReviewPage() {
     createWorkingCopy(loaderData.report),
   );
   const [isApproveDialogOpen, setIsApproveDialogOpen] = useState(false);
+  const [validationErrors, setValidationErrors] = useState<
+    ReportValidationError[]
+  >([]);
 
   const handleMetadataChange = (
     metadata: CandidateReport["metadata"],
@@ -63,6 +91,25 @@ export function ReviewPage() {
     }));
   };
 
+  const handleSave = (
+    documentState: "draft" | "approved",
+    message: string,
+  ) => {
+    const errors = validateReport(workingCopy);
+    if (errors.length > 0) {
+      setValidationErrors(errors);
+      focusField(errors[0].field);
+      return;
+    }
+
+    setValidationErrors([]);
+    loaderData.onUpdateReport({
+      ...workingCopy,
+      documentState,
+    });
+    navigate("/report", { state: { message } });
+  };
+
   return (
     <div className="space-y-6">
       <div>
@@ -73,11 +120,27 @@ export function ReviewPage() {
         </p>
       </div>
 
-      <ReportMetadataForm
-        metadata={workingCopy.metadata}
-        candidateDisplayName={workingCopy.candidateDisplayName}
-        onChange={handleMetadataChange}
-      />
+      {validationErrors.length > 0 && (
+        <div
+          role="alert"
+          className="rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800"
+        >
+          <p className="font-medium">Исправьте ошибки перед сохранением:</p>
+          <ul className="mt-1 list-disc pl-5">
+            {validationErrors.map((error, index) => (
+              <li key={`${error.field}-${index}`}>{error.message}</li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      <div data-field="candidateDisplayName" tabIndex={-1}>
+        <ReportMetadataForm
+          metadata={workingCopy.metadata}
+          candidateDisplayName={workingCopy.candidateDisplayName}
+          onChange={handleMetadataChange}
+        />
+      </div>
 
       <p className="rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-600">
         Поддерживается Markdown: <strong>жирный</strong>, <em>курсив</em>,
@@ -91,12 +154,17 @@ export function ReviewPage() {
           );
           if (!section) return null;
           return (
-            <ReportSectionEditor
+            <div
               key={definition.id}
-              section={section}
-              title={definition.title}
-              onChange={handleSectionChange}
-            />
+              data-field={`section-${definition.id}`}
+              tabIndex={-1}
+            >
+              <ReportSectionEditor
+                section={section}
+                title={definition.title}
+                onChange={handleSectionChange}
+              />
+            </div>
           );
         })}
       </div>
@@ -111,15 +179,9 @@ export function ReviewPage() {
         </Button>
         <Button
           type="button"
-          onClick={() => {
-            loaderData.onUpdateReport({
-              ...workingCopy,
-              documentState: "draft",
-            });
-            navigate("/report", {
-              state: { message: "Черновик сохранён в текущей сессии" },
-            });
-          }}
+          onClick={() =>
+            handleSave("draft", "Черновик сохранён в текущей сессии")
+          }
         >
           Сохранить черновик
         </Button>
@@ -141,15 +203,9 @@ export function ReviewPage() {
             <AlertDialogFooter>
               <AlertDialogCancel>Вернуться к проверке</AlertDialogCancel>
               <AlertDialogAction
-                onClick={() => {
-                  loaderData.onUpdateReport({
-                    ...workingCopy,
-                    documentState: "approved",
-                  });
-                  navigate("/report", {
-                    state: { message: "Документ утверждён наставником" },
-                  });
-                }}
+                onClick={() =>
+                  handleSave("approved", "Документ утверждён наставником")
+                }
               >
                 Утвердить документ
               </AlertDialogAction>
