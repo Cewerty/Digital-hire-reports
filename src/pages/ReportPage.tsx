@@ -16,17 +16,15 @@ import { interviewEntries } from "@/data/demoData";
 import type { CandidateReport } from "@/types/candidateReport";
 import { ArrowLeft, ArrowRight, RotateCcw } from "lucide-react";
 import { useState } from "react";
-import { Link, useLoaderData, useLocation, useNavigate } from "react-router-dom";
+import { Link, useLoaderData } from "react-router-dom";
+import { toast } from "sonner";
 
 export function ReportPage() {
   const loaderData = useLoaderData() as {
     report: CandidateReport;
     onUpdateReport: (report: CandidateReport) => void;
   };
-  const navigate = useNavigate();
   const [report, setReport] = useState<CandidateReport>(loaderData.report);
-  const location = useLocation();
-  const message = (location.state as { message?: string } | null)?.message;
   const isApproved = report.documentState === "approved";
 
   const handleUnapprove = () => {
@@ -36,20 +34,11 @@ export function ReportPage() {
     };
     loaderData.onUpdateReport(updatedReport);
     setReport(updatedReport);
-    navigate("/report", {
-      replace: true,
-      state: { message: "Документ возвращён в черновик" },
-    });
+    toast.success("Документ возвращён в черновик");
   };
 
   return (
     <div className="space-y-6">
-      {message && (
-        <output className="animate-slide-in-from-top block rounded-md border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800 shadow-sm">
-          {message}
-        </output>
-      )}
-
       <div className="flex flex-wrap items-center justify-between gap-3">
         <h1 className="text-xl font-semibold">Отчёт</h1>
         <DocumentStateBadge state={report.documentState} />

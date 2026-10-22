@@ -12,6 +12,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
+import { Progress } from "@/components/ui/progress";
 import { REPORT_SECTION_DEFINITIONS } from "@/data/reportSections";
 import {
   type ReportValidationError,
@@ -21,6 +22,7 @@ import type { CandidateReport } from "@/types/candidateReport";
 import { AlertCircle, Check, Save, X } from "lucide-react";
 import { useState } from "react";
 import { useLoaderData, useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 function createWorkingCopy(report: CandidateReport): CandidateReport {
   return {
@@ -69,6 +71,12 @@ export function ReviewPage() {
     ReportValidationError[]
   >([]);
 
+  const completedSections = workingCopy.sections.filter(
+    (section) => section.markdown.trim().length > 0,
+  ).length;
+  const totalSections = REPORT_SECTION_DEFINITIONS.length;
+  const progressValue = (completedSections / totalSections) * 100;
+
   const handleMetadataChange = (
     metadata: CandidateReport["metadata"],
     candidateDisplayName: string,
@@ -104,7 +112,8 @@ export function ReviewPage() {
       ...workingCopy,
       documentState,
     });
-    navigate("/report", { state: { message } });
+    toast.success(message);
+    navigate("/report", { replace: true });
   };
 
   return (
@@ -115,6 +124,16 @@ export function ReviewPage() {
           Рабочая копия для: {workingCopy.candidateDisplayName}. Изменения не
           влияют на сохранённый документ до сохранения.
         </p>
+      </div>
+
+      <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+        <div className="flex items-center justify-between text-sm">
+          <span className="font-medium text-slate-700">
+            Заполнено разделов: {completedSections} из {totalSections}
+          </span>
+          <span className="text-slate-500">{Math.round(progressValue)}%</span>
+        </div>
+        <Progress value={progressValue} className="mt-3" />
       </div>
 
       {validationErrors.length > 0 && (

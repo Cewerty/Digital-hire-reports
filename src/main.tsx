@@ -1,6 +1,7 @@
 import React, { useCallback, useMemo, useRef } from "react";
 import ReactDOM from "react-dom/client";
 import { RouterProvider } from "react-router-dom";
+import { Toaster } from "sonner";
 
 import { candidateReport } from "@/data/demoData";
 import { createRouter } from "@/router";
@@ -19,7 +20,12 @@ function App() {
     [handleUpdateReport],
   );
 
-  return <RouterProvider router={router} />;
+  return (
+    <>
+      <RouterProvider router={router} />
+      <Toaster position="top-right" richColors />
+    </>
+  );
 }
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
