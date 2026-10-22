@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { DocumentStateBadge } from "@/components/DocumentStateBadge";
+import { DocumentStateBadge } from "@/components/layout/DocumentStateBadge";
 import { ReportDocument } from "@/components/layout/ReportDocument";
 import { candidateReport, interviewEntries } from "@/data/demoData";
 
@@ -10,7 +10,7 @@ export function ReportPage() {
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <h2 className="text-xl font-semibold">Отчёт</h2>
+        <h1 className="text-xl font-semibold">Отчёт</h1>
         <DocumentStateBadge state={report.documentState} />
       </div>
 

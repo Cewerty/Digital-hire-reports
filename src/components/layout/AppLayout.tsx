@@ -1,6 +1,6 @@
 import { NavLink, Outlet } from "react-router-dom";
 
-import { DocumentStateBadge } from "@/components/DocumentStateBadge";
+import { DocumentStateBadge } from "@/components/layout/DocumentStateBadge";
 import type { DocumentState } from "@/types/candidateReport";
 
 const NAV_ITEMS = [

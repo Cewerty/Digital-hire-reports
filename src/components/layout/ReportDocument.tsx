@@ -30,10 +30,10 @@ export function ReportDocument({
   return (
     <article className="space-y-8">
       <header className="space-y-4">
-        <h1 className="text-2xl font-semibold text-slate-900">
+        <h2 className="text-2xl font-semibold text-slate-900">
           Отчёт по кандидату: {report.candidateDisplayName} (
           {report.candidatePreferredName})
-        </h1>
+        </h2>
 
         <dl className="grid gap-3 sm:grid-cols-2">
           {metadataRows.map((row) => (
@@ -58,9 +58,9 @@ export function ReportDocument({
 
           return (
             <section key={definition.id} className="space-y-3">
-              <h2 className="text-lg font-semibold text-slate-900">
+              <h3 className="text-lg font-semibold text-slate-900">
                 {index + 1}. {definition.title}
-              </h2>
+              </h3>
               <MarkdownContent markdown={section.markdown} />
               <SectionSources
                 sourceEntryIds={section.sourceEntryIds}
