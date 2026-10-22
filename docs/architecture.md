@@ -65,7 +65,9 @@ App
 
 ### Сохранённая версия
 
-Хранится в `main.tsx` через `useState<CandidateReport>`.
+Хранится в `main.tsx` через `useState<CandidateReport>` или `useRef<CandidateReport>`.
+
+`useRef` может применяться, если это улучшает производительность — например, чтобы не пересоздавать роутер при каждом обновлении отчёта. В этом случае роутер получает актуальное значение через callback-геттер, а обновление отчёта не вызывает re-render корневого `App`. Страницы всё равно получают актуальные данные через loader data.
 
 Роуты создаются в main.tsx. Данные и callback могут передаваться в страницы двумя способами:
 
@@ -112,7 +114,7 @@ Context не используется.
 
 ## 6. Поток данных
 
-1. `main.tsx` хранит `CandidateReport` и передаёт его в страницы через props или loader data.
+1. `main.tsx` хранит `CandidateReport` (через `useState` или `useRef`) и передаёт его в страницы через props или loader data.
 2. `ProfilePage` получает `candidate` и `interviewEntries` из демоданных.
 3. `ReportPage` получает `report` и отображает его через `ReportDocument`.
 4. `ReviewPage` при монтировании создаёт рабочую копию `report`.
