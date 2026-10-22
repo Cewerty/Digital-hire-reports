@@ -42,6 +42,7 @@ export interface ReportSection {
 export interface CandidateReport {
   candidateId: string;
   candidateDisplayName: string;
+  candidatePreferredName: string;
   metadata: ReportMetadata;
   sections: ReportSection[];
   documentState: DocumentState;
