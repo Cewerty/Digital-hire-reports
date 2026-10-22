@@ -4,7 +4,7 @@ import { AppLayout } from "@/components/layout/AppLayout";
 import type { CandidateReport } from "@/types/candidateReport";
 
 export function createRouter(
-  report: CandidateReport,
+  getReport: () => CandidateReport,
   onUpdateReport: (report: CandidateReport) => void,
 ) {
   return createBrowserRouter([
@@ -25,7 +25,7 @@ export function createRouter(
             import("@/pages/ReportPage").then((m) => ({
               Component: m.ReportPage,
             })),
-          loader: () => ({ report }),
+          loader: () => ({ report: getReport() }),
         },
         {
           path: "review",
@@ -33,7 +33,7 @@ export function createRouter(
             import("@/pages/ReviewPage").then((m) => ({
               Component: m.ReviewPage,
             })),
-          loader: () => ({ report, onUpdateReport }),
+          loader: () => ({ report: getReport(), onUpdateReport }),
         },
         {
           path: "*",

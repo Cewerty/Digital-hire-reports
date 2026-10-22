@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from "react";
+import React, { useCallback, useMemo, useRef } from "react";
 import ReactDOM from "react-dom/client";
 import { RouterProvider } from "react-router-dom";
 
@@ -8,15 +8,15 @@ import type { CandidateReport } from "@/types/candidateReport";
 import "@/index.css";
 
 function App() {
-  const [report, setReport] = useState<CandidateReport>(candidateReport);
+  const reportRef = useRef<CandidateReport>(candidateReport);
 
   const handleUpdateReport = useCallback((updatedReport: CandidateReport) => {
-    setReport(updatedReport);
+    reportRef.current = updatedReport;
   }, []);
 
   const router = useMemo(
-    () => createRouter(report, handleUpdateReport),
-    [report, handleUpdateReport],
+    () => createRouter(() => reportRef.current, handleUpdateReport),
+    [handleUpdateReport],
   );
 
   return <RouterProvider router={router} />;
