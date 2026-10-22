@@ -1,6 +1,8 @@
 import type { CandidateReport } from "@/types/candidateReport";
 import { REPORT_SECTION_DEFINITIONS } from "@/data/reportSections";
+import { interviewEntries } from "@/data/demoData";
 import { MarkdownContent } from "@/components/layout/MarkdownContent";
+import { SectionSources } from "@/components/layout/SectionSources";
 
 interface ReportDocumentProps {
   report: CandidateReport;
@@ -37,6 +39,10 @@ export function ReportDocument({ report }: ReportDocumentProps) {
         </dl>
       </header>
 
+      <p className="text-sm text-slate-500">
+        Источники разделов можно раскрыть под каждым разделом.
+      </p>
+
       <div className="space-y-8">
         {REPORT_SECTION_DEFINITIONS.map((definition, index) => {
           const section = sections.find((item) => item.id === definition.id);
@@ -50,6 +56,10 @@ export function ReportDocument({ report }: ReportDocumentProps) {
                 {index + 1}. {definition.title}
               </h2>
               <MarkdownContent markdown={section.markdown} />
+              <SectionSources
+                sourceEntryIds={section.sourceEntryIds}
+                entries={interviewEntries}
+              />
             </section>
           );
         })}
