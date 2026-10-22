@@ -25,7 +25,7 @@ export function createRouter(
             import("@/pages/ReportPage").then((m) => ({
               Component: m.ReportPage,
             })),
-          loader: () => ({ report: getReport() }),
+          loader: () => ({ report: getReport(), onUpdateReport }),
         },
         {
           path: "review",
