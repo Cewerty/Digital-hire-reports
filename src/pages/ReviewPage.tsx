@@ -2,6 +2,17 @@ import { useState } from "react";
 import { useLoaderData, useNavigate } from "react-router-dom";
 
 import { Button } from "@/components/ui/button";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import { ReportMetadataForm } from "@/components/layout/ReportMetadataForm";
 import { ReportSectionEditor } from "@/components/layout/ReportSectionEditor";
 import { REPORT_SECTION_DEFINITIONS } from "@/data/reportSections";
@@ -28,6 +39,7 @@ export function ReviewPage() {
   const [workingCopy, setWorkingCopy] = useState<CandidateReport>(() =>
     createWorkingCopy(loaderData.report),
   );
+  const [isApproveDialogOpen, setIsApproveDialogOpen] = useState(false);
 
   const handleMetadataChange = (
     metadata: CandidateReport["metadata"],
@@ -111,6 +123,27 @@ export function ReviewPage() {
         >
           Сохранить черновик
         </Button>
+        <AlertDialog
+          open={isApproveDialogOpen}
+          onOpenChange={setIsApproveDialogOpen}
+        >
+          <AlertDialogTrigger asChild>
+            <Button type="button">Утвердить документ</Button>
+          </AlertDialogTrigger>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Утвердить документ?</AlertDialogTitle>
+              <AlertDialogDescription>
+                Документ будет помечен как утверждённый наставником. Это
+                действие не изменяет статус кандидата и выводы отчёта.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Вернуться к проверке</AlertDialogCancel>
+              <AlertDialogAction>Утвердить документ</AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       </div>
     </div>
   );
