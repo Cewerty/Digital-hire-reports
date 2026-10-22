@@ -14,7 +14,9 @@ export function SectionSources({
   const [isOpen, setIsOpen] = useState(false);
   const listId = useId();
 
-  const sources = sourceEntryIds
+  const uniqueSourceIds = Array.from(new Set(sourceEntryIds));
+
+  const sources = uniqueSourceIds
     .map((id) => entries.find((entry) => entry.id === id))
     .filter((entry): entry is InterviewEntry => entry !== undefined);
 

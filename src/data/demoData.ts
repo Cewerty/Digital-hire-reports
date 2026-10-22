@@ -5,6 +5,21 @@ import type {
   ReportSection,
 } from "@/types/candidateReport";
 
+/** Демонстрационные состояния интерфейса, задаваемые через `?state=`. */
+export type DemoViewState = "default" | "loading" | "empty";
+
+/**
+ * Разбирает query-параметр `state`.
+ * `loading` — имитация асинхронной загрузки, `empty` — отсутствие данных.
+ */
+export function parseDemoViewState(value: string | null): DemoViewState {
+  if (value === "loading" || value === "empty") {
+    return value;
+  }
+
+  return "default";
+}
+
 export const candidate: Candidate = {
   id: "cand-001",
   fullName: "Иван Прототипов",

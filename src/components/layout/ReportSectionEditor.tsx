@@ -1,3 +1,4 @@
+import { EmptyState } from "@/components/layout/EmptyState";
 import { MarkdownContent } from "@/components/layout/MarkdownContent";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -49,11 +50,17 @@ export function ReportSectionEditor({
           onChange={(event) =>
             onChange({ ...section, markdown: event.target.value })
           }
+          placeholder="Введите текст раздела в формате Markdown"
           aria-label={`Markdown раздела «${title}»`}
           className="min-h-[160px]"
         />
-      ) : (
+      ) : section.markdown.trim().length > 0 ? (
         <MarkdownContent markdown={section.markdown} />
+      ) : (
+        <EmptyState
+          title="Раздел не заполнен"
+          description="Добавьте содержание, чтобы увидеть предпросмотр."
+        />
       )}
     </section>
   );
