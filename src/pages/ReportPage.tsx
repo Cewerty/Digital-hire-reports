@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { DocumentStateBadge } from "@/components/DocumentStateBadge";
 import { ReportDocument } from "@/components/layout/ReportDocument";
-import { candidateReport } from "@/data/demoData";
+import { candidateReport, interviewEntries } from "@/data/demoData";
 
 export function ReportPage() {
   const report = candidateReport;
@@ -14,7 +14,7 @@ export function ReportPage() {
         <DocumentStateBadge state={report.documentState} />
       </div>
 
-      <ReportDocument report={report} />
+      <ReportDocument report={report} interviewEntries={interviewEntries} />
 
       <div className="flex flex-wrap gap-3">
         <Link

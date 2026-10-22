@@ -1,14 +1,20 @@
-import type { CandidateReport } from "@/types/candidateReport";
+import type {
+  CandidateReport,
+  InterviewEntry,
+} from "@/types/candidateReport";
 import { REPORT_SECTION_DEFINITIONS } from "@/data/reportSections";
-import { interviewEntries } from "@/data/demoData";
 import { MarkdownContent } from "@/components/layout/MarkdownContent";
 import { SectionSources } from "@/components/layout/SectionSources";
 
 interface ReportDocumentProps {
   report: CandidateReport;
+  interviewEntries: InterviewEntry[];
 }
 
-export function ReportDocument({ report }: ReportDocumentProps) {
+export function ReportDocument({
+  report,
+  interviewEntries,
+}: ReportDocumentProps) {
   const { metadata, sections } = report;
 
   const metadataRows: Array<{ label: string; value: string }> = [
