@@ -1,8 +1,8 @@
-import { useState } from "react";
+import { MarkdownContent } from "@/components/layout/MarkdownContent";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { MarkdownContent } from "@/components/layout/MarkdownContent";
 import type { ReportSection } from "@/types/candidateReport";
+import { useState } from "react";
 
 interface ReportSectionEditorProps {
   section: ReportSection;

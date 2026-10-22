@@ -1,7 +1,5 @@
-import { useState } from "react";
-import { useLoaderData, useNavigate } from "react-router-dom";
-
-import { Button } from "@/components/ui/button";
+import { ReportMetadataForm } from "@/components/layout/ReportMetadataForm";
+import { ReportSectionEditor } from "@/components/layout/ReportSectionEditor";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -13,14 +11,15 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { ReportMetadataForm } from "@/components/layout/ReportMetadataForm";
-import { ReportSectionEditor } from "@/components/layout/ReportSectionEditor";
+import { Button } from "@/components/ui/button";
 import { REPORT_SECTION_DEFINITIONS } from "@/data/reportSections";
 import {
-  validateReport,
   type ReportValidationError,
+  validateReport,
 } from "@/lib/validateReport";
 import type { CandidateReport } from "@/types/candidateReport";
+import { useState } from "react";
+import { useLoaderData, useNavigate } from "react-router-dom";
 
 function createWorkingCopy(report: CandidateReport): CandidateReport {
   return {

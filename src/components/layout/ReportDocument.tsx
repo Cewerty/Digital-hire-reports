@@ -1,8 +1,8 @@
-import type { CandidateReport, InterviewEntry } from "@/types/candidateReport";
-import { REPORT_SECTION_DEFINITIONS } from "@/data/reportSections";
 import { MarkdownContent } from "@/components/layout/MarkdownContent";
 import { SectionSources } from "@/components/layout/SectionSources";
 import { candidate } from "@/data/demoData";
+import { REPORT_SECTION_DEFINITIONS } from "@/data/reportSections";
+import type { CandidateReport, InterviewEntry } from "@/types/candidateReport";
 
 interface ReportDocumentProps {
   report: CandidateReport;

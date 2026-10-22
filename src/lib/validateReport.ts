@@ -1,5 +1,5 @@
-import type { CandidateReport, ReportSectionId } from "@/types/candidateReport";
 import { REPORT_SECTION_DEFINITIONS } from "@/data/reportSections";
+import type { CandidateReport, ReportSectionId } from "@/types/candidateReport";
 
 export type ReportValidationError = {
   field: "candidateDisplayName" | "direction" | "contactDate" | ReportSectionId;
