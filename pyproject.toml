@@ -1,0 +1,110 @@
+[project]
+name = "backend"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.14"
+dependencies = [
+    "dishka>=1.10.1",
+    "django-modern-rest[jwt,msgspec,openapi,pydantic]>=0.16.0",
+    "dmr-dishka>=0.1.1",
+    "ruff>=0.17.1",
+    "uvicorn>=0.54.0",
+    "whitenoise>=6.12.0",
+]
+
+[tool.ruff]
+exclude = [
+    ".bzr",
+    ".direnv",
+    ".eggs",
+    ".git",
+    ".git-rewrite",
+    ".hg",
+    ".ipynb_checkpoints",
+    ".mypy_cache",
+    ".nox",
+    ".pants.d",
+    ".pyenv",
+    ".pytest_cache",
+    ".pytype",
+    ".ruff_cache",
+    ".svn",
+    ".tox",
+    ".venv",
+    ".vscode",
+    "__pypackages__",
+    "_build",
+    "buck-out",
+    "build",
+    "dist",
+    "node_modules",
+    "site-packages",
+    "venv",
+    "hello.py",
+    "docs",
+    "**/migrations",
+]
+line-length = 120
+indent-width = 4
+
+[tool.ruff.lint]
+preview = false
+select = [
+    "DJ",  # flake8-django
+    "E",
+    "F",
+    "UP",
+    "B",
+    "SIM",
+    "I",
+    "C90",
+    "PLC",
+    "PLE",
+    "PLR",
+    "PLW",
+    "RUF",
+    "TRY",
+    "ANN",
+    "S",
+    "N",
+    "D",
+]
+fixable = ["ALL"]
+unfixable = []
+ignore = [
+    "PLR6301",
+    "TRY003",
+    "RUF002",
+    "PLC0414",
+    "ANN401",
+    "RUF029",
+    "RUF001",
+    "RUF003",
+    # D1xx — не требовать обязательное наличие docstrings
+    "D100",  # Missing docstring in public module
+    "D101",  # Missing docstring in public class
+    "D102",  # Missing docstring in public method
+    "D103",  # Missing docstring in public function
+    "D104",  # Missing docstring in public package
+    "D105",  # Missing docstring in magic method
+    "D106",  # Missing docstring in public nested class
+    "D107",  # Missing docstring in __init__
+    "D212",  # Multi-line summary first line
+]
+exclude = ["test_*", "__init__.py"]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.ruff.lint.per-file-ignores]
+
+[tool.ruff.lint.isort]
+known-first-party = ["apps"]
+section-order = [
+    "future",
+    "standard-library",
+    "third-party",
+    "first-party",
+    "local-folder"
+]
