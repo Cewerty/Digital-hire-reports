@@ -8,7 +8,7 @@ export function ProfilePage() {
       <div>
         <h2 className="text-xl font-semibold">Профиль и материалы интервью</h2>
         <p className="mt-1 text-sm text-slate-500">
-          Данные кандидата импортированы из 1С и доступны только для чтения.
+          В прототипе данные кандидата имитируют импорт из 1С и доступны только для чтения.
         </p>
       </div>
 
