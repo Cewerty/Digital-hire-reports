@@ -167,6 +167,11 @@ export function AppLayout() {
 
   // Материалы интервью отдаются копией массива: страницы не должны
   // мутировать демонстрационные данные модуля.
+  //
+  // ВНИМАНИЕ (тех. долг, docs/decisions.md §11.7): результат НЕ мемоизирован,
+  // каждый вызов возвращает новый массив. Не использовать результат этого
+  // геттера в зависимостях `useMemo` / `useEffect` / `useCallback` — иначе
+  // эффект будет перезапускаться на каждом рендере.
   const getInterviewByCandidateId = useCallback(
     (candidateId: string) => [
       ...getInterviewByCandidateIdFromData(candidateId),
@@ -297,7 +302,9 @@ export function AppLayout() {
         </main>
 
         <footer className="border-t border-border bg-background">
-          <div className="mx-auto w-full max-w-5xl space-y-1 px-8 py-4 text-sm text-muted-foreground">
+          <div
+            className={`mx-auto w-full space-y-1 px-8 py-4 text-sm text-muted-foreground ${getContentWidthClass(location.pathname)}`}
+          >
             <p>
               Прототип на вымышленных данных. Интеграция с 1С и генерация ИИ не
               подключены.

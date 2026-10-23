@@ -130,10 +130,23 @@ function ReviewPageContent() {
   const totalSections = REPORT_SECTION_DEFINITIONS.length;
   const progressValue = (completedSections / totalSections) * 100;
 
+  /**
+   * Снимает ошибки с полей, которые пользователь уже изменил: стандарт
+   * де-факто «ошибка гаснет по вводу» (docs/decisions.md §11.8). Полная
+   * перевалидация выполняется при сохранении и утверждении.
+   */
+  const clearErrorsForFields = (fields: ReadonlySet<string>) => {
+    if (fields.size === 0) return;
+    setValidationErrors((prev) =>
+      prev.filter((error) => !fields.has(error.field)),
+    );
+  };
+
   const handleMetadataChange = (
     metadata: CandidateReport["metadata"],
     candidateDisplayName: string,
   ) => {
+    const previous = workingCopy;
     setWorkingCopy((prev) =>
       prev
         ? {
@@ -143,6 +156,21 @@ function ReviewPageContent() {
           }
         : prev,
     );
+
+    if (!previous) return;
+
+    const changedFields = new Set<string>();
+    if (candidateDisplayName !== previous.candidateDisplayName) {
+      changedFields.add("candidateDisplayName");
+    }
+    for (const key of Object.keys(metadata) as Array<
+      keyof CandidateReport["metadata"]
+    >) {
+      if (metadata[key] !== previous.metadata[key]) {
+        changedFields.add(key);
+      }
+    }
+    clearErrorsForFields(changedFields);
   };
 
   const handleSectionChange = (
@@ -158,6 +186,7 @@ function ReviewPageContent() {
           }
         : prev,
     );
+    clearErrorsForFields(new Set([updatedSection.id]));
   };
 
   const validateWorkingCopy = (): boolean => {

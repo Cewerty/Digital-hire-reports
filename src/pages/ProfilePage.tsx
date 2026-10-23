@@ -70,9 +70,11 @@ export function ProfilePage() {
     { label: "Специальность", value: candidate.specialty },
   ];
 
-  const isUninterviewed =
-    candidate.pipelineStage === "uninterviewed" ||
-    interviewEntries.length === 0;
+  // «Не опрошен» — это этап воронки, а не отсутствие материалов интервью.
+  // Смешивание условий давало ложное сообщение «Отчёт станет доступен
+  // после проведения интервью» кандидату на этапе `in_review` без интервью.
+  const isUninterviewed = candidate.pipelineStage === "uninterviewed";
+  const hasInterviewMaterials = interviewEntries.length > 0;
 
   return (
     <div className="space-y-6">
@@ -101,7 +103,15 @@ export function ProfilePage() {
             {candidateRows.map((row) => (
               <div key={row.label}>
                 <dt className="text-sm text-muted-foreground">{row.label}</dt>
-                <dd className="text-sm font-medium">{row.value}</dd>
+                <dd className="text-sm font-medium">
+                  {row.value.trim().length > 0 ? (
+                    row.value
+                  ) : (
+                    <span className="text-slate-400 dark:text-[#7A7A7A]">
+                      Не указано
+                    </span>
+                  )}
+                </dd>
               </div>
             ))}
           </dl>
@@ -156,7 +166,9 @@ export function ProfilePage() {
             Перейти к отчёту
           </Button>
           <p className="text-sm text-muted-foreground">
-            Отчёт по этому кандидату ещё не создан.
+            {hasInterviewMaterials
+              ? "Отчёт по этому кандидату ещё не создан."
+              : "Материалы интервью отсутствуют, поэтому отчёт ещё не создан."}
           </p>
         </div>
       ) : (
