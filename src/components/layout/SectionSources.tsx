@@ -44,7 +44,7 @@ export function SectionSources({
         {sources.map((source) => (
           <article
             key={source.id}
-            className="rounded-md border border-slate-200 bg-slate-50 p-3 dark:border-[#2E2E2E] dark:bg-[#2F2F2F]"
+            className="rounded-md border border-transparent bg-white p-3 dark:border-[#3A3A3A] dark:bg-[#2F2F2F]"
           >
             <h4 className="text-sm font-semibold text-slate-900 dark:text-[#E3E3E3]">
               {source.question}

@@ -123,12 +123,12 @@ export function ProfilePage() {
             {interviewEntries.map((entry: InterviewEntry) => (
               <article
                 key={entry.id}
-                className="rounded-md border border-border bg-muted p-3"
+                className="rounded-md border border-transparent bg-white p-3 dark:border-[#3A3A3A] dark:bg-[#2F2F2F]"
               >
-                <h4 className="text-sm font-semibold text-foreground">
+                <h4 className="text-sm font-semibold text-slate-700 dark:text-slate-200">
                   {entry.question}
                 </h4>
-                <p className="mt-1 whitespace-pre-wrap text-sm text-foreground">
+                <p className="mt-1 whitespace-pre-wrap text-sm text-slate-700 dark:text-slate-200">
                   {entry.answer}
                 </p>
               </article>
