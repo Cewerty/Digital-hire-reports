@@ -1,3 +1,11 @@
+import {
+  CheckCircle2,
+  CircleDashed,
+  Clock,
+  FileCheck,
+  type LucideIcon,
+  XCircle,
+} from "lucide-react";
 import { Link, useOutletContext } from "react-router-dom";
 
 import type { AppOutletContext } from "@/components/layout/AppLayout";
@@ -19,6 +27,29 @@ const STAGE_CLASSES: Record<PipelineStage, string> = {
   approved: "border-emerald-200 bg-emerald-100 text-emerald-900",
   rejected: "border-red-200 bg-red-50 text-red-800",
 };
+
+const STAGE_ICONS: Record<PipelineStage, LucideIcon> = {
+  uninterviewed: CircleDashed,
+  in_review: Clock,
+  reviewed: FileCheck,
+  approved: CheckCircle2,
+  rejected: XCircle,
+};
+
+function StageBadge({ stage }: { stage: PipelineStage }) {
+  const Icon = STAGE_ICONS[stage];
+
+  return (
+    <span
+      className={`mt-3 inline-flex items-center gap-1.5 rounded-full border px-3 py-0.5 text-xs font-medium transition-colors ${
+        STAGE_CLASSES[stage]
+      }`}
+    >
+      <Icon className="h-3.5 w-3.5" aria-hidden="true" />
+      {STAGE_LABELS[stage]}
+    </span>
+  );
+}
 
 export function CandidatesListPage() {
   const { candidates } = useOutletContext<AppOutletContext>();
@@ -52,15 +83,12 @@ export function CandidatesListPage() {
                   {candidate.fullName}
                 </p>
                 <p className="mt-1 text-sm text-slate-500">
-                  {candidate.group} · {candidate.specialty}
+                  Группа: {candidate.group}
                 </p>
-                <span
-                  className={`mt-3 inline-flex items-center rounded-full border px-3 py-0.5 text-xs font-medium transition-colors ${
-                    STAGE_CLASSES[candidate.pipelineStage]
-                  }`}
-                >
-                  {STAGE_LABELS[candidate.pipelineStage]}
-                </span>
+                <p className="text-sm text-slate-500">
+                  Направление: {candidate.specialty}
+                </p>
+                <StageBadge stage={candidate.pipelineStage} />
               </Link>
             </li>
           ))}
