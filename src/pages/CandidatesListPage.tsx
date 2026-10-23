@@ -22,6 +22,10 @@ const STAGE_LABELS: Record<PipelineStage, string> = {
   rejected: "Отклонён",
 };
 
+// `bg-brand-soft/40` — это `#F5D061/40` из docs/design-system.md §2:
+// `--brand-soft: 45 88% 67%` в `src/index.css` даёт ровно `#F5D061`.
+// Hex не хардкодим (§11.6), поэтому используется токен; расхождение
+// с буквой спеки только формальное.
 const STAGE_CLASSES: Record<PipelineStage, string> = {
   uninterviewed:
     "border-slate-200 bg-white text-slate-600 dark:border-[#3E3E3E] dark:bg-[#2F2F2F] dark:text-slate-300",

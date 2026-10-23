@@ -10,6 +10,7 @@ import {
   getInterviewByCandidateId as getInterviewByCandidateIdFromData,
   getReportByCandidateId,
 } from "@/data/demoData";
+import { createEventId } from "@/lib/createEventId";
 import type {
   Candidate,
   CandidateReport,
@@ -140,7 +141,7 @@ export function AppLayout() {
       ...prevCurator,
       recentEvents: [
         {
-          id: `evt-${Date.now()}`,
+          id: createEventId(),
           timestamp: new Date().toISOString(),
           text: isNewlyApproved
             ? `Утверждён отчёт кандидата: ${updatedReport.candidateDisplayName}`
