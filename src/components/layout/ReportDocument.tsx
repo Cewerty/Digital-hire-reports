@@ -2,6 +2,7 @@ import { EmptyState } from "@/components/layout/EmptyState";
 import { MarkdownContent } from "@/components/layout/MarkdownContent";
 import { SectionSources } from "@/components/layout/SectionSources";
 import { REPORT_SECTION_DEFINITIONS } from "@/data/reportSections";
+import { PLATE_SURFACE_CLASS } from "@/lib/surfaces";
 import type {
   Candidate,
   CandidateReport,
@@ -49,7 +50,9 @@ export function ReportDocument({
           {preferredLabel ? ` (${preferredLabel})` : ""}
         </h2>
 
-        <dl className="grid gap-3 rounded-lg border border-transparent bg-white p-4 sm:grid-cols-2 dark:border-[#3A3A3A] dark:bg-[#2F2F2F]">
+        <dl
+          className={`grid gap-3 rounded-lg p-4 sm:grid-cols-2 ${PLATE_SURFACE_CLASS}`}
+        >
           {metadataRows.map((row) => (
             <div key={row.label} className="text-sm">
               <dt className="font-medium text-slate-500 dark:text-[#9B9B9B]">
@@ -83,7 +86,7 @@ export function ReportDocument({
           return (
             <section
               key={definition.id}
-              className="space-y-3 rounded-lg border border-transparent bg-white p-4 dark:border-[#3A3A3A] dark:bg-[#2F2F2F]"
+              className={`space-y-3 rounded-lg p-4 ${PLATE_SURFACE_CLASS}`}
             >
               <h3 className="text-lg font-semibold text-slate-900 dark:text-[#E3E3E3]">
                 {index + 1}. {definition.title}

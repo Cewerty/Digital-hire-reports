@@ -1,5 +1,6 @@
 import { useId, useState } from "react";
 
+import { PLATE_SURFACE_CLASS } from "@/lib/surfaces";
 import type { InterviewEntry } from "@/types/candidateReport";
 
 interface SectionSourcesProps {
@@ -52,7 +53,7 @@ export function SectionSources({
         {sources.map((source) => (
           <article
             key={source.id}
-            className="rounded-md border border-slate-200/80 bg-white p-3 dark:border-[#3A3A3A] dark:bg-[#2F2F2F]"
+            className={`rounded-md p-3 ${PLATE_SURFACE_CLASS}`}
           >
             <h4 className="text-sm font-semibold text-slate-900 dark:text-[#E3E3E3]">
               {source.question}

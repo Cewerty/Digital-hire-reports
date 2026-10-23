@@ -1,6 +1,7 @@
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { PROPERTY_ROW_HOVER_CLASS } from "@/lib/surfaces";
 import type { ReportValidationError } from "@/lib/validateReport";
 import type { ReportMetadata } from "@/types/candidateReport";
 import { useId } from "react";
@@ -23,8 +24,7 @@ interface ReportMetadataFormProps {
  * Строка свойства в духе Notion: при наведении подсвечивается отдельной
  * поверхностью `bg-white` / `#2F2F2F`, чтобы не сливаться с фоном карточки.
  */
-const FIELD_ROW_CLASS =
-  "-mx-2 space-y-1 rounded-lg p-2 transition-colors hover:bg-white dark:hover:bg-[#2F2F2F]";
+const FIELD_ROW_CLASS = `-mx-2 space-y-1 rounded-lg p-2 ${PROPERTY_ROW_HOVER_CLASS}`;
 
 export function ReportMetadataForm({
   metadata,

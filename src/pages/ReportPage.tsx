@@ -17,6 +17,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { parseDemoViewState } from "@/data/demoData";
 import { cloneReport } from "@/lib/cloneReport";
+import { CARD_SURFACE_CLASS } from "@/lib/surfaces";
 import { ArrowLeft, ArrowRight, RotateCcw } from "lucide-react";
 import { useEffect, useState } from "react";
 import {
@@ -126,7 +127,7 @@ export function ReportPage() {
         <DocumentStateBadge state={report.documentState} />
       </div>
 
-      <div className="rounded-xl border border-border bg-card p-4 shadow-xs">
+      <div className={`rounded-2xl p-5 shadow-xs ${CARD_SURFACE_CLASS}`}>
         <ReportDocument
           report={report}
           candidate={candidate}

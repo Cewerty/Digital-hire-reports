@@ -146,14 +146,23 @@ Biome используется как единый инструмент форм
 
 **Решение.**
 
-- Внутренняя плашка внутри карточки `bg-[#F4F5F7] dark:bg-[#252525]`:
-  `rounded-xl border border-slate-200/80 bg-white p-4 dark:border-[#3A3A3A] dark:bg-[#2F2F2F]`.
-- `border-transparent` допустим **только** для карточек верхнего уровня
-  (`rounded-2xl bg-[#F4F5F7] dark:bg-[#252525]`), где hover-граница
-  появляется по `hover:border-slate-300 dark:hover:border-[#383838]`.
-- Тонкий `border-slate-200/80` вместо `border-transparent` в светлой теме —
-  осознанное отступление от буквы §2 `docs/design-system.md`: на матрицах с
-  низкой гаммой чистый белый блок без границы неотличим от фона.
+- Слои и границы задаются **семантическими токенами** (§11.6), а не hex:
+  - `bg-card` — карточка верхнего уровня (`#F4F5F7` / `#252525`);
+  - `bg-plate` + `border-plate-border` — вложенная плашка
+    (`#FFFFFF` / `#2F2F2F`, граница `#E5E7EB` / `#3A3A3A`);
+  - `hover:border-border-hover` — hover-граница карточки
+    (`slate-300` / `#383838`);
+  - `hover:border-plate-border-hover` — hover-граница плашки
+    (`slate-300` / `#4A4A4A`).
+- Повторяющиеся комбинации собраны в `src/lib/surfaces.ts`
+  (`CARD_SURFACE_CLASS`, `CARD_INTERACTIVE_CLASS`, `PLATE_SURFACE_CLASS`,
+  `PLATE_INTERACTIVE_CLASS`, `PROPERTY_ROW_HOVER_CLASS`). Компоненты
+  импортируют константы, а не дублируют строки классов.
+- `border-transparent` допустим **только** для карточек верхнего уровня,
+  где hover-граница появляется по `hover:border-border-hover`.
+- Тонкая граница плашки в светлой теме (`--plate-border`) — осознанное
+  отступление от буквы §2 `docs/design-system.md`: на матрицах с низкой
+  гаммой чистый белый блок без границы неотличим от фона.
 
 **Где применено.** `ProfilePage` (плашки интервью), `SectionSources`
 (статьи источников), `ReportDocument` (реквизиты и секции),
@@ -238,8 +247,8 @@ Biome используется как единый инструмент форм
 
 - [ ] Вложенные плашки имеют видимую границу в обеих темах (§11.1).
 - [ ] `border-transparent` используется только у карточек верхнего уровня.
-- [ ] Карточки — `bg-[#F4F5F7] dark:bg-[#252525]`, плашки —
-      `bg-white dark:bg-[#2F2F2F]`.
+- [ ] Карточки — `bg-card`, плашки — `bg-plate` + `border-plate-border`
+      (токены, не hex).
 
 **Тени и геометрия**
 
@@ -277,3 +286,46 @@ Biome используется как единый инструмент форм
 - [ ] `npm run build` завершается успешно.
 - [ ] Ручной проход: светлая и тёмная темы, узкий экран без горизонтальной
       прокрутки, консоль без необработанных ошибок.
+
+### 11.6. Токены поверхностей вместо хардкода
+
+**Симптом.** В компонентах одновременно встречались `bg-card`, `bg-muted`,
+`bg-[#F4F5F7]`, `bg-white`, `border-border`, `border-transparent` и
+`border-slate-200/80`. Одинаковые по смыслу слои выглядели по-разному при
+смене темы.
+
+**Причина.** Дизайн-система задаёт слои в hex, и эти hex попадали в JSX
+напрямую. Любая правка палитры требовала поиска по всем файлам, а
+рассогласование (`border-border` у карточки против `border-transparent` у
+плашки) не отлавливалось.
+
+**Решение.** Слои и границы описаны семантическими токенами в
+`src/index.css` и `tailwind.config.js`:
+
+| Токен | Светлая | Тёмная | Классы |
+| :--- | :--- | :--- | :--- |
+| `--card` | `#F4F5F7` | `#252525` | `bg-card` |
+| `--plate` | `#FFFFFF` | `#2F2F2F` | `bg-plate` |
+| `--plate-border` | `#E5E7EB` | `#3A3A3A` | `border-plate-border` |
+| `--border-hover` | `slate-300` | `#383838` | `hover:border-border-hover` |
+| `--plate-border-hover` | `slate-300` | `#4A4A4A` | `hover:border-plate-border-hover` |
+
+Повторяющиеся комбинации собраны в `src/lib/surfaces.ts`:
+
+- `CARD_SURFACE_CLASS` — карточка без hover;
+- `CARD_INTERACTIVE_CLASS` — карточка с hover-границей;
+- `PLATE_SURFACE_CLASS` — вложенная плашка;
+- `PLATE_INTERACTIVE_CLASS` — плашка с hover-границей;
+- `PROPERTY_ROW_HOVER_CLASS` — hover-подсветка строки свойства.
+
+**Правило.** В карточках и плашках не должно быть hex-значений слоёв и
+границ. Допустимы только токены и константы из `src/lib/surfaces.ts`.
+Исключения:
+
+- «хром» макета (`AppLayout`: `bg-background`, `bg-sidebar`,
+  `border-border`) — для него shadcn-токены и предназначены;
+- кнопки и акценты (§5: `bg-[#F2CA52]`, `text-[#1E2028]`,
+  `ring-[#E5BA41]`) — отдельный набор правил.
+
+**Проверка.** `rg "bg-\[#|border-\[#" src` не должен находить совпадений в
+карточках и плашках (кнопки и акценты — вне проверки).

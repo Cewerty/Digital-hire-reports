@@ -43,9 +43,15 @@ export default {
           foreground: "hsl(var(--destructive-foreground) / <alpha-value>)",
         },
         border: "hsl(var(--border) / <alpha-value>)",
+        "border-hover": "hsl(var(--border-hover) / <alpha-value>)",
         input: "hsl(var(--input) / <alpha-value>)",
         ring: "hsl(var(--ring) / <alpha-value>)",
         sidebar: "hsl(var(--sidebar) / <alpha-value>)",
+        plate: {
+          DEFAULT: "hsl(var(--plate) / <alpha-value>)",
+          border: "hsl(var(--plate-border) / <alpha-value>)",
+          "border-hover": "hsl(var(--plate-border-hover) / <alpha-value>)",
+        },
         brand: {
           DEFAULT: "hsl(var(--brand) / <alpha-value>)",
           strong: "hsl(var(--brand-strong) / <alpha-value>)",

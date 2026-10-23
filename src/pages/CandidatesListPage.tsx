@@ -11,6 +11,7 @@ import { Link, useOutletContext } from "react-router-dom";
 
 import type { AppOutletContext } from "@/components/layout/AppLayout";
 import { EmptyState } from "@/components/layout/EmptyState";
+import { CARD_INTERACTIVE_CLASS } from "@/lib/surfaces";
 import type { PipelineStage } from "@/types/candidateReport";
 
 const STAGE_LABELS: Record<PipelineStage, string> = {
@@ -171,7 +172,7 @@ export function CandidatesListPage() {
             <li key={candidate.id}>
               <Link
                 to={`/candidates/${candidate.id}`}
-                className="block h-full rounded-2xl border border-transparent bg-muted p-5 transition-colors hover:border-slate-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-strong focus-visible:ring-offset-2 focus-visible:ring-offset-background dark:hover:border-[#383838]"
+                className={`block h-full rounded-2xl p-5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-strong focus-visible:ring-offset-2 focus-visible:ring-offset-background ${CARD_INTERACTIVE_CLASS}`}
               >
                 <p className="text-sm font-semibold text-foreground">
                   {candidate.fullName}

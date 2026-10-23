@@ -17,6 +17,11 @@ import { Progress } from "@/components/ui/progress";
 import { REPORT_SECTION_DEFINITIONS } from "@/data/reportSections";
 import { cloneReport } from "@/lib/cloneReport";
 import {
+  CARD_INTERACTIVE_CLASS,
+  CARD_SURFACE_CLASS,
+  PLATE_SURFACE_CLASS,
+} from "@/lib/surfaces";
+import {
   type ReportValidationError,
   validateReport,
 } from "@/lib/validateReport";
@@ -200,7 +205,7 @@ function ReviewPageContent() {
         </p>
       </div>
 
-      <div className="rounded-2xl border border-transparent bg-[#F4F5F7] p-5 dark:bg-[#252525]">
+      <div className={`rounded-2xl p-5 ${CARD_SURFACE_CLASS}`}>
         <div className="flex items-center justify-between text-sm">
           <span className="font-medium text-foreground">
             Заполнено разделов: {completedSections} из {totalSections}
@@ -232,7 +237,7 @@ function ReviewPageContent() {
       <div
         data-field="candidateDisplayName"
         tabIndex={-1}
-        className="rounded-2xl border border-transparent bg-[#F4F5F7] p-5 transition-colors hover:border-slate-300 dark:bg-[#252525] dark:hover:border-[#383838]"
+        className={`rounded-2xl p-5 ${CARD_INTERACTIVE_CLASS}`}
       >
         <ReportMetadataForm
           metadata={workingCopy.metadata}
@@ -242,7 +247,9 @@ function ReviewPageContent() {
         />
       </div>
 
-      <p className="rounded-2xl border border-slate-200/80 bg-white px-4 py-3 text-sm text-slate-600 dark:border-[#3A3A3A] dark:bg-[#2F2F2F] dark:text-slate-300">
+      <p
+        className={`rounded-2xl px-4 py-3 text-sm text-slate-600 dark:text-slate-300 ${PLATE_SURFACE_CLASS}`}
+      >
         Поддерживается Markdown: <strong>жирный</strong>, <em>курсив</em>,
         списки, цитаты и ссылки. Заголовки разделов добавляются автоматически.
       </p>
@@ -258,7 +265,7 @@ function ReviewPageContent() {
               key={definition.id}
               data-field={`section-${definition.id}`}
               tabIndex={-1}
-              className="rounded-2xl border border-transparent bg-[#F4F5F7] p-5 transition-colors hover:border-slate-300 dark:bg-[#252525] dark:hover:border-[#383838]"
+              className={`rounded-2xl p-5 ${CARD_INTERACTIVE_CLASS}`}
             >
               <ReportSectionEditor
                 section={section}
