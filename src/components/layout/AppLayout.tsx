@@ -73,69 +73,66 @@ export function AppLayout() {
     : undefined;
   const headerDocumentState = activeReport?.documentState;
 
-  const updateReport = useCallback(
-    (updatedReport: CandidateReport) => {
-      const previousReport = reportsRef.current[updatedReport.candidateId];
-      // Повторное утверждение уже утверждённого документа не должно
-      // дублировать событие в ленте куратора.
-      const isNewlyApproved =
-        updatedReport.documentState === "approved" &&
-        previousReport?.documentState !== "approved";
-      // Возврат утверждённого документа в черновик откатывает этап
-      // «Рассмотрен» обратно в «На рассмотрении».
-      const isRevertedToDraft =
-        updatedReport.documentState === "draft" &&
-        previousReport?.documentState === "approved";
+  const updateReport = useCallback((updatedReport: CandidateReport) => {
+    const previousReport = reportsRef.current[updatedReport.candidateId];
+    // Повторное утверждение уже утверждённого документа не должно
+    // дублировать событие в ленте куратора.
+    const isNewlyApproved =
+      updatedReport.documentState === "approved" &&
+      previousReport?.documentState !== "approved";
+    // Возврат утверждённого документа в черновик откатывает этап
+    // «Рассмотрен» обратно в «На рассмотрении».
+    const isRevertedToDraft =
+      updatedReport.documentState === "draft" &&
+      previousReport?.documentState === "approved";
 
-      setReports((prev) => ({
-        ...prev,
-        [updatedReport.candidateId]: updatedReport,
-      }));
+    setReports((prev) => ({
+      ...prev,
+      [updatedReport.candidateId]: updatedReport,
+    }));
 
-      if (!isNewlyApproved && !isRevertedToDraft) {
-        return;
-      }
+    if (!isNewlyApproved && !isRevertedToDraft) {
+      return;
+    }
 
-      // Утверждение документа не является финальным решением по кандидату:
-      // этап переводится в «Рассмотрен», а «Подтверждён» / «Отклонён»
-      // выставляются вне прототипа (в 1С). Явное решение куратора
-      // не отменяется молча.
-      setCandidates((prevCandidates) =>
-        prevCandidates.map((candidate) => {
-          if (candidate.id !== updatedReport.candidateId) {
-            return candidate;
-          }
+    // Утверждение документа не является финальным решением по кандидату:
+    // этап переводится в «Рассмотрен», а «Подтверждён» / «Отклонён»
+    // выставляются вне прототипа (в 1С). Явное решение куратора
+    // не отменяется молча.
+    setCandidates((prevCandidates) =>
+      prevCandidates.map((candidate) => {
+        if (candidate.id !== updatedReport.candidateId) {
+          return candidate;
+        }
 
-          if (isNewlyApproved) {
-            return candidate.pipelineStage === "approved" ||
-              candidate.pipelineStage === "rejected"
-              ? candidate
-              : { ...candidate, pipelineStage: "reviewed" as PipelineStage };
-          }
+        if (isNewlyApproved) {
+          return candidate.pipelineStage === "approved" ||
+            candidate.pipelineStage === "rejected"
+            ? candidate
+            : { ...candidate, pipelineStage: "reviewed" as PipelineStage };
+        }
 
-          return candidate.pipelineStage === "reviewed"
-            ? { ...candidate, pipelineStage: "in_review" as PipelineStage }
-            : candidate;
-        }),
-      );
+        return candidate.pipelineStage === "reviewed"
+          ? { ...candidate, pipelineStage: "in_review" as PipelineStage }
+          : candidate;
+      }),
+    );
 
-      setCurator((prevCurator) => ({
-        ...prevCurator,
-        recentEvents: [
-          {
-            id: `evt-${Date.now()}`,
-            timestamp: new Date().toISOString(),
-            text: isNewlyApproved
-              ? `Утверждён отчёт кандидата: ${updatedReport.candidateDisplayName}`
-              : `Документ возвращён в черновик: ${updatedReport.candidateDisplayName}`,
-            candidateId: updatedReport.candidateId,
-          },
-          ...prevCurator.recentEvents,
-        ],
-      }));
-    },
-    [],
-  );
+    setCurator((prevCurator) => ({
+      ...prevCurator,
+      recentEvents: [
+        {
+          id: `evt-${Date.now()}`,
+          timestamp: new Date().toISOString(),
+          text: isNewlyApproved
+            ? `Утверждён отчёт кандидата: ${updatedReport.candidateDisplayName}`
+            : `Документ возвращён в черновик: ${updatedReport.candidateDisplayName}`,
+          candidateId: updatedReport.candidateId,
+        },
+        ...prevCurator.recentEvents,
+      ],
+    }));
+  }, []);
 
   const getReportById = useCallback(
     (candidateId: string) => reports[candidateId],
