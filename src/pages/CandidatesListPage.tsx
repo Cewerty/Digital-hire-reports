@@ -33,6 +33,18 @@ const STAGE_CLASSES: Record<PipelineStage, string> = {
     "border-red-200 bg-red-50 text-red-800 dark:border-red-800/50 dark:bg-red-950/40 dark:text-red-300",
 };
 
+// Активная таблетка фильтра использует ту же палитру, что и бейдж этапа
+// на карточке кандидата: цвет фильтра совпадает с цветом статуса.
+const FILTER_ACTIVE_CLASSES: Record<StageFilter, string> = {
+  all: "border-brand-strong bg-brand text-brand-foreground",
+  uninterviewed:
+    "border-slate-300 bg-slate-100 text-slate-900 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100",
+  in_review: STAGE_CLASSES.in_review,
+  reviewed: STAGE_CLASSES.reviewed,
+  approved: STAGE_CLASSES.approved,
+  rejected: STAGE_CLASSES.rejected,
+};
+
 const STAGE_ICONS: Record<PipelineStage, LucideIcon> = {
   uninterviewed: CircleDashed,
   in_review: Clock,
@@ -104,7 +116,7 @@ export function CandidatesListPage() {
                 aria-pressed={isActive}
                 className={`rounded-full border px-3 py-1 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-strong focus-visible:ring-offset-2 focus-visible:ring-offset-background ${
                   isActive
-                    ? "border-brand-strong bg-brand text-brand-foreground"
+                    ? FILTER_ACTIVE_CLASSES[option.value]
                     : "border-border bg-background text-muted-foreground hover:bg-muted hover:text-foreground"
                 }`}
               >
