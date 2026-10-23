@@ -9,10 +9,10 @@ export function DocumentStateBadge({ state }: DocumentStateBadgeProps) {
 
   return (
     <span
-      className={`inline-flex items-center rounded-full border px-3 py-1 text-xs font-medium ${
+      className={`inline-flex items-center rounded-full border px-3 py-0.5 text-xs font-medium transition-colors duration-150 ${
         isApproved
-          ? "border-emerald-200 bg-emerald-50 text-emerald-700"
-          : "border-amber-200 bg-amber-50 text-amber-700"
+          ? "border-emerald-200 bg-emerald-100 text-emerald-900 dark:border-emerald-800/50 dark:bg-emerald-950/40 dark:text-emerald-300"
+          : "border-[#E5BA41] bg-[#F5D061]/40 text-[#1E2028] dark:border-[#E5BA41]/50 dark:bg-amber-950/40 dark:text-[#F2CA52]"
       }`}
     >
       {isApproved ? "Документ утверждён наставником" : "Черновик документа"}
