@@ -14,7 +14,11 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
-import { interviewEntries, parseDemoViewState } from "@/data/demoData";
+import {
+  getCandidateById,
+  getInterviewByCandidateId,
+  parseDemoViewState,
+} from "@/data/demoData";
 import type { CandidateReport } from "@/types/candidateReport";
 import { ArrowLeft, ArrowRight, RotateCcw } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -30,6 +34,11 @@ export function ReportPage() {
   const demoState = parseDemoViewState(searchParams.get("state"));
   const [report, setReport] = useState<CandidateReport>(loaderData.report);
   const [isLoading, setIsLoading] = useState(demoState === "loading");
+
+  // Данные резолвятся строго по `report.candidateId`, чтобы в документе
+  // и в источниках не появлялись материалы другого кандидата.
+  const candidate = getCandidateById(report.candidateId);
+  const interviewEntries = getInterviewByCandidateId(report.candidateId);
 
   useEffect(() => {
     if (demoState !== "loading") {
@@ -100,7 +109,11 @@ export function ReportPage() {
       </div>
 
       <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
-        <ReportDocument report={report} interviewEntries={interviewEntries} />
+        <ReportDocument
+          report={report}
+          candidate={candidate}
+          interviewEntries={interviewEntries}
+        />
       </div>
 
       <div className="flex flex-wrap gap-3">

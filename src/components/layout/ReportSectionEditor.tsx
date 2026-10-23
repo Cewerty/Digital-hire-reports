@@ -3,20 +3,24 @@ import { MarkdownContent } from "@/components/layout/MarkdownContent";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import type { ReportSection } from "@/types/candidateReport";
-import { useState } from "react";
+import { useId, useState } from "react";
 
 interface ReportSectionEditorProps {
   section: ReportSection;
   title: string;
   onChange: (section: ReportSection) => void;
+  /** Ошибка валидации раздела; выводится под редактором. */
+  error?: string;
 }
 
 export function ReportSectionEditor({
   section,
   title,
   onChange,
+  error,
 }: ReportSectionEditorProps) {
   const [mode, setMode] = useState<"edit" | "preview">("edit");
+  const errorId = useId();
 
   return (
     <section className="space-y-3">
@@ -52,6 +56,8 @@ export function ReportSectionEditor({
           }
           placeholder="Введите текст раздела в формате Markdown"
           aria-label={`Markdown раздела «${title}»`}
+          aria-invalid={Boolean(error)}
+          aria-describedby={error ? errorId : undefined}
           className="min-h-[160px]"
         />
       ) : section.markdown.trim().length > 0 ? (
@@ -62,6 +68,12 @@ export function ReportSectionEditor({
           description="Добавьте содержание, чтобы увидеть предпросмотр."
         />
       )}
+
+      {error ? (
+        <p id={errorId} role="alert" className="text-sm text-red-600">
+          {error}
+        </p>
+      ) : null}
     </section>
   );
 }

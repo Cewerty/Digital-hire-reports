@@ -37,12 +37,11 @@ function createWorkingCopy(report: CandidateReport): CandidateReport {
 
 function focusField(field: string) {
   requestAnimationFrame(() => {
-    const candidates = [
+    const selectors = [
       `[data-field="${field}"]`,
       `[data-field="section-${field}"]`,
-      `[data-field="sections.${field}"]`,
     ];
-    for (const selector of candidates) {
+    for (const selector of selectors) {
       const container = document.querySelector(selector);
       if (!(container instanceof HTMLElement)) continue;
       const target =
@@ -66,10 +65,23 @@ export function ReviewPage() {
   const [workingCopy, setWorkingCopy] = useState<CandidateReport>(() =>
     createWorkingCopy(loaderData.report),
   );
+  const [workingCopyCandidateId, setWorkingCopyCandidateId] = useState(
+    loaderData.report.candidateId,
+  );
+
+  // Маршрут `/candidates/:id/review` переиспользуется при смене кандидата,
+  // поэтому несохранённый черновик сбрасывается на данные нового отчёта.
+  if (workingCopyCandidateId !== loaderData.report.candidateId) {
+    setWorkingCopyCandidateId(loaderData.report.candidateId);
+    setWorkingCopy(createWorkingCopy(loaderData.report));
+  }
   const [isApproveDialogOpen, setIsApproveDialogOpen] = useState(false);
   const [validationErrors, setValidationErrors] = useState<
     ReportValidationError[]
   >([]);
+
+  const errorForField = (field: ReportValidationError["field"]) =>
+    validationErrors.find((error) => error.field === field)?.message;
 
   const completedSections = workingCopy.sections.filter(
     (section) => section.markdown.trim().length > 0,
@@ -162,6 +174,7 @@ export function ReviewPage() {
           metadata={workingCopy.metadata}
           candidateDisplayName={workingCopy.candidateDisplayName}
           onChange={handleMetadataChange}
+          errors={validationErrors}
         />
       </div>
 
@@ -187,6 +200,7 @@ export function ReviewPage() {
                 section={section}
                 title={definition.title}
                 onChange={handleSectionChange}
+                error={errorForField(definition.id)}
               />
             </div>
           );

@@ -1,17 +1,24 @@
 import { EmptyState } from "@/components/layout/EmptyState";
 import { MarkdownContent } from "@/components/layout/MarkdownContent";
 import { SectionSources } from "@/components/layout/SectionSources";
-import { candidate } from "@/data/demoData";
 import { REPORT_SECTION_DEFINITIONS } from "@/data/reportSections";
-import type { CandidateReport, InterviewEntry } from "@/types/candidateReport";
+import type {
+  Candidate,
+  CandidateReport,
+  InterviewEntry,
+} from "@/types/candidateReport";
 
 interface ReportDocumentProps {
   report: CandidateReport;
+  /** Профиль того же кандидата, что и отчёт (`report.candidateId`). */
+  candidate?: Candidate;
+  /** Материалы интервью того же кандидата, что и отчёт. */
   interviewEntries: InterviewEntry[];
 }
 
 export function ReportDocument({
   report,
+  candidate,
   interviewEntries,
 }: ReportDocumentProps) {
   const { metadata, sections } = report;
@@ -30,8 +37,8 @@ export function ReportDocument({
     <article className="space-y-8">
       <header className="space-y-4">
         <h2 className="text-2xl font-semibold text-slate-900">
-          Отчёт по кандидату: {report.candidateDisplayName} (
-          {candidate.preferredName})
+          Отчёт по кандидату: {report.candidateDisplayName}
+          {candidate ? ` (${candidate.preferredName})` : ""}
         </h2>
 
         <dl className="grid gap-3 sm:grid-cols-2">
