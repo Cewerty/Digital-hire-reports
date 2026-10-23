@@ -1,12 +1,12 @@
 import { describe, expect, it } from "vitest";
 
 import {
+  type ReportUpdateDeps,
+  type ReportUpdateState,
   applyPipelineStageTransition,
   applyReportUpdate,
   buildCuratorEvent,
   getReportTransition,
-  type ReportUpdateDeps,
-  type ReportUpdateState,
 } from "@/lib/reportTransitions";
 import type {
   Candidate,
