@@ -118,7 +118,15 @@ export function CandidatesListPage() {
       {candidates.length === 0 ? (
         <EmptyState
           title="Кандидатов пока нет"
-          description="В реестре нет ни одной записи."
+          description="В реестре нет ни одной записи. Новые кандидаты появятся после импорта из 1С."
+          action={
+            <Link
+              to="/"
+              className="inline-flex items-center rounded-md border border-border px-3 py-1.5 text-sm font-medium text-foreground transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-strong focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+            >
+              На главную
+            </Link>
+          }
         />
       ) : filteredCandidates.length === 0 ? (
         <EmptyState
