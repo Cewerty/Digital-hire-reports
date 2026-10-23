@@ -115,15 +115,16 @@ export function ReportPage() {
           to="/review"
           className="inline-flex items-center rounded-md bg-slate-900 px-3 py-1.5 text-sm font-medium text-white transition-colors duration-200 hover:bg-slate-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-900 focus-visible:ring-offset-2"
         >
-          {isApproved
-            ? "Повторная проверка и правка"
-            : "Перейти к проверке"}
+          {isApproved ? "Повторная проверка и правка" : "Перейти к проверке"}
           <ArrowRight className="ml-2 h-4 w-4" />
         </Link>
         {isApproved && (
           <AlertDialog>
             <AlertDialogTrigger asChild>
-              <Button variant="outline" className="transition-colors duration-200">
+              <Button
+                variant="outline"
+                className="transition-colors duration-200"
+              >
                 <RotateCcw className="mr-2 h-4 w-4" />
                 Вернуть в черновик
               </Button>
