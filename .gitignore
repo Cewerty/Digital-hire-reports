@@ -27,5 +27,4 @@ tsconfig.app.tsbuildinfo
 .env.*                                                                                                                     
 !.env.example
 .vscode
-
 Цифровой_профиль_кликабельный_прототип.html
