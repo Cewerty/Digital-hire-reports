@@ -3,7 +3,7 @@ import { useCallback, useState } from "react";
 import { NavLink, Outlet, useLocation } from "react-router-dom";
 
 import { DocumentStateBadge } from "@/components/layout/DocumentStateBadge";
-import { ThemeToggle } from "@/components/layout/ThemeToggle";
+// import { ThemeToggle } from "@/components/layout/ThemeToggle";
 import {
   demoCandidates,
   demoCurator,
@@ -202,7 +202,7 @@ export function AppLayout({ documentState = "draft" }: AppLayoutProps) {
               {headerDocumentState && (
                 <DocumentStateBadge state={headerDocumentState} />
               )}
-              <ThemeToggle />
+              {/* <ThemeToggle /> */}
             </div>
           </div>
         </header>
