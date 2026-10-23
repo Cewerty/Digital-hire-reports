@@ -51,7 +51,7 @@ export function ReportMetadataForm({
       <p
         id={errorIdFor(field)}
         role="alert"
-        className="mt-1 text-sm text-red-600"
+        className="mt-1 text-sm text-red-600 dark:text-rose-300"
       >
         {message}
       </p>

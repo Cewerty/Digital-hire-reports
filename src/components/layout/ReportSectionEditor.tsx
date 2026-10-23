@@ -33,7 +33,9 @@ export function ReportSectionEditor({
   return (
     <section className="space-y-3">
       <div className="flex items-center justify-between gap-3">
-        <h3 className="text-lg font-semibold text-slate-900">{title}</h3>
+        <h3 className="text-lg font-semibold text-slate-900 dark:text-[#E3E3E3]">
+          {title}
+        </h3>
         <div className="flex gap-2">
           <Button
             type="button"
@@ -78,7 +80,11 @@ export function ReportSectionEditor({
       )}
 
       {error ? (
-        <p id={errorId} role="alert" className="text-sm text-red-600">
+        <p
+          id={errorId}
+          role="alert"
+          className="text-sm text-red-600 dark:text-rose-300"
+        >
           {error}
         </p>
       ) : null}
