@@ -29,7 +29,7 @@ export interface AppOutletContext {
 }
 
 const NAV_ITEMS = [
-  { to: "/", label: "Главная (Куратор)", icon: Home, end: true },
+  { to: "/", label: "Главная (Ментор)", icon: Home, end: true },
   { to: "/candidates", label: "Кандидаты", icon: Users, end: false },
 ] as const;
 
@@ -91,7 +91,7 @@ export function AppLayout() {
   const updateReport = useCallback((updatedReport: CandidateReport) => {
     const previousReport = reportsRef.current[updatedReport.candidateId];
     // Повторное утверждение уже утверждённого документа не должно
-    // дублировать событие в ленте куратора.
+    // дублировать событие в ленте менто.
     const isNewlyApproved =
       updatedReport.documentState === "approved" &&
       previousReport?.documentState !== "approved";
@@ -112,7 +112,7 @@ export function AppLayout() {
 
     // Утверждение документа не является финальным решением по кандидату:
     // этап переводится в «Рассмотрен», а «Подтверждён» / «Отклонён»
-    // выставляются вне прототипа (в 1С). Явное решение куратора
+    // выставляются вне прототипа (в 1С). Явное решение ментора
     // не отменяется молча.
     setCandidates((prevCandidates) =>
       prevCandidates.map((candidate) => {
@@ -268,7 +268,7 @@ export function AppLayout() {
           <div className="flex flex-wrap items-center justify-between gap-3 px-8 py-4">
             <div>
               <p className="text-base font-semibold text-foreground">
-                Рабочее пространство наставника
+                Цифровой двойник наставника
               </p>
               <p className="text-sm text-muted-foreground">
                 Интерактивный прототип · Вымышленные данные
