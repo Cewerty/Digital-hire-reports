@@ -78,7 +78,7 @@ export function ReportPage() {
           action={
             <Link
               to="/candidates"
-              className="inline-flex items-center rounded-md border border-slate-300 px-3 py-1.5 text-sm font-medium text-slate-700 transition-colors duration-200 hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-900 focus-visible:ring-offset-2"
+              className="inline-flex items-center rounded-md border border-border bg-background px-3 py-1.5 text-sm font-medium text-foreground transition-colors duration-200 hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E5BA41] focus-visible:ring-offset-2 focus-visible:ring-offset-background"
             >
               <ArrowLeft className="mr-2 h-4 w-4" />К списку кандидатов
             </Link>
@@ -102,7 +102,7 @@ export function ReportPage() {
           action={
             <Link
               to="/candidates"
-              className="inline-flex items-center rounded-md border border-slate-300 px-3 py-1.5 text-sm font-medium text-slate-700 transition-colors duration-200 hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-900 focus-visible:ring-offset-2"
+              className="inline-flex items-center rounded-md border border-border bg-background px-3 py-1.5 text-sm font-medium text-foreground transition-colors duration-200 hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E5BA41] focus-visible:ring-offset-2 focus-visible:ring-offset-background"
             >
               <ArrowLeft className="mr-2 h-4 w-4" />К списку кандидатов
             </Link>
@@ -126,7 +126,7 @@ export function ReportPage() {
         <DocumentStateBadge state={report.documentState} />
       </div>
 
-      <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+      <div className="rounded-xl border border-border bg-card p-4 shadow-sm">
         <ReportDocument
           report={report}
           candidate={candidate}
@@ -137,14 +137,14 @@ export function ReportPage() {
       <div className="flex flex-wrap gap-3">
         <Link
           to={`/candidates/${id}`}
-          className="inline-flex items-center rounded-md border border-slate-300 px-3 py-1.5 text-sm font-medium text-slate-700 transition-colors duration-200 hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-900 focus-visible:ring-offset-2"
+          className="inline-flex items-center rounded-md border border-border bg-background px-3 py-1.5 text-sm font-medium text-foreground transition-colors duration-200 hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E5BA41] focus-visible:ring-offset-2 focus-visible:ring-offset-background"
         >
           <ArrowLeft className="mr-2 h-4 w-4" />
           Профиль
         </Link>
         <Link
           to={`/candidates/${id}/review`}
-          className="inline-flex items-center rounded-md bg-slate-900 px-3 py-1.5 text-sm font-medium text-white transition-colors duration-200 hover:bg-slate-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-900 focus-visible:ring-offset-2"
+          className="inline-flex items-center rounded-md bg-[#F2CA52] px-3 py-1.5 text-sm font-medium text-[#1E2028] transition-colors duration-200 hover:bg-[#E5BA41] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E5BA41] focus-visible:ring-offset-2 focus-visible:ring-offset-background"
         >
           {isApproved ? "Повторная проверка и правка" : "Перейти к проверке"}
           <ArrowRight className="ml-2 h-4 w-4" />

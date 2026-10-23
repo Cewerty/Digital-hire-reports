@@ -74,7 +74,7 @@ export function ProfilePage() {
     <div className="space-y-6">
       <div>
         <h2 className="text-xl font-semibold">Профиль и материалы интервью</h2>
-        <p className="mt-1 text-sm text-slate-500">
+        <p className="mt-1 text-sm text-muted-foreground">
           В прототипе данные кандидата имитируют импорт из 1С и доступны только
           для чтения.
         </p>
@@ -88,7 +88,7 @@ export function ProfilePage() {
       ) : (
         <section
           aria-labelledby="candidate-card-heading"
-          className="rounded-lg border border-slate-200 bg-white p-4 shadow-sm"
+          className="rounded-lg border border-border bg-card p-4 shadow-sm"
         >
           <h3 id="candidate-card-heading" className="text-lg font-semibold">
             Карточка кандидата
@@ -96,7 +96,7 @@ export function ProfilePage() {
           <dl className="mt-3 grid grid-cols-1 gap-x-4 gap-y-2 sm:grid-cols-2">
             {candidateRows.map((row) => (
               <div key={row.label}>
-                <dt className="text-sm text-slate-500">{row.label}</dt>
+                <dt className="text-sm text-muted-foreground">{row.label}</dt>
                 <dd className="text-sm font-medium">{row.value}</dd>
               </div>
             ))}
@@ -106,7 +106,7 @@ export function ProfilePage() {
 
       <section
         aria-labelledby="interview-heading"
-        className="rounded-lg border border-slate-200 bg-white p-4 shadow-sm"
+        className="rounded-lg border border-border bg-card p-4 shadow-sm"
       >
         <h3 id="interview-heading" className="text-lg font-semibold">
           Материалы интервью
@@ -123,12 +123,12 @@ export function ProfilePage() {
             {interviewEntries.map((entry: InterviewEntry) => (
               <article
                 key={entry.id}
-                className="rounded-md border border-slate-100 bg-slate-50 p-3"
+                className="rounded-md border border-border bg-muted p-3"
               >
-                <h4 className="text-sm font-semibold text-slate-900">
+                <h4 className="text-sm font-semibold text-foreground">
                   {entry.question}
                 </h4>
-                <p className="mt-1 whitespace-pre-wrap text-sm text-slate-700">
+                <p className="mt-1 whitespace-pre-wrap text-sm text-foreground">
                   {entry.answer}
                 </p>
               </article>
@@ -142,7 +142,7 @@ export function ProfilePage() {
           <Button type="button" disabled>
             Перейти к отчёту
           </Button>
-          <p className="text-sm text-slate-500">
+          <p className="text-sm text-muted-foreground">
             Отчёт станет доступен после проведения интервью.
           </p>
         </div>
@@ -151,7 +151,7 @@ export function ProfilePage() {
           <Button type="button" disabled>
             Перейти к отчёту
           </Button>
-          <p className="text-sm text-slate-500">
+          <p className="text-sm text-muted-foreground">
             Отчёт по этому кандидату ещё не создан.
           </p>
         </div>

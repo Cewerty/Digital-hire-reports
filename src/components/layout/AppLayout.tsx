@@ -209,7 +209,7 @@ export function AppLayout() {
                 ? "Развернуть боковое меню"
                 : "Свернуть боковое меню"
             }
-            className="rounded-lg p-2 text-muted-foreground transition-colors duration-150 hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-strong focus-visible:ring-offset-1 focus-visible:ring-offset-background"
+            className="rounded-lg p-2 text-muted-foreground transition-colors duration-150 hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E5BA41] focus-visible:ring-offset-1 focus-visible:ring-offset-background"
           >
             <PanelLeft className="h-4 w-4" aria-hidden="true" />
           </button>

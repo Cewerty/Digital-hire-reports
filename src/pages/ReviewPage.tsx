@@ -106,7 +106,7 @@ function ReviewPageContent() {
             <button
               type="button"
               onClick={() => navigate("/candidates")}
-              className="inline-flex items-center rounded-md border border-slate-300 px-3 py-1.5 text-sm font-medium text-slate-700 transition-colors duration-200 hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-900 focus-visible:ring-offset-2"
+              className="inline-flex items-center rounded-md border border-border bg-background px-3 py-1.5 text-sm font-medium text-foreground transition-colors duration-200 hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E5BA41] focus-visible:ring-offset-2 focus-visible:ring-offset-background"
             >
               <X className="mr-2 h-4 w-4" />К списку кандидатов
             </button>
@@ -194,18 +194,20 @@ function ReviewPageContent() {
     <div className="space-y-6">
       <div>
         <h2 className="text-xl font-semibold">Проверка и правка</h2>
-        <p className="mt-1 text-sm text-slate-500">
+        <p className="mt-1 text-sm text-muted-foreground">
           Рабочая копия для: {workingCopy.candidateDisplayName}. Изменения не
           влияют на сохранённый документ до сохранения.
         </p>
       </div>
 
-      <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+      <div className="rounded-xl border border-border bg-card p-4 shadow-sm">
         <div className="flex items-center justify-between text-sm">
-          <span className="font-medium text-slate-700">
+          <span className="font-medium text-foreground">
             Заполнено разделов: {completedSections} из {totalSections}
           </span>
-          <span className="text-slate-500">{Math.round(progressValue)}%</span>
+          <span className="text-muted-foreground">
+            {Math.round(progressValue)}%
+          </span>
         </div>
         <Progress value={progressValue} className="mt-3" />
       </div>
@@ -213,7 +215,7 @@ function ReviewPageContent() {
       {validationErrors.length > 0 && (
         <div
           role="alert"
-          className="animate-slide-in-from-top rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800 shadow-sm"
+          className="animate-slide-in-from-top rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800 shadow-sm dark:border-rose-800/50 dark:bg-rose-950/40 dark:text-rose-300"
         >
           <p className="flex items-center gap-2 font-medium">
             <AlertCircle className="h-4 w-4" />
@@ -230,7 +232,7 @@ function ReviewPageContent() {
       <div
         data-field="candidateDisplayName"
         tabIndex={-1}
-        className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm transition-shadow hover:shadow-md"
+        className="rounded-xl border border-border bg-card p-4 shadow-sm transition-shadow hover:shadow-md"
       >
         <ReportMetadataForm
           metadata={workingCopy.metadata}
@@ -240,7 +242,7 @@ function ReviewPageContent() {
         />
       </div>
 
-      <p className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-600 shadow-sm">
+      <p className="rounded-xl border border-border bg-muted px-4 py-3 text-sm text-muted-foreground shadow-sm">
         Поддерживается Markdown: <strong>жирный</strong>, <em>курсив</em>,
         списки, цитаты и ссылки. Заголовки разделов добавляются автоматически.
       </p>
@@ -256,7 +258,7 @@ function ReviewPageContent() {
               key={definition.id}
               data-field={`section-${definition.id}`}
               tabIndex={-1}
-              className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm transition-shadow hover:shadow-md"
+              className="rounded-xl border border-border bg-card p-4 shadow-sm transition-shadow hover:shadow-md"
             >
               <ReportSectionEditor
                 section={section}
