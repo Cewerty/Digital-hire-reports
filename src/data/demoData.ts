@@ -93,11 +93,22 @@ const candidateD: Candidate = {
   pipelineStage: "rejected",
 };
 
+const candidateE: Candidate = {
+  id: "c-05",
+  fullName: "Дарья Лебедева",
+  preferredName: "Дарья",
+  course: 3,
+  group: "ПРОГ-32",
+  specialty: "Программная инженерия",
+  pipelineStage: "reviewed",
+};
+
 export const demoCandidates: Candidate[] = [
   candidateA,
   candidateB,
   candidateC,
   candidateD,
+  candidateE,
 ];
 
 const candidateAInterviews: InterviewEntry[] = [
@@ -202,6 +213,21 @@ const candidateDInterviews: InterviewEntry[] = [
     question: "Сколько времени вы можете уделять проекту?",
     answer:
       "Около пяти часов в неделю, поэтому участие может быть нерегулярным.",
+  },
+];
+
+const candidateEInterviews: InterviewEntry[] = [
+  {
+    id: "int-e1",
+    question: "Расскажите о вашем опыте frontend-разработки.",
+    answer:
+      "Разрабатываю интерфейсы на React и TypeScript около двух лет, участвовала в двух командных проектах.",
+  },
+  {
+    id: "int-e2",
+    question: "Сколько времени вы можете уделять проекту?",
+    answer:
+      "Около 15 часов в неделю, готова подстраиваться под командный график.",
   },
 ];
 
@@ -352,15 +378,70 @@ const candidateBReport: CandidateReport = {
   documentState: "approved",
 };
 
+const candidateEReport: CandidateReport = {
+  candidateId: candidateE.id,
+  candidateDisplayName: candidateE.fullName,
+  metadata: {
+    recipients: "Команда найма",
+    interviewer: "Мария Прототипова",
+    contact: "daria.lebedeva@example.com",
+    contactDate: "2025-01-12",
+    direction: "Frontend-разработка",
+    curator: "Анна Прототипова",
+    candidateStatus:
+      "Отчёт утверждён, финальное решение принимается вне прототипа",
+  },
+  sections: [
+    {
+      id: "summary",
+      markdown:
+        "Дарья — студентка 3 курса. Уверенно работает с React и TypeScript, имеет опыт командной разработки.",
+      sourceEntryIds: ["int-e1"],
+    },
+    {
+      id: "description",
+      markdown:
+        "Аккуратна в коде, быстро осваивает новые инструменты, хорошо работает в команде.",
+      sourceEntryIds: ["int-e1"],
+    },
+    {
+      id: "skills",
+      markdown: "- React\n- TypeScript\n- Git",
+      sourceEntryIds: ["int-e1"],
+    },
+    {
+      id: "motivation",
+      markdown:
+        "Хочет участвовать в реальном продукте и получить опыт код-ревью.",
+      sourceEntryIds: ["int-e1", "int-e2"],
+    },
+    {
+      id: "next_steps",
+      markdown:
+        "1. Передать отчёт в комиссию.\n2. Дождаться финального решения.",
+      sourceEntryIds: ["int-e2"],
+    },
+    {
+      id: "conclusions",
+      markdown:
+        "**Вердикт:** отчёт утверждён наставником. Финальное решение по кандидату принимается вне прототипа.",
+      sourceEntryIds: ["int-e1"],
+    },
+  ],
+  documentState: "approved",
+};
+
 const demoReports: Record<string, CandidateReport> = {
   [candidateA.id]: candidateAReport,
   [candidateB.id]: candidateBReport,
+  [candidateE.id]: candidateEReport,
 };
 
 const demoInterviews: Record<string, InterviewEntry[]> = {
   [candidateA.id]: candidateAInterviews,
   [candidateB.id]: candidateBInterviews,
   [candidateD.id]: candidateDInterviews,
+  [candidateE.id]: candidateEInterviews,
 };
 
 /** Находит кандидата по идентификатору. */

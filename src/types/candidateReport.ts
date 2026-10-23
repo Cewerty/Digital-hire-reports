@@ -3,6 +3,7 @@ export type DocumentState = "draft" | "approved";
 export type PipelineStage =
   | "uninterviewed"
   | "in_review"
+  | "reviewed"
   | "approved"
   | "rejected";
 

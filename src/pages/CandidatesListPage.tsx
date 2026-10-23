@@ -7,6 +7,7 @@ import type { PipelineStage } from "@/types/candidateReport";
 const STAGE_LABELS: Record<PipelineStage, string> = {
   uninterviewed: "Не опрошен",
   in_review: "На рассмотрении",
+  reviewed: "Рассмотрен",
   approved: "Подтверждён",
   rejected: "Отклонён",
 };
@@ -14,6 +15,7 @@ const STAGE_LABELS: Record<PipelineStage, string> = {
 const STAGE_CLASSES: Record<PipelineStage, string> = {
   uninterviewed: "border-slate-200 bg-white text-slate-600",
   in_review: "border-[#E5BA41] bg-[#F5D061]/40 text-[#1E2028]",
+  reviewed: "border-sky-200 bg-sky-100 text-sky-900",
   approved: "border-emerald-200 bg-emerald-100 text-emerald-900",
   rejected: "border-red-200 bg-red-50 text-red-800",
 };

@@ -75,25 +75,42 @@ export function AppLayout() {
       const isNewlyApproved =
         updatedReport.documentState === "approved" &&
         previousReport?.documentState !== "approved";
+      // Возврат утверждённого документа в черновик откатывает этап
+      // «Рассмотрен» обратно в «На рассмотрении».
+      const isRevertedToDraft =
+        updatedReport.documentState === "draft" &&
+        previousReport?.documentState === "approved";
 
       setReports((prev) => ({
         ...prev,
         [updatedReport.candidateId]: updatedReport,
       }));
 
-      if (!isNewlyApproved) {
+      if (!isNewlyApproved && !isRevertedToDraft) {
         return;
       }
 
-      // Отклонённого кандидата утверждение документа не переводит
-      // в «Подтверждён»: явное решение куратора не отменяется молча.
+      // Утверждение документа не является финальным решением по кандидату:
+      // этап переводится в «Рассмотрен», а «Подтверждён» / «Отклонён»
+      // выставляются вне прототипа (в 1С). Явное решение куратора
+      // не отменяется молча.
       setCandidates((prevCandidates) =>
-        prevCandidates.map((candidate) =>
-          candidate.id === updatedReport.candidateId &&
-          candidate.pipelineStage !== "rejected"
-            ? { ...candidate, pipelineStage: "approved" as PipelineStage }
-            : candidate,
-        ),
+        prevCandidates.map((candidate) => {
+          if (candidate.id !== updatedReport.candidateId) {
+            return candidate;
+          }
+
+          if (isNewlyApproved) {
+            return candidate.pipelineStage === "approved" ||
+              candidate.pipelineStage === "rejected"
+              ? candidate
+              : { ...candidate, pipelineStage: "reviewed" as PipelineStage };
+          }
+
+          return candidate.pipelineStage === "reviewed"
+            ? { ...candidate, pipelineStage: "in_review" as PipelineStage }
+            : candidate;
+        }),
       );
 
       setCurator((prevCurator) => ({
@@ -102,7 +119,9 @@ export function AppLayout() {
           {
             id: `evt-${Date.now()}`,
             timestamp: new Date().toISOString(),
-            text: `Утверждён отчёт кандидата: ${updatedReport.candidateDisplayName}`,
+            text: isNewlyApproved
+              ? `Утверждён отчёт кандидата: ${updatedReport.candidateDisplayName}`
+              : `Документ возвращён в черновик: ${updatedReport.candidateDisplayName}`,
             candidateId: updatedReport.candidateId,
           },
           ...prevCurator.recentEvents,
