@@ -5,10 +5,7 @@ import { Toaster } from "sonner";
 
 import { candidateReport, demoCandidates } from "@/data/demoData";
 import { createRouter } from "@/router";
-import type {
-  CandidateReport,
-  PipelineStage,
-} from "@/types/candidateReport";
+import type { CandidateReport, PipelineStage } from "@/types/candidateReport";
 import "@/index.css";
 
 function App() {
@@ -18,7 +15,10 @@ function App() {
   // отчёта в черновик. Полноценный реестр кандидатов появится позже.
   const [, setPipelineStages] = useState<Record<string, PipelineStage>>(() =>
     Object.fromEntries(
-      demoCandidates.map((candidate) => [candidate.id, candidate.pipelineStage]),
+      demoCandidates.map((candidate) => [
+        candidate.id,
+        candidate.pipelineStage,
+      ]),
     ),
   );
 
