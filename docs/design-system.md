@@ -102,7 +102,7 @@
 ## 5. Интерактивные элементы и Состояния
 
 - **Фильтры воронки (`/candidates`):**
-  - Активный фильтр: `bg-[#F2CA52] text-[#1E2028] font-medium shadow-sm`.
+  - Активный фильтр: `bg-[#F2CA52] text-[#1E2028] font-medium shadow-xs`.
   - Неактивные: `bg-white dark:bg-[#252525] border border-slate-200 dark:border-[#2E2E2E] hover:bg-slate-50 dark:hover:bg-[#2F2F2F]`. Текст неактивной таблетки сохраняет приглушённый семантический оттенок этапа и плавно переходит в акцентный при активации.
 - **Кольцо фокуса (Keyboard Focus):**  
   `focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E5BA41] focus-visible:ring-offset-2 dark:focus-visible:ring-offset-[#191919]`.
