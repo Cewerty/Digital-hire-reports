@@ -57,7 +57,17 @@ function focusField(field: string) {
   });
 }
 
+/**
+ * Ключ по `id` пересоздаёт компонент при смене кандидата в URL.
+ * Без этого `useState`-инициализатор не вызывается повторно и в форме
+ * остаются несохранённые правки предыдущего кандидата.
+ */
 export function ReviewPage() {
+  const { id = "c-01" } = useParams<{ id: string }>();
+  return <ReviewPageContent key={id} />;
+}
+
+function ReviewPageContent() {
   const { id = "c-01" } = useParams<{ id: string }>();
   const { getReportById, updateReport } = useOutletContext<AppOutletContext>();
   const navigate = useNavigate();
