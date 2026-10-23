@@ -75,6 +75,67 @@ export function subscribeTheme(listener: () => void): () => void {
   };
 }
 
+type SystemThemeChangeHandler = (event: MediaQueryListEvent) => void;
+
+interface SystemThemeListenerState {
+  mediaQuery: MediaQueryList;
+  handler: SystemThemeChangeHandler;
+}
+
+/**
+ * Ключ на `window`: под Vite Fast Refresh модуль может инициализироваться
+ * повторно, и ссылка в локальной переменной теряется. Хранение на `window`
+ * позволяет снимать предыдущий обработчик и не плодить дубли слушателей.
+ */
+const SYSTEM_THEME_LISTENER_KEY = "__mentorThemeSystemListener";
+
+type SystemThemeListenerStore = Record<
+  string,
+  SystemThemeListenerState | undefined
+>;
+
+function getSystemThemeListenerStore(): SystemThemeListenerStore | undefined {
+  if (typeof window === "undefined") {
+    return undefined;
+  }
+  return window as unknown as SystemThemeListenerStore;
+}
+
+function detachSystemThemeListener(): void {
+  const store = getSystemThemeListenerStore();
+  if (!store) {
+    return;
+  }
+
+  const state = store[SYSTEM_THEME_LISTENER_KEY];
+  if (!state) {
+    return;
+  }
+
+  state.mediaQuery.removeEventListener("change", state.handler);
+  delete store[SYSTEM_THEME_LISTENER_KEY];
+}
+
+function attachSystemThemeListener(): void {
+  const store = getSystemThemeListenerStore();
+  if (!store || typeof window === "undefined") {
+    return;
+  }
+
+  const mediaQuery = window.matchMedia(DARK_MEDIA_QUERY);
+  const handler: SystemThemeChangeHandler = (event) => {
+    if (hasStoredChoice) {
+      return;
+    }
+    currentTheme = event.matches ? "dark" : "light";
+    applyTheme(currentTheme);
+    notify();
+  };
+
+  mediaQuery.addEventListener("change", handler);
+  store[SYSTEM_THEME_LISTENER_KEY] = { mediaQuery, handler };
+}
+
 /**
  * Инициализирует тему при старте приложения.
  * Пока пользователь не выбрал тему явно, приложение следует системной настройке.
@@ -82,18 +143,15 @@ export function subscribeTheme(listener: () => void): () => void {
 export function initTheme(): void {
   applyTheme(getTheme());
 
-  if (hasStoredChoice || typeof window === "undefined") {
+  // Повторный вызов (например, в dev после HMR) не должен накапливать
+  // обработчики: сначала снимаем прежний слушатель.
+  detachSystemThemeListener();
+
+  if (hasStoredChoice) {
     return;
   }
 
-  window.matchMedia(DARK_MEDIA_QUERY).addEventListener("change", (event) => {
-    if (hasStoredChoice) {
-      return;
-    }
-    currentTheme = event.matches ? "dark" : "light";
-    applyTheme(currentTheme);
-    notify();
-  });
+  attachSystemThemeListener();
 }
 
 function getServerTheme(): Theme {

@@ -126,7 +126,7 @@ export function ReportPage() {
         <DocumentStateBadge state={report.documentState} />
       </div>
 
-      <div className="rounded-xl border border-border bg-card p-4 shadow-sm">
+      <div className="rounded-xl border border-border bg-card p-4 shadow-xs">
         <ReportDocument
           report={report}
           candidate={candidate}

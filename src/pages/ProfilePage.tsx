@@ -128,7 +128,7 @@ export function ProfilePage() {
                 <h4 className="text-sm font-semibold text-slate-900 dark:text-[#E3E3E3]">
                   {entry.question}
                 </h4>
-                <p className="mt-1 whitespace-pre-wrap text-sm text-slate-700 dark:text-slate-300">
+                <p className="mt-1 whitespace-pre-wrap text-sm text-slate-700 dark:text-slate-200">
                   {entry.answer}
                 </p>
               </article>

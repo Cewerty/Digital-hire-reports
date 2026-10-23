@@ -53,7 +53,7 @@ const FILTER_IDLE_CLASSES: Record<StageFilter, string> = {
   approved:
     "text-emerald-700 hover:text-emerald-900 dark:text-emerald-300 dark:hover:text-emerald-200",
   rejected:
-    "text-red-700 hover:text-red-900 dark:text-red-300 dark:hover:text-red-200",
+    "text-red-700 hover:text-red-900 dark:text-rose-300 dark:hover:text-rose-200",
 };
 
 const STAGE_ICONS: Record<PipelineStage, LucideIcon> = {

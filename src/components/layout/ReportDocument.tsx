@@ -23,6 +23,12 @@ export function ReportDocument({
 }: ReportDocumentProps) {
   const { metadata, sections } = report;
 
+  // Если `preferredName` не заполнено, в заголовке показываем ФИО кандидата,
+  // чтобы не получить пустые скобки «()».
+  const preferredLabel = candidate
+    ? candidate.preferredName.trim() || candidate.fullName
+    : "";
+
   const metadataRows: Array<{ label: string; value: string }> = [
     { label: "Кому", value: metadata.recipients },
     { label: "Интервьюер", value: metadata.interviewer },
@@ -38,7 +44,7 @@ export function ReportDocument({
       <header className="space-y-4">
         <h2 className="text-2xl font-semibold text-slate-900 dark:text-[#E3E3E3]">
           Отчёт по кандидату: {report.candidateDisplayName}
-          {candidate ? ` (${candidate.preferredName})` : ""}
+          {preferredLabel ? ` (${preferredLabel})` : ""}
         </h2>
 
         <dl className="grid gap-3 rounded-lg border border-transparent bg-white p-4 sm:grid-cols-2 dark:border-[#3A3A3A] dark:bg-[#2F2F2F]">

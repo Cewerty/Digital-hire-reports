@@ -9,10 +9,7 @@ export function LoadingState({
   label = "Загрузка данных…",
 }: LoadingStateProps) {
   return (
-    <output
-      aria-live="polite"
-      className="flex items-center gap-3 rounded-2xl border border-border bg-muted p-4 text-sm text-muted-foreground shadow-sm"
-    >
+    <output className="flex items-center gap-3 rounded-2xl border border-border bg-muted p-4 text-sm text-muted-foreground shadow-xs">
       <Loader2
         className="h-4 w-4 animate-spin text-brand-strong"
         aria-hidden="true"

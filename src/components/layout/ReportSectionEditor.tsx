@@ -56,6 +56,12 @@ export function ReportSectionEditor({
             variant={mode === "preview" ? "secondary" : "ghost"}
             size="sm"
             aria-pressed={mode === "preview"}
+            aria-describedby={error ? errorId : undefined}
+            title={
+              error
+                ? "Пока ошибка валидации не исправлена, раздел остаётся в режиме редактирования"
+                : undefined
+            }
             onClick={() => setMode("preview")}
             className={
               mode === "preview"
@@ -90,13 +96,21 @@ export function ReportSectionEditor({
       )}
 
       {error ? (
-        <p
-          id={errorId}
-          role="alert"
-          className="text-sm text-red-600 dark:text-rose-300"
-        >
-          {error}
-        </p>
+        <div className="space-y-1">
+          <p
+            id={errorId}
+            role="alert"
+            className="text-sm text-red-600 dark:text-rose-300"
+          >
+            {error}
+          </p>
+          <p className="text-xs text-slate-500 dark:text-[#9B9B9B]">
+            Пока ошибка не исправлена, раздел открывается в режиме
+            редактирования: так поле с ошибкой остаётся доступным для
+            исправления. Переключение в «Предпросмотр» станет доступно после
+            исправления.
+          </p>
+        </div>
       ) : null}
     </section>
   );

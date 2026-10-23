@@ -12,7 +12,10 @@ export function SectionSources({
   entries,
 }: SectionSourcesProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const listId = useId();
+  // `useId()` возвращает значения вида `:r0:` — валидные для `aria-controls`,
+  // но непригодные для `querySelector`. Санитизация сохраняет уникальность
+  // и делает `id` пригодным для любых селекторов.
+  const listId = `section-sources-${useId().replace(/:/g, "")}`;
 
   const uniqueSourceIds = Array.from(new Set(sourceEntryIds));
 
