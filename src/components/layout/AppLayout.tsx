@@ -1,5 +1,6 @@
+import { LayoutDashboard, PanelLeft, Users } from "lucide-react";
 import { useCallback, useState } from "react";
-import { NavLink, Outlet } from "react-router-dom";
+import { NavLink, Outlet, useLocation } from "react-router-dom";
 
 import { DocumentStateBadge } from "@/components/layout/DocumentStateBadge";
 import {
@@ -30,9 +31,15 @@ export interface AppOutletContext {
 }
 
 const NAV_ITEMS = [
-  { to: "/", label: "Профиль и интервью", end: true },
-  { to: "/candidates", label: "Кандидаты", end: false },
+  { to: "/", label: "Главная (Куратор)", icon: LayoutDashboard, end: true },
+  { to: "/candidates", label: "Кандидаты", icon: Users, end: false },
 ] as const;
+
+const REPORT_ROUTE_PATTERN = /^\/candidates\/([^/]+)\/(?:report|review)\/?$/;
+
+function getReportCandidateId(pathname: string): string | undefined {
+  return REPORT_ROUTE_PATTERN.exec(pathname)?.[1];
+}
 
 interface AppLayoutProps {
   documentState?: DocumentState;
@@ -41,6 +48,8 @@ interface AppLayoutProps {
 export function AppLayout({ documentState = "draft" }: AppLayoutProps) {
   const [candidates, setCandidates] = useState<Candidate[]>(demoCandidates);
   const [curator, setCurator] = useState<CuratorProfile>(demoCurator);
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
+  const location = useLocation();
   const [reports, setReports] = useState<Record<string, CandidateReport>>(
     () => {
       const initial: Record<string, CandidateReport> = {};
@@ -54,6 +63,16 @@ export function AppLayout({ documentState = "draft" }: AppLayoutProps) {
       return initial;
     },
   );
+
+  const activeReportCandidateId = getReportCandidateId(location.pathname);
+  const activeReport = activeReportCandidateId
+    ? reports[activeReportCandidateId]
+    : undefined;
+  const headerDocumentState: DocumentState | undefined = activeReport
+    ? activeReport.documentState
+    : activeReportCandidateId
+      ? documentState
+      : undefined;
 
   const updateReport = useCallback((updatedReport: CandidateReport) => {
     setReports((prev) => ({
@@ -92,69 +111,119 @@ export function AppLayout({ documentState = "draft" }: AppLayoutProps) {
     curator,
     reports,
     getCandidateById,
-    getReportById: getReportByCandidateId,
+    getReportById: (candidateId: string) => reports[candidateId],
     getInterviewByCandidateId,
     updateReport,
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900">
-      <header className="border-b border-slate-200 bg-white">
-        <div className="mx-auto w-full max-w-5xl px-4 py-4">
-          <div className="flex flex-wrap items-start justify-between gap-3">
+    <div className="flex min-h-screen bg-white text-slate-900">
+      <aside
+        id="app-sidebar"
+        className={`flex shrink-0 flex-col overflow-hidden border-r border-slate-200/80 bg-[#F4F5F7] transition-[width] duration-200 ease-out motion-reduce:transition-none ${
+          isSidebarCollapsed ? "w-16" : "w-60"
+        }`}
+      >
+        <div
+          className={`flex h-16 shrink-0 items-center ${
+            isSidebarCollapsed ? "justify-center px-2" : "justify-between px-4"
+          }`}
+        >
+          {!isSidebarCollapsed && (
+            <span className="truncate text-sm font-semibold text-slate-700">
+              Наставник
+            </span>
+          )}
+          <button
+            type="button"
+            onClick={() => setIsSidebarCollapsed((prev) => !prev)}
+            aria-expanded={!isSidebarCollapsed}
+            aria-controls="app-sidebar"
+            aria-label={
+              isSidebarCollapsed
+                ? "Развернуть боковое меню"
+                : "Свернуть боковое меню"
+            }
+            title={
+              isSidebarCollapsed
+                ? "Развернуть боковое меню"
+                : "Свернуть боковое меню"
+            }
+            className="rounded-lg p-2 text-slate-600 transition-colors duration-150 hover:bg-white hover:text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E5BA41] focus-visible:ring-offset-1"
+          >
+            <PanelLeft className="h-4 w-4" aria-hidden="true" />
+          </button>
+        </div>
+
+        <nav
+          aria-label="Боковая навигация"
+          className="flex flex-1 flex-col gap-1 px-2 py-2"
+        >
+          {NAV_ITEMS.map((item) => (
+            <NavLink
+              key={item.to}
+              to={item.to}
+              end={item.end}
+              title={isSidebarCollapsed ? item.label : undefined}
+              className={({ isActive }) =>
+                `flex items-center rounded-xl text-sm transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E5BA41] focus-visible:ring-offset-1 ${
+                  isSidebarCollapsed
+                    ? "justify-center px-0 py-2.5"
+                    : "gap-2.5 px-3 py-2"
+                } ${
+                  isActive
+                    ? "bg-[#F2CA52] font-medium text-[#1E2028]"
+                    : "text-slate-600 hover:bg-white/70 hover:text-slate-900"
+                }`
+              }
+            >
+              <item.icon className="h-4 w-4 shrink-0" aria-hidden="true" />
+              {!isSidebarCollapsed && (
+                <span className="truncate">{item.label}</span>
+              )}
+            </NavLink>
+          ))}
+        </nav>
+      </aside>
+
+      <div className="flex min-w-0 flex-1 flex-col">
+        <header className="border-b border-slate-200 bg-white">
+          <div className="flex flex-wrap items-center justify-between gap-3 px-8 py-4">
             <div>
-              <h1 className="text-lg font-semibold">
+              <p className="text-base font-semibold text-slate-900">
                 Рабочее пространство наставника
-              </h1>
+              </p>
               <p className="text-sm text-slate-500">
                 Интерактивный прототип · Вымышленные данные
               </p>
             </div>
-            <DocumentStateBadge state={documentState} />
+            {headerDocumentState && (
+              <DocumentStateBadge state={headerDocumentState} />
+            )}
           </div>
+        </header>
 
-          <nav
-            className="mt-4 flex flex-wrap gap-1"
-            aria-label="Основная навигация"
-          >
-            {NAV_ITEMS.map((item) => (
-              <NavLink
-                key={item.to}
-                to={item.to}
-                end={item.end}
-                className={({ isActive }) =>
-                  `rounded-md px-3 py-1.5 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-900 focus-visible:ring-offset-2 ${
-                    isActive
-                      ? "bg-slate-900 text-white"
-                      : "text-slate-600 hover:bg-slate-100 hover:text-slate-900"
-                  }`
-                }
-              >
-                {item.label}
-              </NavLink>
-            ))}
-          </nav>
-        </div>
-      </header>
+        <main className="flex-1 px-8 py-6">
+          <div className="mx-auto w-full max-w-5xl">
+            <div className="rounded-2xl border border-slate-200/80 bg-white p-6">
+              <Outlet context={contextValue} />
+            </div>
+          </div>
+        </main>
 
-      <main className="mx-auto w-full max-w-5xl px-4 py-6">
-        <div className="rounded-lg border border-slate-200 bg-white p-6 shadow-sm">
-          <Outlet context={contextValue} />
-        </div>
-      </main>
-
-      <footer className="border-t border-slate-200 bg-white">
-        <div className="mx-auto w-full max-w-5xl space-y-1 px-4 py-4 text-sm text-slate-500">
-          <p>
-            Прототип на вымышленных данных. Интеграция с 1С и генерация ИИ не
-            подключены.
-          </p>
-          <p>
-            Изменения сохраняются между страницами, но сбрасываются при
-            перезагрузке.
-          </p>
-        </div>
-      </footer>
+        <footer className="border-t border-slate-200 bg-white">
+          <div className="mx-auto w-full max-w-5xl space-y-1 px-8 py-4 text-sm text-slate-500">
+            <p>
+              Прототип на вымышленных данных. Интеграция с 1С и генерация ИИ не
+              подключены.
+            </p>
+            <p>
+              Изменения сохраняются между страницами, но сбрасываются при
+              перезагрузке.
+            </p>
+          </div>
+        </footer>
+      </div>
     </div>
   );
 }
