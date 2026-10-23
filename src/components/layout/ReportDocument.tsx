@@ -36,20 +36,24 @@ export function ReportDocument({
   return (
     <article className="space-y-8">
       <header className="space-y-4">
-        <h2 className="text-2xl font-semibold text-slate-900">
+        <h2 className="text-2xl font-semibold text-slate-900 dark:text-[#E3E3E3]">
           Отчёт по кандидату: {report.candidateDisplayName}
           {candidate ? ` (${candidate.preferredName})` : ""}
         </h2>
 
-        <dl className="grid gap-3 sm:grid-cols-2">
+        <dl className="grid gap-3 rounded-lg border border-slate-200 bg-slate-50 p-4 sm:grid-cols-2 dark:border-[#2E2E2E] dark:bg-[#2F2F2F]">
           {metadataRows.map((row) => (
             <div key={row.label} className="text-sm">
-              <dt className="font-medium text-slate-500">{row.label}</dt>
-              <dd className="mt-0.5 text-slate-900">
+              <dt className="font-medium text-slate-500 dark:text-[#9B9B9B]">
+                {row.label}
+              </dt>
+              <dd className="mt-0.5 text-slate-900 dark:text-[#E3E3E3]">
                 {row.value.trim().length > 0 ? (
                   row.value
                 ) : (
-                  <span className="text-slate-400">Не указано</span>
+                  <span className="text-slate-400 dark:text-[#7A7A7A]">
+                    Не указано
+                  </span>
                 )}
               </dd>
             </div>
@@ -57,7 +61,7 @@ export function ReportDocument({
         </dl>
       </header>
 
-      <p className="text-sm text-slate-500">
+      <p className="text-sm text-slate-500 dark:text-[#9B9B9B]">
         Источники разделов можно раскрыть под каждым разделом.
       </p>
 
@@ -69,8 +73,11 @@ export function ReportDocument({
           }
 
           return (
-            <section key={definition.id} className="space-y-3">
-              <h3 className="text-lg font-semibold text-slate-900">
+            <section
+              key={definition.id}
+              className="space-y-3 rounded-lg border border-slate-200 bg-slate-50 p-4 dark:border-[#2E2E2E] dark:bg-[#2F2F2F]"
+            >
+              <h3 className="text-lg font-semibold text-slate-900 dark:text-[#E3E3E3]">
                 {index + 1}. {definition.title}
               </h3>
               {section.markdown.trim().length > 0 ? (
