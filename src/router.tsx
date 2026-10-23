@@ -45,7 +45,7 @@ export function createRouter() {
         },
         {
           path: "review",
-          element: <Navigate to="/candidates/c-01/report" replace />,
+          element: <Navigate to="/candidates/c-01/review" replace />,
         },
         {
           path: "*",

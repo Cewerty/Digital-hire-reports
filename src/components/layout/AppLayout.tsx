@@ -7,7 +7,6 @@ import { DocumentStateBadge } from "@/components/layout/DocumentStateBadge";
 import {
   demoCandidates,
   demoCurator,
-  getCandidateById,
   getInterviewByCandidateId,
   getReportByCandidateId,
 } from "@/data/demoData";
@@ -139,6 +138,14 @@ export function AppLayout() {
     [reports],
   );
 
+  // Кандидат читается из изменяемого состояния, а не из демоданных:
+  // после утверждения отчёта `pipelineStage` обновляется в `candidates`,
+  // и профиль должен показывать актуальный этап.
+  const getCandidateById = useCallback(
+    (id: string) => candidates.find((candidate) => candidate.id === id),
+    [candidates],
+  );
+
   const contextValue = useMemo<AppOutletContext>(
     () => ({
       candidates,
@@ -149,7 +156,14 @@ export function AppLayout() {
       getInterviewByCandidateId,
       updateReport,
     }),
-    [candidates, curator, reports, getReportById, updateReport],
+    [
+      candidates,
+      curator,
+      reports,
+      getCandidateById,
+      getReportById,
+      updateReport,
+    ],
   );
 
   return (

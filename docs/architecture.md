@@ -30,7 +30,8 @@ Backend, API, БД, LLM, интеграция с 1С и авторизация �
 | `/candidates/:id` | `ProfilePage` | Профиль кандидата и материалы интервью |
 | `/candidates/:id/report` | `ReportPage` | Просмотр сохранённого отчёта |
 | `/candidates/:id/review` | `ReviewPage` | Редактирование и утверждение |
-| `/report`, `/review` | — | Редиректы на `/candidates/c-01/report` для обратной совместимости |
+| `/report` | — | Редирект на `/candidates/c-01/report` для обратной совместимости |
+| `/review` | — | Редирект на `/candidates/c-01/review` для обратной совместимости |
 | `*` | `NotFoundPage` | Страница «Не найдено» |
 
 Используется клиентская навигация без перезагрузки страницы.
