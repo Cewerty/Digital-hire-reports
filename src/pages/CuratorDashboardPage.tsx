@@ -1,4 +1,10 @@
-import { ArrowRight, ClipboardCheck, History, Users } from "lucide-react";
+import {
+  ArrowRight,
+  ClipboardCheck,
+  FileCheck,
+  History,
+  Users,
+} from "lucide-react";
 import { Link, useOutletContext } from "react-router-dom";
 
 import type { AppOutletContext } from "@/components/layout/AppLayout";
@@ -40,6 +46,10 @@ export function CuratorDashboardPage() {
     (candidate) => candidate.pipelineStage === "in_review",
   ).length;
 
+  const reviewedCount = candidates.filter(
+    (candidate) => candidate.pipelineStage === "reviewed",
+  ).length;
+
   const events = curator.recentEvents;
 
   return (
@@ -78,7 +88,7 @@ export function CuratorDashboardPage() {
         <h2 className="text-2xl font-semibold tracking-tight text-slate-900 dark:text-[#E3E3E3]">
           Очередь задач
         </h2>
-        <div className="grid gap-4 sm:grid-cols-2">
+        <div className="grid gap-4 sm:grid-cols-3">
           <div className={cardClassName}>
             <div className="flex items-center gap-2 text-sm text-slate-500 dark:text-[#9B9B9B]">
               <Users className="h-4 w-4" aria-hidden="true" />
@@ -95,6 +105,15 @@ export function CuratorDashboardPage() {
             </div>
             <p className="mt-2 text-3xl font-semibold text-slate-900 dark:text-[#E3E3E3]">
               {inReviewCount}
+            </p>
+          </div>
+          <div className={cardClassName}>
+            <div className="flex items-center gap-2 text-sm text-slate-500 dark:text-[#9B9B9B]">
+              <FileCheck className="h-4 w-4" aria-hidden="true" />
+              Рассмотрено
+            </div>
+            <p className="mt-2 text-3xl font-semibold text-slate-900 dark:text-[#E3E3E3]">
+              {reviewedCount}
             </p>
           </div>
         </div>
