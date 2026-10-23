@@ -67,10 +67,10 @@ export function ReportDocument({
 
       <div className="space-y-8">
         {REPORT_SECTION_DEFINITIONS.map((definition, index) => {
+          // Отсутствующий раздел не скрывается молча: сохраняем нумерацию
+          // и показываем честное пустое состояние, чтобы читатель заметил
+          // пробел в документе.
           const section = sections.find((item) => item.id === definition.id);
-          if (!section) {
-            return null;
-          }
 
           return (
             <section
@@ -80,7 +80,12 @@ export function ReportDocument({
               <h3 className="text-lg font-semibold text-slate-900 dark:text-[#E3E3E3]">
                 {index + 1}. {definition.title}
               </h3>
-              {section.markdown.trim().length > 0 ? (
+              {!section ? (
+                <EmptyState
+                  title="Раздел отсутствует"
+                  description="Раздел не найден в сохранённом отчёте. Откройте проверку и правку, чтобы восстановить его содержание."
+                />
+              ) : section.markdown.trim().length > 0 ? (
                 <MarkdownContent markdown={section.markdown} />
               ) : (
                 <EmptyState
@@ -89,7 +94,7 @@ export function ReportDocument({
                 />
               )}
               <SectionSources
-                sourceEntryIds={section.sourceEntryIds}
+                sourceEntryIds={section?.sourceEntryIds ?? []}
                 entries={interviewEntries}
               />
             </section>

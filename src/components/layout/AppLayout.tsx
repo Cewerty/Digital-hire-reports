@@ -35,6 +35,18 @@ const NAV_ITEMS = [
 
 const REPORT_ROUTE_PATTERN = /^\/candidates\/([^/]+)\/(?:report|review)\/?$/;
 
+/**
+ * Ширина рабочей области зависит от типа страницы (docs/design-system.md §3.2):
+ * списки и дашборд — `max-w-6xl`, текстовые страницы — `max-w-4xl`
+ * для комфортной длины строки 65–75 символов.
+ */
+function getContentWidthClass(pathname: string): string {
+  if (pathname === "/" || pathname === "/candidates" || pathname === "/candidates/") {
+    return "max-w-6xl";
+  }
+  return "max-w-4xl";
+}
+
 function getReportCandidateId(pathname: string): string | undefined {
   return REPORT_ROUTE_PATTERN.exec(pathname)?.[1];
 }
@@ -268,7 +280,9 @@ export function AppLayout() {
         </header>
 
         <main className="flex-1 px-8 py-6">
-          <div className="mx-auto w-full max-w-5xl">
+          <div
+            className={`mx-auto w-full ${getContentWidthClass(location.pathname)}`}
+          >
             <div className="rounded-2xl border border-border bg-background p-6">
               <Outlet context={contextValue} />
             </div>

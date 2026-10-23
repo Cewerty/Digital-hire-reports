@@ -171,7 +171,7 @@ export function CandidatesListPage() {
             <li key={candidate.id}>
               <Link
                 to={`/candidates/${candidate.id}`}
-                className="block h-full rounded-2xl border border-transparent bg-muted p-5 transition-colors hover:border-border focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-strong focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+                className="block h-full rounded-2xl border border-transparent bg-muted p-5 transition-colors hover:border-slate-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-strong focus-visible:ring-offset-2 focus-visible:ring-offset-background dark:hover:border-[#383838]"
               >
                 <p className="text-sm font-semibold text-foreground">
                   {candidate.fullName}

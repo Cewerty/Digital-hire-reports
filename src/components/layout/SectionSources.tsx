@@ -20,7 +20,12 @@ export function SectionSources({
     .map((id) => entries.find((entry) => entry.id === id))
     .filter((entry): entry is InterviewEntry => entry !== undefined);
 
-  if (sources.length === 0) {
+  // Счётчик отражает число *указанных* в разделе источников, а не только
+  // тех, что нашлись в материалах: так «битые» ссылки не теряются молча.
+  const declaredCount = uniqueSourceIds.length;
+  const missingCount = declaredCount - sources.length;
+
+  if (declaredCount === 0) {
     return (
       <p className="text-sm text-slate-500 dark:text-[#9B9B9B]">
         Источники раздела не указаны
@@ -37,7 +42,7 @@ export function SectionSources({
         aria-controls={listId}
         className="inline-flex items-center rounded-md border border-slate-300 bg-white px-3 py-1.5 text-sm font-medium text-slate-700 transition-colors duration-200 hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E5BA41] focus-visible:ring-offset-2 focus-visible:ring-offset-background dark:border-[#2E2E2E] dark:bg-[#252525] dark:text-[#E3E3E3] dark:hover:bg-[#2F2F2F]"
       >
-        Источники раздела · {sources.length}
+        Источники раздела · {declaredCount}
       </button>
 
       <div id={listId} hidden={!isOpen} className="mt-3 space-y-3">
@@ -54,6 +59,15 @@ export function SectionSources({
             </p>
           </article>
         ))}
+        {missingCount > 0 && (
+          <p
+            role="status"
+            className="rounded-md border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-900 dark:border-amber-800/50 dark:bg-amber-950/40 dark:text-amber-200"
+          >
+            Не удалось сопоставить с материалами интервью: {missingCount}{" "}
+            {missingCount === 1 ? "источник" : "источника(ов)"}.
+          </p>
+        )}
       </div>
     </div>
   );
