@@ -19,6 +19,13 @@ interface ReportMetadataFormProps {
   errors?: ReportValidationError[];
 }
 
+/**
+ * Строка свойства в духе Notion: при наведении подсвечивается отдельной
+ * поверхностью `bg-white` / `#2F2F2F`, чтобы не сливаться с фоном карточки.
+ */
+const FIELD_ROW_CLASS =
+  "-mx-2 space-y-1 rounded-lg p-2 transition-colors hover:bg-white dark:hover:bg-[#2F2F2F]";
+
 export function ReportMetadataForm({
   metadata,
   candidateDisplayName,
@@ -67,7 +74,7 @@ export function ReportMetadataForm({
 
   return (
     <div className="space-y-4">
-      <div data-field="candidateDisplayName">
+      <div data-field="candidateDisplayName" className={FIELD_ROW_CLASS}>
         <Label htmlFor="candidateDisplayName" className="block">
           Имя в документе
         </Label>
@@ -80,7 +87,7 @@ export function ReportMetadataForm({
         {renderError("candidateDisplayName")}
       </div>
 
-      <div data-field="recipients">
+      <div data-field="recipients" className={FIELD_ROW_CLASS}>
         <Label htmlFor="recipients" className="block">
           Кому
         </Label>
@@ -95,7 +102,7 @@ export function ReportMetadataForm({
         {renderError("recipients")}
       </div>
 
-      <div data-field="interviewer">
+      <div data-field="interviewer" className={FIELD_ROW_CLASS}>
         <Label htmlFor="interviewer" className="block">
           Интервьюер
         </Label>
@@ -110,7 +117,7 @@ export function ReportMetadataForm({
         {renderError("interviewer")}
       </div>
 
-      <div data-field="contact">
+      <div data-field="contact" className={FIELD_ROW_CLASS}>
         <Label htmlFor="contact" className="block">
           Контакт
         </Label>
@@ -125,7 +132,7 @@ export function ReportMetadataForm({
         {renderError("contact")}
       </div>
 
-      <div data-field="contactDate">
+      <div data-field="contactDate" className={FIELD_ROW_CLASS}>
         <Label htmlFor="contactDate" className="block">
           Дата контакта
         </Label>
@@ -141,7 +148,7 @@ export function ReportMetadataForm({
         {renderError("contactDate")}
       </div>
 
-      <div data-field="direction">
+      <div data-field="direction" className={FIELD_ROW_CLASS}>
         <Label htmlFor="direction" className="block">
           Направление
         </Label>
@@ -156,7 +163,7 @@ export function ReportMetadataForm({
         {renderError("direction")}
       </div>
 
-      <div data-field="curator">
+      <div data-field="curator" className={FIELD_ROW_CLASS}>
         <Label htmlFor="curator" className="block">
           Куратор
         </Label>
@@ -171,7 +178,7 @@ export function ReportMetadataForm({
         {renderError("curator")}
       </div>
 
-      <div data-field="candidateStatus">
+      <div data-field="candidateStatus" className={FIELD_ROW_CLASS}>
         <Label htmlFor="candidateStatus" className="block">
           Статус кандидата
         </Label>

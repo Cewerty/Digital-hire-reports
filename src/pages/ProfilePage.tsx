@@ -88,7 +88,7 @@ export function ProfilePage() {
       ) : (
         <section
           aria-labelledby="candidate-card-heading"
-          className="rounded-lg border border-border bg-card p-4 shadow-sm"
+          className="rounded-2xl border border-transparent bg-[#F4F5F7] p-5 transition-colors hover:border-slate-300 dark:bg-[#252525] dark:hover:border-[#383838]"
         >
           <h3 id="candidate-card-heading" className="text-lg font-semibold">
             Карточка кандидата
@@ -106,7 +106,7 @@ export function ProfilePage() {
 
       <section
         aria-labelledby="interview-heading"
-        className="rounded-lg border border-border bg-card p-4 shadow-sm"
+        className="rounded-2xl border border-transparent bg-[#F4F5F7] p-5 transition-colors hover:border-slate-300 dark:bg-[#252525] dark:hover:border-[#383838]"
       >
         <h3 id="interview-heading" className="text-lg font-semibold">
           Материалы интервью
@@ -123,12 +123,12 @@ export function ProfilePage() {
             {interviewEntries.map((entry: InterviewEntry) => (
               <article
                 key={entry.id}
-                className="rounded-md border border-transparent bg-white p-3 dark:border-[#3A3A3A] dark:bg-[#2F2F2F]"
+                className="rounded-xl border border-slate-200/80 bg-white p-4 transition-colors hover:border-slate-300 dark:border-[#3A3A3A] dark:bg-[#2F2F2F] dark:hover:border-[#4A4A4A]"
               >
-                <h4 className="text-sm font-semibold text-slate-700 dark:text-slate-200">
+                <h4 className="text-sm font-semibold text-slate-900 dark:text-[#E3E3E3]">
                   {entry.question}
                 </h4>
-                <p className="mt-1 whitespace-pre-wrap text-sm text-slate-700 dark:text-slate-200">
+                <p className="mt-1 whitespace-pre-wrap text-sm text-slate-700 dark:text-slate-300">
                   {entry.answer}
                 </p>
               </article>

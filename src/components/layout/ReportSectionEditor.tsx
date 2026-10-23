@@ -43,6 +43,11 @@ export function ReportSectionEditor({
             size="sm"
             aria-pressed={mode === "edit"}
             onClick={() => setMode("edit")}
+            className={
+              mode === "edit"
+                ? "bg-[#F2CA52] text-[#1E2028] hover:bg-[#E5BA41]"
+                : "bg-white text-slate-600 hover:bg-slate-50 dark:bg-[#2F2F2F] dark:text-slate-300 dark:hover:bg-[#3A3A3A]"
+            }
           >
             Редактирование
           </Button>
@@ -52,6 +57,11 @@ export function ReportSectionEditor({
             size="sm"
             aria-pressed={mode === "preview"}
             onClick={() => setMode("preview")}
+            className={
+              mode === "preview"
+                ? "bg-[#F2CA52] text-[#1E2028] hover:bg-[#E5BA41]"
+                : "bg-white text-slate-600 hover:bg-slate-50 dark:bg-[#2F2F2F] dark:text-slate-300 dark:hover:bg-[#3A3A3A]"
+            }
           >
             Предпросмотр
           </Button>
@@ -68,7 +78,7 @@ export function ReportSectionEditor({
           aria-label={`Markdown раздела «${title}»`}
           aria-invalid={Boolean(error)}
           aria-describedby={error ? errorId : undefined}
-          className="min-h-[160px]"
+          className="min-h-[160px] transition-colors hover:border-slate-300 dark:hover:border-[#4A4A4A]"
         />
       ) : section.markdown.trim().length > 0 ? (
         <MarkdownContent markdown={section.markdown} />

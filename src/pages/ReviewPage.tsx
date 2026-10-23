@@ -200,7 +200,7 @@ function ReviewPageContent() {
         </p>
       </div>
 
-      <div className="rounded-xl border border-border bg-card p-4 shadow-sm">
+      <div className="rounded-2xl border border-transparent bg-[#F4F5F7] p-5 dark:bg-[#252525]">
         <div className="flex items-center justify-between text-sm">
           <span className="font-medium text-foreground">
             Заполнено разделов: {completedSections} из {totalSections}
@@ -232,7 +232,7 @@ function ReviewPageContent() {
       <div
         data-field="candidateDisplayName"
         tabIndex={-1}
-        className="rounded-xl border border-border bg-card p-4 shadow-sm transition-shadow hover:shadow-md"
+        className="rounded-2xl border border-transparent bg-[#F4F5F7] p-5 transition-colors hover:border-slate-300 dark:bg-[#252525] dark:hover:border-[#383838]"
       >
         <ReportMetadataForm
           metadata={workingCopy.metadata}
@@ -242,7 +242,7 @@ function ReviewPageContent() {
         />
       </div>
 
-      <p className="rounded-xl border border-border bg-muted px-4 py-3 text-sm text-muted-foreground shadow-sm">
+      <p className="rounded-2xl border border-slate-200/80 bg-white px-4 py-3 text-sm text-slate-600 dark:border-[#3A3A3A] dark:bg-[#2F2F2F] dark:text-slate-300">
         Поддерживается Markdown: <strong>жирный</strong>, <em>курсив</em>,
         списки, цитаты и ссылки. Заголовки разделов добавляются автоматически.
       </p>
@@ -258,7 +258,7 @@ function ReviewPageContent() {
               key={definition.id}
               data-field={`section-${definition.id}`}
               tabIndex={-1}
-              className="rounded-xl border border-border bg-card p-4 shadow-sm transition-shadow hover:shadow-md"
+              className="rounded-2xl border border-transparent bg-[#F4F5F7] p-5 transition-colors hover:border-slate-300 dark:bg-[#252525] dark:hover:border-[#383838]"
             >
               <ReportSectionEditor
                 section={section}
