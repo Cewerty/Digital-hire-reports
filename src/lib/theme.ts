@@ -107,10 +107,6 @@ export interface ThemeController {
 
 /** Хук доступа к теме для компонентов. */
 export function useTheme(): ThemeController {
-  const theme = useSyncExternalStore(
-    subscribeTheme,
-    getTheme,
-    getServerTheme,
-  );
+  const theme = useSyncExternalStore(subscribeTheme, getTheme, getServerTheme);
   return { theme, toggleTheme };
 }
