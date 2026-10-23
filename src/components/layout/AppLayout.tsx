@@ -41,7 +41,11 @@ const REPORT_ROUTE_PATTERN = /^\/candidates\/([^/]+)\/(?:report|review)\/?$/;
  * для комфортной длины строки 65–75 символов.
  */
 function getContentWidthClass(pathname: string): string {
-  if (pathname === "/" || pathname === "/candidates" || pathname === "/candidates/") {
+  if (
+    pathname === "/" ||
+    pathname === "/candidates" ||
+    pathname === "/candidates/"
+  ) {
     return "max-w-6xl";
   }
   return "max-w-4xl";
