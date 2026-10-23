@@ -11,7 +11,7 @@ export function LoadingState({
   return (
     <output
       aria-live="polite"
-      className="flex items-center gap-3 rounded-2xl border border-border bg-background p-4 text-sm text-muted-foreground shadow-sm"
+      className="flex items-center gap-3 rounded-2xl border border-border bg-muted p-4 text-sm text-muted-foreground shadow-sm"
     >
       <Loader2
         className="h-4 w-4 animate-spin text-brand-strong"

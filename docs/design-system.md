@@ -51,6 +51,10 @@
   - *Light:* `bg-[#F5D061]/40 text-[#1E2028] border border-[#E5BA41]`
   - *Dark:* `dark:bg-amber-950/40 dark:text-[#F2CA52] dark:border-[#E5BA41]/50`
   - Иконка: `Clock`
+- `reviewed` («Рассмотрен»):
+  - *Light:* `bg-sky-100 text-sky-900 border border-sky-200`
+  - *Dark:* `dark:bg-sky-950/40 dark:text-sky-300 dark:border-sky-800/50`
+  - Иконка: `FileCheck`
 - `uninterviewed` («Не опрошен»):
   - *Light:* `bg-white text-slate-600 border border-slate-200`
   - *Dark:* `dark:bg-[#2F2F2F] dark:text-slate-300 dark:border-[#3E3E3E]`
@@ -98,8 +102,8 @@
 ## 5. Интерактивные элементы и Состояния
 
 - **Фильтры воронки (`/candidates`):**
-  - Активный фильтр: `bg-[#F2CA52] text-[#1E2028] font-medium shadow-xs`.
-  - Неактивные: `bg-white dark:bg-[#252525] border border-slate-200 dark:border-[#2E2E2E] text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-[#2F2F2F]`.
+  - Активный фильтр: `bg-[#F2CA52] text-[#1E2028] font-medium shadow-sm`.
+  - Неактивные: `bg-white dark:bg-[#252525] border border-slate-200 dark:border-[#2E2E2E] hover:bg-slate-50 dark:hover:bg-[#2F2F2F]`. Текст неактивной таблетки сохраняет приглушённый семантический оттенок этапа и плавно переходит в акцентный при активации.
 - **Кольцо фокуса (Keyboard Focus):**  
   `focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E5BA41] focus-visible:ring-offset-2 dark:focus-visible:ring-offset-[#191919]`.
 - **Состояние Disabled:**  

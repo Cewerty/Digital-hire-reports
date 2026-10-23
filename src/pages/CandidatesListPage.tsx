@@ -1,9 +1,9 @@
 import {
   CheckCircle2,
-  CircleDashed,
   Clock,
   FileCheck,
   type LucideIcon,
+  MinusCircle,
   XCircle,
 } from "lucide-react";
 import { useState } from "react";
@@ -22,7 +22,8 @@ const STAGE_LABELS: Record<PipelineStage, string> = {
 };
 
 const STAGE_CLASSES: Record<PipelineStage, string> = {
-  uninterviewed: "border-border bg-background text-muted-foreground",
+  uninterviewed:
+    "border-slate-200 bg-white text-slate-600 dark:border-[#3E3E3E] dark:bg-[#2F2F2F] dark:text-slate-300",
   in_review:
     "border-brand-strong bg-brand-soft/40 text-brand-foreground dark:border-brand-strong/50 dark:bg-amber-950/40 dark:text-brand",
   reviewed:
@@ -30,40 +31,33 @@ const STAGE_CLASSES: Record<PipelineStage, string> = {
   approved:
     "border-emerald-200 bg-emerald-100 text-emerald-900 dark:border-emerald-800/50 dark:bg-emerald-950/40 dark:text-emerald-300",
   rejected:
-    "border-red-200 bg-red-50 text-red-800 dark:border-red-800/50 dark:bg-red-950/40 dark:text-red-300",
+    "border-red-200 bg-red-50 text-red-800 dark:border-rose-800/50 dark:bg-rose-950/40 dark:text-rose-300",
 };
 
-// Активная таблетка фильтра использует ту же палитру, что и бейдж этапа
-// на карточке кандидата: цвет фильтра совпадает с цветом статуса.
-const FILTER_ACTIVE_CLASSES: Record<StageFilter, string> = {
-  all: "border-brand-strong bg-brand text-brand-foreground",
-  uninterviewed:
-    "border-slate-300 bg-slate-100 text-slate-900 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100",
-  in_review: STAGE_CLASSES.in_review,
-  reviewed: STAGE_CLASSES.reviewed,
-  approved: STAGE_CLASSES.approved,
-  rejected: STAGE_CLASSES.rejected,
-};
+// Активная таблетка всегда использует фирменный янтарно-золотой акцент
+// института (docs/design-system.md §5), независимо от этапа.
+const FILTER_ACTIVE_CLASS =
+  "border-brand-strong bg-brand text-brand-foreground shadow-sm";
 
 // Пассивная таблетка сохраняет семантический цвет этапа, но приглушённый:
 // при наведении и активации `transition-colors` плавно переводит текст
 // в насыщенный цвет бейджа.
 const FILTER_IDLE_CLASSES: Record<StageFilter, string> = {
-  all: "text-muted-foreground hover:text-foreground",
+  all: "text-slate-600 hover:text-slate-900 dark:text-slate-300 dark:hover:text-[#E3E3E3]",
   uninterviewed:
     "text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-100",
   in_review:
-    "text-amber-700/80 hover:text-amber-900 dark:text-amber-300/80 dark:hover:text-amber-200",
+    "text-amber-700 hover:text-amber-900 dark:text-amber-300 dark:hover:text-amber-200",
   reviewed:
-    "text-sky-700/80 hover:text-sky-900 dark:text-sky-300/80 dark:hover:text-sky-200",
+    "text-sky-700 hover:text-sky-900 dark:text-sky-300 dark:hover:text-sky-200",
   approved:
-    "text-emerald-700/80 hover:text-emerald-900 dark:text-emerald-300/80 dark:hover:text-emerald-200",
+    "text-emerald-700 hover:text-emerald-900 dark:text-emerald-300 dark:hover:text-emerald-200",
   rejected:
-    "text-red-700/80 hover:text-red-900 dark:text-red-300/80 dark:hover:text-red-200",
+    "text-red-700 hover:text-red-900 dark:text-red-300 dark:hover:text-red-200",
 };
 
 const STAGE_ICONS: Record<PipelineStage, LucideIcon> = {
-  uninterviewed: CircleDashed,
+  uninterviewed: MinusCircle,
   in_review: Clock,
   reviewed: FileCheck,
   approved: CheckCircle2,
@@ -133,8 +127,8 @@ export function CandidatesListPage() {
                 aria-pressed={isActive}
                 className={`rounded-full border px-3 py-1 text-sm font-medium transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-strong focus-visible:ring-offset-2 focus-visible:ring-offset-background ${
                   isActive
-                    ? FILTER_ACTIVE_CLASSES[option.value]
-                    : `border-border bg-background hover:bg-muted ${FILTER_IDLE_CLASSES[option.value]}`
+                    ? FILTER_ACTIVE_CLASS
+                    : `border-slate-200 bg-white hover:bg-slate-50 dark:border-[#2E2E2E] dark:bg-[#252525] dark:hover:bg-[#2F2F2F] ${FILTER_IDLE_CLASSES[option.value]}`
                 }`}
               >
                 {option.label}

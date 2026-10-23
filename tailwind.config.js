@@ -45,6 +45,7 @@ export default {
         border: "hsl(var(--border) / <alpha-value>)",
         input: "hsl(var(--input) / <alpha-value>)",
         ring: "hsl(var(--ring) / <alpha-value>)",
+        sidebar: "hsl(var(--sidebar) / <alpha-value>)",
         brand: {
           DEFAULT: "hsl(var(--brand) / <alpha-value>)",
           strong: "hsl(var(--brand-strong) / <alpha-value>)",
