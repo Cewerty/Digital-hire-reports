@@ -21,11 +21,15 @@ const STAGE_LABELS: Record<PipelineStage, string> = {
 };
 
 const STAGE_CLASSES: Record<PipelineStage, string> = {
-  uninterviewed: "border-slate-200 bg-white text-slate-600",
-  in_review: "border-[#E5BA41] bg-[#F5D061]/40 text-[#1E2028]",
-  reviewed: "border-sky-200 bg-sky-100 text-sky-900",
-  approved: "border-emerald-200 bg-emerald-100 text-emerald-900",
-  rejected: "border-red-200 bg-red-50 text-red-800",
+  uninterviewed: "border-border bg-background text-muted-foreground",
+  in_review:
+    "border-brand-strong bg-brand-soft/40 text-brand-foreground dark:border-brand-strong/50 dark:bg-amber-950/40 dark:text-brand",
+  reviewed:
+    "border-sky-200 bg-sky-100 text-sky-900 dark:border-sky-800/50 dark:bg-sky-950/40 dark:text-sky-300",
+  approved:
+    "border-emerald-200 bg-emerald-100 text-emerald-900 dark:border-emerald-800/50 dark:bg-emerald-950/40 dark:text-emerald-300",
+  rejected:
+    "border-red-200 bg-red-50 text-red-800 dark:border-red-800/50 dark:bg-red-950/40 dark:text-red-300",
 };
 
 const STAGE_ICONS: Record<PipelineStage, LucideIcon> = {
@@ -57,10 +61,10 @@ export function CandidatesListPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-2xl font-semibold tracking-tight text-slate-900">
+        <h2 className="text-2xl font-semibold tracking-tight text-foreground">
           Кандидаты · {candidates.length}
         </h2>
-        <p className="mt-1 text-sm text-slate-500">
+        <p className="mt-1 text-sm text-muted-foreground">
           Реестр вертикального среза. Откройте карточку, чтобы посмотреть
           профиль, материалы интервью и отчёт.
         </p>
@@ -77,15 +81,15 @@ export function CandidatesListPage() {
             <li key={candidate.id}>
               <Link
                 to={`/candidates/${candidate.id}`}
-                className="block h-full rounded-2xl border border-transparent bg-[#F4F5F7] p-5 transition-colors hover:border-slate-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E5BA41] focus-visible:ring-offset-2"
+                className="block h-full rounded-2xl border border-transparent bg-muted p-5 transition-colors hover:border-border focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-strong focus-visible:ring-offset-2 focus-visible:ring-offset-background"
               >
-                <p className="text-sm font-semibold text-slate-900">
+                <p className="text-sm font-semibold text-foreground">
                   {candidate.fullName}
                 </p>
-                <p className="mt-1 text-sm text-slate-500">
+                <p className="mt-1 text-sm text-muted-foreground">
                   Группа: {candidate.group}
                 </p>
-                <p className="text-sm text-slate-500">
+                <p className="text-sm text-muted-foreground">
                   Направление: {candidate.specialty}
                 </p>
                 <StageBadge stage={candidate.pipelineStage} />

@@ -1,5 +1,5 @@
 import { Home, PanelLeft, Users } from "lucide-react";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { NavLink, Outlet, useLocation } from "react-router-dom";
 
 import { DocumentStateBadge } from "@/components/layout/DocumentStateBadge";
@@ -60,6 +60,13 @@ export function AppLayout() {
     },
   );
 
+  // Зеркало словаря отчётов: `updateReport` читает предыдущее состояние
+  // через ref и не пересоздаётся при каждом сохранении.
+  const reportsRef = useRef(reports);
+  useEffect(() => {
+    reportsRef.current = reports;
+  }, [reports]);
+
   const activeReportCandidateId = getReportCandidateId(location.pathname);
   const activeReport = activeReportCandidateId
     ? reports[activeReportCandidateId]
@@ -68,7 +75,7 @@ export function AppLayout() {
 
   const updateReport = useCallback(
     (updatedReport: CandidateReport) => {
-      const previousReport = reports[updatedReport.candidateId];
+      const previousReport = reportsRef.current[updatedReport.candidateId];
       // Повторное утверждение уже утверждённого документа не должно
       // дублировать событие в ленте куратора.
       const isNewlyApproved =
@@ -127,18 +134,26 @@ export function AppLayout() {
         ],
       }));
     },
+    [],
+  );
+
+  const getReportById = useCallback(
+    (candidateId: string) => reports[candidateId],
     [reports],
   );
 
-  const contextValue: AppOutletContext = {
-    candidates,
-    curator,
-    reports,
-    getCandidateById,
-    getReportById: (candidateId: string) => reports[candidateId],
-    getInterviewByCandidateId,
-    updateReport,
-  };
+  const contextValue = useMemo<AppOutletContext>(
+    () => ({
+      candidates,
+      curator,
+      reports,
+      getCandidateById,
+      getReportById,
+      getInterviewByCandidateId,
+      updateReport,
+    }),
+    [candidates, curator, reports, getReportById, updateReport],
+  );
 
   return (
     <div className="flex min-h-screen bg-background text-foreground">

@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { parseDemoViewState } from "@/data/demoData";
-import type { CandidateReport } from "@/types/candidateReport";
+import { cloneReport } from "@/lib/cloneReport";
 import { ArrowLeft, ArrowRight, RotateCcw } from "lucide-react";
 import { useEffect, useState } from "react";
 import {
@@ -67,7 +67,28 @@ export function ReportPage() {
     );
   }
 
-  if (!candidate || !report) {
+  if (!candidate) {
+    return (
+      <div className="space-y-6">
+        <h1 className="text-xl font-semibold">Отчёт</h1>
+
+        <EmptyState
+          title="Кандидат не найден"
+          description="Данные профиля недоступны. Проверьте, что кандидат был импортирован из 1С."
+          action={
+            <Link
+              to="/candidates"
+              className="inline-flex items-center rounded-md border border-slate-300 px-3 py-1.5 text-sm font-medium text-slate-700 transition-colors duration-200 hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-900 focus-visible:ring-offset-2"
+            >
+              <ArrowLeft className="mr-2 h-4 w-4" />К списку кандидатов
+            </Link>
+          }
+        />
+      </div>
+    );
+  }
+
+  if (!report) {
     return (
       <div className="space-y-6">
         <div className="flex flex-wrap items-center justify-between gap-3">
@@ -94,11 +115,7 @@ export function ReportPage() {
   const isApproved = report.documentState === "approved";
 
   const handleUnapprove = () => {
-    const updatedReport: CandidateReport = {
-      ...report,
-      documentState: "draft",
-    };
-    updateReport(updatedReport);
+    updateReport({ ...cloneReport(report), documentState: "draft" });
     toast.success("Документ возвращён в черновик");
   };
 

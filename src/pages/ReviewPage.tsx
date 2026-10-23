@@ -15,6 +15,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { REPORT_SECTION_DEFINITIONS } from "@/data/reportSections";
+import { cloneReport } from "@/lib/cloneReport";
 import {
   type ReportValidationError,
   validateReport,
@@ -24,17 +25,6 @@ import { AlertCircle, Check, Save, X } from "lucide-react";
 import { useRef, useState } from "react";
 import { useNavigate, useOutletContext, useParams } from "react-router-dom";
 import { toast } from "sonner";
-
-function createWorkingCopy(report: CandidateReport): CandidateReport {
-  return {
-    ...report,
-    metadata: { ...report.metadata },
-    sections: report.sections.map((section) => ({
-      ...section,
-      sourceEntryIds: [...section.sourceEntryIds],
-    })),
-  };
-}
 
 function focusField(field: string) {
   requestAnimationFrame(() => {
@@ -74,7 +64,7 @@ function ReviewPageContent() {
   const report = getReportById(id);
 
   const [workingCopy, setWorkingCopy] = useState<CandidateReport | null>(() =>
-    report ? createWorkingCopy(report) : null,
+    report ? cloneReport(report) : null,
   );
   const [isApproveDialogOpen, setIsApproveDialogOpen] = useState(false);
   const [validationErrors, setValidationErrors] = useState<
@@ -160,7 +150,7 @@ function ReviewPageContent() {
     if (!workingCopy || !validateWorkingCopy()) return;
 
     updateReport({
-      ...createWorkingCopy(workingCopy),
+      ...cloneReport(workingCopy),
       documentState,
     });
     toast.success(message);

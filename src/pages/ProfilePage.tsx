@@ -15,7 +15,7 @@ import type { InterviewEntry } from "@/types/candidateReport";
 
 export function ProfilePage() {
   const { id = "c-01" } = useParams<{ id: string }>();
-  const { getCandidateById, getInterviewByCandidateId } =
+  const { getCandidateById, getInterviewByCandidateId, getReportById } =
     useOutletContext<AppOutletContext>();
   const [searchParams] = useSearchParams();
   const demoState = parseDemoViewState(searchParams.get("state"));
@@ -24,6 +24,7 @@ export function ProfilePage() {
 
   const candidate = getCandidateById(id);
   const interviewEntries = getInterviewByCandidateId(id);
+  const hasReport = Boolean(getReportById(id));
 
   useEffect(() => {
     if (demoState !== "loading") {
@@ -143,6 +144,15 @@ export function ProfilePage() {
           </Button>
           <p className="text-sm text-slate-500">
             Отчёт станет доступен после проведения интервью.
+          </p>
+        </div>
+      ) : !hasReport ? (
+        <div className="space-y-2">
+          <Button type="button" disabled>
+            Перейти к отчёту
+          </Button>
+          <p className="text-sm text-slate-500">
+            Отчёт по этому кандидату ещё не создан.
           </p>
         </div>
       ) : (

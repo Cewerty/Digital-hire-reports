@@ -34,10 +34,10 @@ function formatEventTimestamp(timestamp: string): string {
 }
 
 const cardClassName =
-  "rounded-2xl border border-transparent bg-[#F4F5F7] p-5 transition-colors hover:border-slate-300 dark:bg-[#252525] dark:hover:border-[#383838]";
+  "rounded-2xl border border-transparent bg-muted p-5 transition-colors hover:border-border";
 
 const focusRingClassName =
-  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E5BA41] focus-visible:ring-offset-2 dark:focus-visible:ring-offset-[#191919]";
+  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-strong focus-visible:ring-offset-2 focus-visible:ring-offset-background";
 
 export function CuratorDashboardPage() {
   const { candidates, curator } = useOutletContext<AppOutletContext>();
@@ -65,19 +65,19 @@ export function CuratorDashboardPage() {
           ) : (
             <div
               aria-hidden="true"
-              className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-[#F2CA52] text-lg font-semibold text-[#1E2028]"
+              className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-brand text-lg font-semibold text-brand-foreground"
             >
               {getInitials(curator.fullName)}
             </div>
           )}
           <div className="min-w-0">
-            <p className="text-xs font-medium uppercase tracking-wide text-slate-500 dark:text-[#9B9B9B]">
+            <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
               Наставник
             </p>
-            <h1 className="truncate text-2xl font-semibold tracking-tight text-slate-900 dark:text-[#E3E3E3]">
+            <h1 className="truncate text-2xl font-semibold tracking-tight text-foreground">
               {curator.fullName}
             </h1>
-            <span className="mt-2 inline-flex items-center gap-1.5 rounded-full border border-transparent bg-white px-3 py-1 text-xs font-medium text-slate-700 dark:border-[#3A3A3A] dark:bg-[#2F2F2F] dark:text-slate-200">
+            <span className="mt-2 inline-flex items-center gap-1.5 rounded-full border border-border bg-background px-3 py-1 text-xs font-medium text-foreground">
               {curator.direction}
             </span>
           </div>
@@ -85,34 +85,34 @@ export function CuratorDashboardPage() {
       </section>
 
       <section className="space-y-3">
-        <h2 className="text-2xl font-semibold tracking-tight text-slate-900 dark:text-[#E3E3E3]">
+        <h2 className="text-2xl font-semibold tracking-tight text-foreground">
           Очередь задач
         </h2>
         <div className="grid gap-4 sm:grid-cols-3">
           <div className={cardClassName}>
-            <div className="flex items-center gap-2 text-sm text-slate-500 dark:text-[#9B9B9B]">
+            <div className="flex items-center gap-2 text-sm text-muted-foreground">
               <Users className="h-4 w-4" aria-hidden="true" />
               Всего в базе
             </div>
-            <p className="mt-2 text-3xl font-semibold text-slate-900 dark:text-[#E3E3E3]">
+            <p className="mt-2 text-3xl font-semibold text-foreground">
               {candidates.length}
             </p>
           </div>
           <div className={cardClassName}>
-            <div className="flex items-center gap-2 text-sm text-slate-500 dark:text-[#9B9B9B]">
+            <div className="flex items-center gap-2 text-sm text-muted-foreground">
               <ClipboardCheck className="h-4 w-4" aria-hidden="true" />
               Ожидают проверки отчёта
             </div>
-            <p className="mt-2 text-3xl font-semibold text-slate-900 dark:text-[#E3E3E3]">
+            <p className="mt-2 text-3xl font-semibold text-foreground">
               {inReviewCount}
             </p>
           </div>
           <div className={cardClassName}>
-            <div className="flex items-center gap-2 text-sm text-slate-500 dark:text-[#9B9B9B]">
+            <div className="flex items-center gap-2 text-sm text-muted-foreground">
               <FileCheck className="h-4 w-4" aria-hidden="true" />
               Рассмотрено
             </div>
-            <p className="mt-2 text-3xl font-semibold text-slate-900 dark:text-[#E3E3E3]">
+            <p className="mt-2 text-3xl font-semibold text-foreground">
               {reviewedCount}
             </p>
           </div>
@@ -121,28 +121,28 @@ export function CuratorDashboardPage() {
 
       <Link
         to="/candidates"
-        className={`group flex items-center justify-between gap-4 rounded-2xl border border-transparent bg-[#F4F5F7] p-6 transition-colors hover:border-slate-300 dark:bg-[#252525] dark:hover:border-[#383838] ${focusRingClassName}`}
+        className={`group flex items-center justify-between gap-4 rounded-2xl border border-transparent bg-muted p-6 transition-colors hover:border-border ${focusRingClassName}`}
       >
         <div className="min-w-0">
-          <p className="text-lg font-semibold text-slate-900 dark:text-[#E3E3E3]">
+          <p className="text-lg font-semibold text-foreground">
             Перейти к реестру кандидатов
           </p>
-          <p className="mt-1 text-sm text-slate-500 dark:text-[#9B9B9B]">
+          <p className="mt-1 text-sm text-muted-foreground">
             Все кандидаты, этапы отбора и отчёты наставника.
           </p>
         </div>
         <ArrowRight
-          className="h-5 w-5 shrink-0 text-slate-500 transition-transform group-hover:translate-x-1 dark:text-[#9B9B9B]"
+          className="h-5 w-5 shrink-0 text-muted-foreground transition-transform group-hover:translate-x-1"
           aria-hidden="true"
         />
       </Link>
 
       <section className="space-y-3">
-        <h2 className="text-2xl font-semibold tracking-tight text-slate-900 dark:text-[#E3E3E3]">
+        <h2 className="text-2xl font-semibold tracking-tight text-foreground">
           Последние события · {events.length}
         </h2>
         {events.length === 0 ? (
-          <p className="rounded-2xl border border-transparent bg-[#F4F5F7] p-5 text-sm text-slate-500 dark:bg-[#252525] dark:text-[#9B9B9B]">
+          <p className="rounded-2xl border border-transparent bg-muted p-5 text-sm text-muted-foreground">
             Событий пока нет.
           </p>
         ) : (
@@ -151,14 +151,12 @@ export function CuratorDashboardPage() {
               const content = (
                 <>
                   <History
-                    className="mt-0.5 h-4 w-4 shrink-0 text-slate-400 dark:text-[#9B9B9B]"
+                    className="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground"
                     aria-hidden="true"
                   />
                   <div className="min-w-0">
-                    <p className="text-sm text-slate-900 dark:text-[#E3E3E3]">
-                      {event.text}
-                    </p>
-                    <p className="mt-1 text-xs text-slate-500 dark:text-[#9B9B9B]">
+                    <p className="text-sm text-foreground">{event.text}</p>
+                    <p className="mt-1 text-xs text-muted-foreground">
                       {formatEventTimestamp(event.timestamp)}
                     </p>
                   </div>
@@ -170,12 +168,12 @@ export function CuratorDashboardPage() {
                   {event.candidateId ? (
                     <Link
                       to={`/candidates/${event.candidateId}`}
-                      className={`flex items-start gap-3 rounded-2xl border border-transparent bg-[#F4F5F7] p-4 transition-colors hover:border-slate-300 dark:bg-[#252525] dark:hover:border-[#383838] ${focusRingClassName}`}
+                      className={`flex items-start gap-3 rounded-2xl border border-transparent bg-muted p-4 transition-colors hover:border-border ${focusRingClassName}`}
                     >
                       {content}
                     </Link>
                   ) : (
-                    <div className="flex items-start gap-3 rounded-2xl border border-transparent bg-[#F4F5F7] p-4 dark:bg-[#252525]">
+                    <div className="flex items-start gap-3 rounded-2xl border border-transparent bg-muted p-4">
                       {content}
                     </div>
                   )}
