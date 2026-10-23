@@ -36,11 +36,19 @@ Backend, API, БД, LLM, интеграция с 1С и авторизация �
 
 ```text
 App
-├── AppLayout
-│   ├── Header (навигация, состояние документа)
-│   ├── Main
-│   │   └── Outlet
-│   └── Footer (пояснения прототипа)
+├── AppLayout (Desktop-first каркас со сворачиваемым Notion-like Sidebar)
+│   ├── Sidebar (сворачиваемое меню: "Дашборд", "Кандидаты", кнопка-бургер)
+│   ├── Header (хлебные крошки, состояние документа при просмотре кандидата, тема)
+│   └── Main (Outlet)
+│
+│
+├── CuratorDashboardPage
+│   ├── CuratorProfileHeader (ФИО, аватар-плейсхолдер, направление)
+│   ├── CuratorStatsGrid (отобрано за месяц и др. счётчики)
+│   └── RecentActivityFeed (лента последних событий)
+│
+├── CandidatesListPage
+│   └── CandidateDirectoryCard (карточка кандидата с бейджем pipelineStage)
 │
 ├── ProfilePage
 │   ├── CandidateCard
