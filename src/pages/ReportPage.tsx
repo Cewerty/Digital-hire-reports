@@ -1,7 +1,6 @@
 import type { AppOutletContext } from "@/components/layout/AppLayout";
 import { DocumentStateBadge } from "@/components/layout/DocumentStateBadge";
 import { EmptyState } from "@/components/layout/EmptyState";
-import { LoadingState } from "@/components/layout/LoadingState";
 import { ReportDocument } from "@/components/layout/ReportDocument";
 import {
   AlertDialog,
@@ -15,17 +14,10 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
-import { parseDemoViewState } from "@/data/demoData";
 import { cloneReport } from "@/lib/cloneReport";
 import { CARD_SURFACE_CLASS } from "@/lib/surfaces";
 import { ArrowLeft, ArrowRight, RotateCcw } from "lucide-react";
-import { useEffect, useState } from "react";
-import {
-  Link,
-  useOutletContext,
-  useParams,
-  useSearchParams,
-} from "react-router-dom";
+import { Link, useOutletContext, useParams } from "react-router-dom";
 import { toast } from "sonner";
 
 export function ReportPage() {
@@ -36,38 +28,12 @@ export function ReportPage() {
     getInterviewByCandidateId,
     updateReport,
   } = useOutletContext<AppOutletContext>();
-  const [searchParams] = useSearchParams();
-  const demoState = parseDemoViewState(searchParams.get("state"));
-  const [isLoading, setIsLoading] = useState(demoState === "loading");
-
   const candidate = getCandidateById(id);
   const report = getReportById(id);
   const interviewEntries = getInterviewByCandidateId(id);
 
-  useEffect(() => {
-    if (demoState !== "loading") {
-      return;
-    }
-
-    setIsLoading(true);
-    const timer = window.setTimeout(() => setIsLoading(false), 800);
-
-    return () => window.clearTimeout(timer);
-  }, [demoState]);
-
-  if (isLoading) {
-    return (
-      <div className="space-y-6">
-        <div className="flex flex-wrap items-center justify-between gap-3">
-          <h1 className="text-xl font-semibold">Отчёт</h1>
-          <DocumentStateBadge state={report?.documentState ?? "draft"} />
-        </div>
-
-        <LoadingState label="Загрузка отчёта…" />
-      </div>
-    );
-  }
-
+  // Пустое состояние определяется фактическим наличием сущностей в локальных
+  // данных, а не query-параметрами (docs/decisions.md §12).
   if (!candidate) {
     return (
       <div className="space-y-6">
