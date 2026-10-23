@@ -2,6 +2,7 @@ import { Navigate, createBrowserRouter } from "react-router-dom";
 
 import { AppLayout } from "@/components/layout/AppLayout";
 import { CandidatesListPage } from "@/pages/CandidatesListPage";
+import { CuratorDashboardPage } from "@/pages/CuratorDashboardPage";
 import { NotFoundPage } from "@/pages/NotFoundPage";
 import { ProfilePage } from "@/pages/ProfilePage";
 import { ReportPage } from "@/pages/ReportPage";
@@ -15,7 +16,7 @@ export function createRouter() {
       children: [
         {
           index: true,
-          element: <Navigate to="/candidates" replace />,
+          element: <CuratorDashboardPage />,
         },
         {
           path: "candidates",
