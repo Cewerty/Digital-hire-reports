@@ -23,11 +23,13 @@ export function ReportDocument({
 }: ReportDocumentProps) {
   const { metadata, sections } = report;
 
-  // Если `preferredName` не заполнено, в заголовке показываем ФИО кандидата,
-  // чтобы не получить пустые скобки «()».
-  const preferredLabel = candidate
-    ? candidate.preferredName.trim() || candidate.fullName
-    : "";
+  // Скобки с предпочитаемым обращением показываем только если оно заполнено
+  // и не дублирует имя в заголовке: иначе получается «Иван (Иван)».
+  const preferredName = candidate?.preferredName.trim() ?? "";
+  const preferredLabel =
+    preferredName && preferredName !== report.candidateDisplayName.trim()
+      ? preferredName
+      : "";
 
   const metadataRows: Array<{ label: string; value: string }> = [
     { label: "Кому", value: metadata.recipients },

@@ -37,7 +37,7 @@ const STAGE_CLASSES: Record<PipelineStage, string> = {
 // Активная таблетка всегда использует фирменный янтарно-золотой акцент
 // института (docs/design-system.md §5), независимо от этапа.
 const FILTER_ACTIVE_CLASS =
-  "border-brand-strong bg-brand text-brand-foreground shadow-sm";
+  "border-brand-strong bg-brand text-brand-foreground shadow-xs";
 
 // Пассивная таблетка сохраняет семантический цвет этапа, но приглушённый:
 // при наведении и активации `transition-colors` плавно переводит текст

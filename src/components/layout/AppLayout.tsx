@@ -1,5 +1,5 @@
 import { Home, PanelLeft, Users } from "lucide-react";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useMemo, useRef, useState } from "react";
 import { NavLink, Outlet, useLocation } from "react-router-dom";
 
 import { DocumentStateBadge } from "@/components/layout/DocumentStateBadge";
@@ -75,12 +75,11 @@ export function AppLayout() {
     },
   );
 
-  // Зеркало словаря отчётов: `updateReport` читает предыдущее состояние
-  // через ref и не пересоздаётся при каждом сохранении.
+  // Зеркало словаря отчётов, синхронизируемое синхронно внутри `updateReport`.
+  // Синхронизация через `useEffect` не подходит: два вызова `updateReport`
+  // в одном тике прочитали бы устаревшее предыдущее состояние и потеряли бы
+  // событие в ленте или переход `pipelineStage`.
   const reportsRef = useRef(reports);
-  useEffect(() => {
-    reportsRef.current = reports;
-  }, [reports]);
 
   const activeReportCandidateId = getReportCandidateId(location.pathname);
   const activeReport = activeReportCandidateId
@@ -101,10 +100,14 @@ export function AppLayout() {
       updatedReport.documentState === "draft" &&
       previousReport?.documentState === "approved";
 
-    setReports((prev) => ({
-      ...prev,
+    const nextReports: Record<string, CandidateReport> = {
+      ...reportsRef.current,
       [updatedReport.candidateId]: updatedReport,
-    }));
+    };
+    // Синхронно обновляем зеркало до `setReports`: следующий вызов
+    // `updateReport` в том же тике увидит актуальное предыдущее состояние.
+    reportsRef.current = nextReports;
+    setReports(nextReports);
 
     if (!isNewlyApproved && !isRevertedToDraft) {
       return;
