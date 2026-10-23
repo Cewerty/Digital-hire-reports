@@ -5,6 +5,12 @@ import type { ReportValidationError } from "@/lib/validateReport";
 import type { ReportMetadata } from "@/types/candidateReport";
 import { useId } from "react";
 
+/**
+ * Ключи полей, по которым форма ищет и показывает ошибки валидации:
+ * имя в документе и реквизиты отчёта.
+ */
+type ReportErrorField = ReportValidationError["field"] | keyof ReportMetadata;
+
 interface ReportMetadataFormProps {
   metadata: ReportMetadata;
   candidateDisplayName: string;
@@ -21,12 +27,12 @@ export function ReportMetadataForm({
 }: ReportMetadataFormProps) {
   const errorIdBase = useId();
 
-  const messageFor = (field: ReportValidationError["field"]) =>
+  const messageFor = (field: ReportErrorField) =>
     errors.find((error) => error.field === field)?.message;
 
   const errorIdFor = (field: string) => `${errorIdBase}-${field}-error`;
 
-  const ariaFor = (field: ReportValidationError["field"]) => {
+  const ariaFor = (field: ReportErrorField) => {
     const message = messageFor(field);
 
     return {
@@ -35,7 +41,7 @@ export function ReportMetadataForm({
     };
   };
 
-  const renderError = (field: ReportValidationError["field"]) => {
+  const renderError = (field: ReportErrorField) => {
     const message = messageFor(field);
     if (!message) {
       return null;
