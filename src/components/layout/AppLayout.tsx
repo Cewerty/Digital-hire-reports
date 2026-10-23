@@ -227,13 +227,13 @@ export function AppLayout() {
               aria-label={isSidebarCollapsed ? item.label : undefined}
               title={isSidebarCollapsed ? item.label : undefined}
               className={({ isActive }) =>
-                `flex items-center rounded-xl text-sm transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-strong focus-visible:ring-offset-1 ${
+                `flex items-center rounded-xl text-sm transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E5BA41] focus-visible:ring-offset-1 ${
                   isSidebarCollapsed
                     ? "justify-center px-0 py-2.5"
                     : "gap-2.5 px-3 py-2"
                 } ${
                   isActive
-                    ? "bg-brand font-medium text-brand-foreground"
+                    ? "bg-[#F2CA52] font-medium text-[#1E2028] shadow-sm"
                     : "text-muted-foreground hover:bg-accent hover:text-foreground"
                 }`
               }
