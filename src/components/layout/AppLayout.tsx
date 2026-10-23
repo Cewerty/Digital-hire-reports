@@ -10,13 +10,12 @@ import {
   getInterviewByCandidateId as getInterviewByCandidateIdFromData,
   getReportByCandidateId,
 } from "@/data/demoData";
-import { createEventId } from "@/lib/createEventId";
+import { applyReportUpdate } from "@/lib/reportTransitions";
 import type {
   Candidate,
   CandidateReport,
   CuratorProfile,
   InterviewEntry,
-  PipelineStage,
 } from "@/types/candidateReport";
 
 export interface AppOutletContext {
@@ -76,11 +75,13 @@ export function AppLayout() {
     },
   );
 
-  // Зеркало словаря отчётов, синхронизируемое синхронно внутри `updateReport`.
-  // Синхронизация через `useEffect` не подходит: два вызова `updateReport`
-  // в одном тике прочитали бы устаревшее предыдущее состояние и потеряли бы
-  // событие в ленте или переход `pipelineStage`.
+  // Зеркала изменяемого состояния, синхронизируемые синхронно внутри
+  // `updateReport`. Синхронизация через `useEffect` не подходит: два вызова
+  // `updateReport` в одном тике прочитали бы устаревшее предыдущее состояние
+  // и потеряли бы событие в ленте или переход `pipelineStage` (§11.2).
   const reportsRef = useRef(reports);
+  const candidatesRef = useRef(candidates);
+  const curatorRef = useRef(curator);
 
   const activeReportCandidateId = getReportCandidateId(location.pathname);
   const activeReport = activeReportCandidateId
@@ -89,68 +90,29 @@ export function AppLayout() {
   const headerDocumentState = activeReport?.documentState;
 
   const updateReport = useCallback((updatedReport: CandidateReport) => {
-    const previousReport = reportsRef.current[updatedReport.candidateId];
-    // Повторное утверждение уже утверждённого документа не должно
-    // дублировать событие в ленте менто.
-    const isNewlyApproved =
-      updatedReport.documentState === "approved" &&
-      previousReport?.documentState !== "approved";
-    // Возврат утверждённого документа в черновик откатывает этап
-    // «Рассмотрен» обратно в «На рассмотрении».
-    const isRevertedToDraft =
-      updatedReport.documentState === "draft" &&
-      previousReport?.documentState === "approved";
-
-    const nextReports: Record<string, CandidateReport> = {
-      ...reportsRef.current,
-      [updatedReport.candidateId]: updatedReport,
+    const previous = {
+      reports: reportsRef.current,
+      candidates: candidatesRef.current,
+      curator: curatorRef.current,
     };
-    // Синхронно обновляем зеркало до `setReports`: следующий вызов
+
+    const next = applyReportUpdate(previous, updatedReport);
+
+    // Синхронно обновляем зеркала до `setState`: следующий вызов
     // `updateReport` в том же тике увидит актуальное предыдущее состояние.
-    reportsRef.current = nextReports;
-    setReports(nextReports);
+    reportsRef.current = next.reports;
+    candidatesRef.current = next.candidates;
+    curatorRef.current = next.curator;
 
-    if (!isNewlyApproved && !isRevertedToDraft) {
-      return;
+    setReports(next.reports);
+    // `applyReportUpdate` возвращает те же ссылки, если переход этапа
+    // не требуется, — лишние ре-рендеры не нужны.
+    if (next.candidates !== previous.candidates) {
+      setCandidates(next.candidates);
     }
-
-    // Утверждение документа не является финальным решением по кандидату:
-    // этап переводится в «Рассмотрен», а «Подтверждён» / «Отклонён»
-    // выставляются вне прототипа (в 1С). Явное решение ментора
-    // не отменяется молча.
-    setCandidates((prevCandidates) =>
-      prevCandidates.map((candidate) => {
-        if (candidate.id !== updatedReport.candidateId) {
-          return candidate;
-        }
-
-        if (isNewlyApproved) {
-          return candidate.pipelineStage === "approved" ||
-            candidate.pipelineStage === "rejected"
-            ? candidate
-            : { ...candidate, pipelineStage: "reviewed" as PipelineStage };
-        }
-
-        return candidate.pipelineStage === "reviewed"
-          ? { ...candidate, pipelineStage: "in_review" as PipelineStage }
-          : candidate;
-      }),
-    );
-
-    setCurator((prevCurator) => ({
-      ...prevCurator,
-      recentEvents: [
-        {
-          id: createEventId(),
-          timestamp: new Date().toISOString(),
-          text: isNewlyApproved
-            ? `Утверждён отчёт кандидата: ${updatedReport.candidateDisplayName}`
-            : `Документ возвращён в черновик: ${updatedReport.candidateDisplayName}`,
-          candidateId: updatedReport.candidateId,
-        },
-        ...prevCurator.recentEvents,
-      ],
-    }));
+    if (next.curator !== previous.curator) {
+      setCurator(next.curator);
+    }
   }, []);
 
   const getReportById = useCallback(
