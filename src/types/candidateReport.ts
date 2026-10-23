@@ -1,5 +1,11 @@
 export type DocumentState = "draft" | "approved";
 
+export type PipelineStage =
+  | "uninterviewed"
+  | "in_review"
+  | "approved"
+  | "rejected";
+
 export type ReportSectionId =
   | "summary"
   | "description"
@@ -15,6 +21,22 @@ export interface Candidate {
   course: number;
   group: string;
   specialty: string;
+  pipelineStage: PipelineStage;
+}
+
+export interface CuratorEvent {
+  id: string;
+  timestamp: string;
+  text: string;
+  candidateId?: string;
+}
+
+export interface CuratorProfile {
+  id: string;
+  fullName: string;
+  avatarUrl?: string;
+  direction: string;
+  recentEvents: CuratorEvent[];
 }
 
 export interface InterviewEntry {

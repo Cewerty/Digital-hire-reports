@@ -27,6 +27,7 @@ export const candidate: Candidate = {
   course: 4,
   group: "ПРОГ-41",
   specialty: "Программная инженерия",
+  pipelineStage: "in_review",
 };
 
 export const interviewEntries: InterviewEntry[] = [
