@@ -215,7 +215,7 @@ function ReviewPageContent() {
       {validationErrors.length > 0 && (
         <div
           role="alert"
-          className="animate-slide-in-from-top rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800 shadow-sm dark:border-rose-800/50 dark:bg-rose-950/40 dark:text-rose-300"
+          className="animate-slide-in-from-top rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800 shadow-xs dark:border-rose-800/50 dark:bg-rose-950/40 dark:text-rose-300"
         >
           <p className="flex items-center gap-2 font-medium">
             <AlertCircle className="h-4 w-4" />

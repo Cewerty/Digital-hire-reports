@@ -249,7 +249,7 @@ export function AppLayout() {
                     : "gap-2.5 px-3 py-2"
                 } ${
                   isActive
-                    ? "bg-[#F2CA52] font-medium text-[#1E2028] shadow-sm"
+                    ? "bg-[#F2CA52] font-medium text-[#1E2028] shadow-xs"
                     : "text-muted-foreground hover:bg-accent hover:text-foreground"
                 }`
               }
