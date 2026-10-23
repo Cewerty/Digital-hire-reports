@@ -58,9 +58,11 @@ export function ReviewPage() {
 
 function ReviewPageContent() {
   const { id = "c-01" } = useParams<{ id: string }>();
-  const { getReportById, updateReport } = useOutletContext<AppOutletContext>();
+  const { getCandidateById, getReportById, updateReport } =
+    useOutletContext<AppOutletContext>();
   const navigate = useNavigate();
 
+  const candidate = getCandidateById(id);
   const report = getReportById(id);
 
   const [workingCopy, setWorkingCopy] = useState<CandidateReport | null>(() =>
@@ -71,6 +73,27 @@ function ReviewPageContent() {
     ReportValidationError[]
   >([]);
   const approveButtonRef = useRef<HTMLButtonElement>(null);
+
+  if (!candidate) {
+    return (
+      <div className="space-y-6">
+        <h2 className="text-xl font-semibold">Проверка и правка</h2>
+        <EmptyState
+          title="Кандидат не найден"
+          description="Данные профиля недоступны. Проверьте, что кандидат был импортирован из 1С."
+          action={
+            <button
+              type="button"
+              onClick={() => navigate("/candidates")}
+              className="inline-flex items-center rounded-md border border-border px-3 py-1.5 text-sm font-medium text-foreground transition-colors duration-200 hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-strong focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+            >
+              <X className="mr-2 h-4 w-4" />К списку кандидатов
+            </button>
+          }
+        />
+      </div>
+    );
+  }
 
   if (!report || !workingCopy) {
     return (
@@ -290,8 +313,9 @@ function ReviewPageContent() {
             <AlertDialogHeader>
               <AlertDialogTitle>Утвердить документ?</AlertDialogTitle>
               <AlertDialogDescription>
-                Документ будет помечен как утверждённый наставником. Это
-                действие не изменяет статус кандидата и выводы отчёта.
+                Документ будет помечен как утверждённый наставником, а кандидат
+                перейдёт в этап «Рассмотрен». Финальное решение по кандидату
+                принимается вне прототипа.
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>

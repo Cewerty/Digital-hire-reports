@@ -4,12 +4,12 @@ export const REPORT_SECTION_DEFINITIONS: ReadonlyArray<{
   id: ReportSectionId;
   title: string;
 }> = [
-  { id: "summary", title: "Резюме" },
-  { id: "description", title: "Описание" },
-  { id: "skills", title: "Навыки" },
+  { id: "summary", title: "Краткое резюме" },
+  { id: "description", title: "Описание кандидата" },
+  { id: "skills", title: "Навыки и компетенции" },
   { id: "motivation", title: "Мотивация" },
-  { id: "next_steps", title: "Следующие шаги" },
-  { id: "conclusions", title: "Выводы" },
+  { id: "next_steps", title: "Дальнейшие шаги" },
+  { id: "conclusions", title: "Выводы и вердикт" },
 ];
 
 export const sectionTitles: Record<ReportSectionId, string> =

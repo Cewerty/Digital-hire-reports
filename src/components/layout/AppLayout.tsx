@@ -3,11 +3,11 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { NavLink, Outlet, useLocation } from "react-router-dom";
 
 import { DocumentStateBadge } from "@/components/layout/DocumentStateBadge";
-// import { ThemeToggle } from "@/components/layout/ThemeToggle";
+import { ThemeToggle } from "@/components/layout/ThemeToggle";
 import {
   demoCandidates,
   demoCurator,
-  getInterviewByCandidateId,
+  getInterviewByCandidateId as getInterviewByCandidateIdFromData,
   getReportByCandidateId,
 } from "@/data/demoData";
 import type {
@@ -146,6 +146,15 @@ export function AppLayout() {
     [candidates],
   );
 
+  // Материалы интервью отдаются копией массива: страницы не должны
+  // мутировать демонстрационные данные модуля.
+  const getInterviewByCandidateId = useCallback(
+    (candidateId: string) => [
+      ...getInterviewByCandidateIdFromData(candidateId),
+    ],
+    [],
+  );
+
   const contextValue = useMemo<AppOutletContext>(
     () => ({
       candidates,
@@ -162,6 +171,7 @@ export function AppLayout() {
       reports,
       getCandidateById,
       getReportById,
+      getInterviewByCandidateId,
       updateReport,
     ],
   );
@@ -252,7 +262,7 @@ export function AppLayout() {
               {headerDocumentState && (
                 <DocumentStateBadge state={headerDocumentState} />
               )}
-              {/* <ThemeToggle /> */}
+              <ThemeToggle />
             </div>
           </div>
         </header>

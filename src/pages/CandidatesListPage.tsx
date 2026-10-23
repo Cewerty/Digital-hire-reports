@@ -6,6 +6,7 @@ import {
   type LucideIcon,
   XCircle,
 } from "lucide-react";
+import { useState } from "react";
 import { Link, useOutletContext } from "react-router-dom";
 
 import type { AppOutletContext } from "@/components/layout/AppLayout";
@@ -40,6 +41,17 @@ const STAGE_ICONS: Record<PipelineStage, LucideIcon> = {
   rejected: XCircle,
 };
 
+type StageFilter = PipelineStage | "all";
+
+const FILTER_OPTIONS: ReadonlyArray<{ value: StageFilter; label: string }> = [
+  { value: "all", label: "Все" },
+  { value: "uninterviewed", label: "Не опрошен" },
+  { value: "in_review", label: "На рассмотрении" },
+  { value: "reviewed", label: "Рассмотрен" },
+  { value: "approved", label: "Подтверждён" },
+  { value: "rejected", label: "Отклонён" },
+];
+
 function StageBadge({ stage }: { stage: PipelineStage }) {
   const Icon = STAGE_ICONS[stage];
 
@@ -57,12 +69,20 @@ function StageBadge({ stage }: { stage: PipelineStage }) {
 
 export function CandidatesListPage() {
   const { candidates } = useOutletContext<AppOutletContext>();
+  const [stageFilter, setStageFilter] = useState<StageFilter>("all");
+
+  const filteredCandidates =
+    stageFilter === "all"
+      ? candidates
+      : candidates.filter(
+          (candidate) => candidate.pipelineStage === stageFilter,
+        );
 
   return (
     <div className="space-y-6">
       <div>
         <h2 className="text-2xl font-semibold tracking-tight text-foreground">
-          Кандидаты · {candidates.length}
+          Кандидаты · {filteredCandidates.length}
         </h2>
         <p className="mt-1 text-sm text-muted-foreground">
           Реестр вертикального среза. Откройте карточку, чтобы посмотреть
@@ -70,14 +90,54 @@ export function CandidatesListPage() {
         </p>
       </div>
 
+      <div
+        role="group"
+        aria-label="Фильтр по этапу отбора"
+        className="flex flex-wrap gap-2"
+      >
+        {FILTER_OPTIONS.map((option) => {
+          const isActive = stageFilter === option.value;
+
+          return (
+            <button
+              key={option.value}
+              type="button"
+              onClick={() => setStageFilter(option.value)}
+              aria-pressed={isActive}
+              className={`rounded-full border px-3 py-1 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-strong focus-visible:ring-offset-2 focus-visible:ring-offset-background ${
+                isActive
+                  ? "border-brand-strong bg-brand text-brand-foreground"
+                  : "border-border bg-background text-muted-foreground hover:bg-muted hover:text-foreground"
+              }`}
+            >
+              {option.label}
+            </button>
+          );
+        })}
+      </div>
+
       {candidates.length === 0 ? (
         <EmptyState
           title="Кандидатов пока нет"
           description="В реестре нет ни одной записи."
         />
+      ) : filteredCandidates.length === 0 ? (
+        <EmptyState
+          title="Нет кандидатов с этим этапом"
+          description="Измените фильтр или сбросьте его, чтобы увидеть весь реестр."
+          action={
+            <button
+              type="button"
+              onClick={() => setStageFilter("all")}
+              className="inline-flex items-center rounded-md border border-border px-3 py-1.5 text-sm font-medium text-foreground transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-strong focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+            >
+              Сбросить фильтр
+            </button>
+          }
+        />
       ) : (
         <ul className="grid gap-3 sm:grid-cols-2">
-          {candidates.map((candidate) => (
+          {filteredCandidates.map((candidate) => (
             <li key={candidate.id}>
               <Link
                 to={`/candidates/${candidate.id}`}
