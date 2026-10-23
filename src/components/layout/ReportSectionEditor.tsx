@@ -3,7 +3,7 @@ import { MarkdownContent } from "@/components/layout/MarkdownContent";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import type { ReportSection } from "@/types/candidateReport";
-import { useId, useState } from "react";
+import { useEffect, useId, useState } from "react";
 
 interface ReportSectionEditorProps {
   section: ReportSection;
@@ -21,6 +21,14 @@ export function ReportSectionEditor({
 }: ReportSectionEditorProps) {
   const [mode, setMode] = useState<"edit" | "preview">("edit");
   const errorId = useId();
+
+  // Ошибка валидации требует перевода фокуса в поле ввода. В режиме
+  // предпросмотра `Textarea` не отрендерена, поэтому возвращаемся в редактор.
+  useEffect(() => {
+    if (error) {
+      setMode("edit");
+    }
+  }, [error]);
 
   return (
     <section className="space-y-3">

@@ -11,7 +11,6 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
@@ -22,7 +21,7 @@ import {
 } from "@/lib/validateReport";
 import type { CandidateReport } from "@/types/candidateReport";
 import { AlertCircle, Check, Save, X } from "lucide-react";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useNavigate, useOutletContext, useParams } from "react-router-dom";
 import { toast } from "sonner";
 
@@ -81,6 +80,7 @@ function ReviewPageContent() {
   const [validationErrors, setValidationErrors] = useState<
     ReportValidationError[]
   >([]);
+  const approveButtonRef = useRef<HTMLButtonElement>(null);
 
   if (!report || !workingCopy) {
     return (
@@ -142,22 +142,39 @@ function ReviewPageContent() {
     );
   };
 
-  const handleSave = (documentState: "draft" | "approved", message: string) => {
-    if (!workingCopy) return;
+  const validateWorkingCopy = (): boolean => {
+    if (!workingCopy) return false;
+
     const errors = validateReport(workingCopy);
-    if (errors.length > 0) {
-      setValidationErrors(errors);
-      focusField(errors[0].field);
-      return;
+    if (errors.length === 0) {
+      setValidationErrors([]);
+      return true;
     }
 
-    setValidationErrors([]);
+    setValidationErrors(errors);
+    focusField(errors[0].field);
+    return false;
+  };
+
+  const handleSave = (documentState: "draft" | "approved", message: string) => {
+    if (!workingCopy || !validateWorkingCopy()) return;
+
     updateReport({
       ...createWorkingCopy(workingCopy),
       documentState,
     });
     toast.success(message);
     navigate(`/candidates/${id}/report`, { replace: true });
+  };
+
+  /**
+   * Валидирует рабочую копию до открытия диалога. Если открыть диалог,
+   * Radix при закрытии вернёт фокус на кнопку и перебьёт `focusField`.
+   */
+  const handleApproveClick = () => {
+    if (validateWorkingCopy()) {
+      setIsApproveDialogOpen(true);
+    }
   };
 
   return (
@@ -263,13 +280,23 @@ function ReviewPageContent() {
           open={isApproveDialogOpen}
           onOpenChange={setIsApproveDialogOpen}
         >
-          <AlertDialogTrigger asChild>
-            <Button type="button" className="transition-colors duration-200">
-              <Check className="mr-2 h-4 w-4" />
-              Утвердить документ
-            </Button>
-          </AlertDialogTrigger>
-          <AlertDialogContent>
+          <Button
+            ref={approveButtonRef}
+            type="button"
+            className="transition-colors duration-200"
+            aria-haspopup="dialog"
+            aria-expanded={isApproveDialogOpen}
+            onClick={handleApproveClick}
+          >
+            <Check className="mr-2 h-4 w-4" />
+            Утвердить документ
+          </Button>
+          <AlertDialogContent
+            onCloseAutoFocus={(event) => {
+              event.preventDefault();
+              approveButtonRef.current?.focus();
+            }}
+          >
             <AlertDialogHeader>
               <AlertDialogTitle>Утвердить документ?</AlertDialogTitle>
               <AlertDialogDescription>

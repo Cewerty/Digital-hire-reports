@@ -1,4 +1,4 @@
-import { LayoutDashboard, PanelLeft, Users } from "lucide-react";
+import { PanelLeft, Users } from "lucide-react";
 import { useCallback, useState } from "react";
 import { NavLink, Outlet, useLocation } from "react-router-dom";
 
@@ -16,7 +16,6 @@ import type {
   Candidate,
   CandidateReport,
   CuratorProfile,
-  DocumentState,
   InterviewEntry,
   PipelineStage,
 } from "@/types/candidateReport";
@@ -31,8 +30,9 @@ export interface AppOutletContext {
   updateReport: (report: CandidateReport) => void;
 }
 
+// Дашборд куратора (T35) пока не реализован: пункт «Главная (Куратор)»
+// вёл в редирект и никогда не становился активным, поэтому убран.
 const NAV_ITEMS = [
-  { to: "/", label: "Главная (Куратор)", icon: LayoutDashboard, end: true },
   { to: "/candidates", label: "Кандидаты", icon: Users, end: false },
 ] as const;
 
@@ -42,11 +42,7 @@ function getReportCandidateId(pathname: string): string | undefined {
   return REPORT_ROUTE_PATTERN.exec(pathname)?.[1];
 }
 
-interface AppLayoutProps {
-  documentState?: DocumentState;
-}
-
-export function AppLayout({ documentState = "draft" }: AppLayoutProps) {
+export function AppLayout() {
   const [candidates, setCandidates] = useState<Candidate[]>(demoCandidates);
   const [curator, setCurator] = useState<CuratorProfile>(demoCurator);
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
@@ -69,11 +65,7 @@ export function AppLayout({ documentState = "draft" }: AppLayoutProps) {
   const activeReport = activeReportCandidateId
     ? reports[activeReportCandidateId]
     : undefined;
-  const headerDocumentState: DocumentState | undefined = activeReport
-    ? activeReport.documentState
-    : activeReportCandidateId
-      ? documentState
-      : undefined;
+  const headerDocumentState = activeReport?.documentState;
 
   const updateReport = useCallback((updatedReport: CandidateReport) => {
     setReports((prev) => ({
@@ -165,6 +157,7 @@ export function AppLayout({ documentState = "draft" }: AppLayoutProps) {
               key={item.to}
               to={item.to}
               end={item.end}
+              aria-label={isSidebarCollapsed ? item.label : undefined}
               title={isSidebarCollapsed ? item.label : undefined}
               className={({ isActive }) =>
                 `flex items-center rounded-xl text-sm transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E5BA41] focus-visible:ring-offset-1 ${

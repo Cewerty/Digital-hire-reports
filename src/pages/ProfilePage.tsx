@@ -9,6 +9,7 @@ import {
 import type { AppOutletContext } from "@/components/layout/AppLayout";
 import { EmptyState } from "@/components/layout/EmptyState";
 import { LoadingState } from "@/components/layout/LoadingState";
+import { Button } from "@/components/ui/button";
 import { parseDemoViewState } from "@/data/demoData";
 import type { InterviewEntry } from "@/types/candidateReport";
 
@@ -135,18 +136,21 @@ export function ProfilePage() {
         )}
       </section>
 
-      {showEmpty ? null : (
-        <Link
-          to={`/candidates/${candidate.id}/report`}
-          className={`inline-flex items-center rounded-md px-3 py-1.5 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-900 focus-visible:ring-offset-2 ${
-            isUninterviewed
-              ? "pointer-events-none bg-slate-200 text-slate-400"
-              : "bg-slate-900 text-white hover:bg-slate-800"
-          }`}
-          aria-disabled={isUninterviewed}
-        >
-          Перейти к отчёту
-        </Link>
+      {showEmpty ? null : isUninterviewed ? (
+        <div className="space-y-2">
+          <Button type="button" disabled>
+            Перейти к отчёту
+          </Button>
+          <p className="text-sm text-slate-500">
+            Отчёт станет доступен после проведения интервью.
+          </p>
+        </div>
+      ) : (
+        <Button asChild>
+          <Link to={`/candidates/${candidate.id}/report`}>
+            Перейти к отчёту
+          </Link>
+        </Button>
       )}
     </div>
   );

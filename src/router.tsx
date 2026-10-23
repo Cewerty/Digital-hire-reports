@@ -1,6 +1,7 @@
 import { Navigate, createBrowserRouter } from "react-router-dom";
 
 import { AppLayout } from "@/components/layout/AppLayout";
+import { CandidatesListPage } from "@/pages/CandidatesListPage";
 import { NotFoundPage } from "@/pages/NotFoundPage";
 import { ProfilePage } from "@/pages/ProfilePage";
 import { ReportPage } from "@/pages/ReportPage";
@@ -14,14 +15,14 @@ export function createRouter() {
       children: [
         {
           index: true,
-          element: <Navigate to="/candidates/c-01" replace />,
+          element: <Navigate to="/candidates" replace />,
         },
         {
           path: "candidates",
           children: [
             {
               index: true,
-              element: <Navigate to="/candidates/c-01" replace />,
+              element: <CandidatesListPage />,
             },
             {
               path: ":id",
