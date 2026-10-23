@@ -4,6 +4,8 @@
 
 @layer base {
   :root {
+    /* Нативные контролы и скроллбары следуют светлой теме. */
+    color-scheme: light;
     --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
     --card: 210 40% 96.1%;
@@ -27,6 +29,8 @@
   }
 
   .dark {
+    /* Нативные контролы и скроллбары следуют тёмной теме. */
+    color-scheme: dark;
     --background: 222.2 84% 4.9%;
     --foreground: 210 40% 98%;
     --card: 217.2 32.6% 17.5%;
@@ -54,6 +58,6 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply min-h-screen bg-background text-foreground antialiased;
   }
 }
