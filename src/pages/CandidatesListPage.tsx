@@ -90,31 +90,30 @@ export function CandidatesListPage() {
         </p>
       </div>
 
-      <div
-        role="group"
-        aria-label="Фильтр по этапу отбора"
-        className="flex flex-wrap gap-2"
-      >
-        {FILTER_OPTIONS.map((option) => {
-          const isActive = stageFilter === option.value;
+      <fieldset className="min-w-0">
+        <legend className="sr-only">Фильтр по этапу отбора</legend>
+        <div className="flex flex-wrap gap-2">
+          {FILTER_OPTIONS.map((option) => {
+            const isActive = stageFilter === option.value;
 
-          return (
-            <button
-              key={option.value}
-              type="button"
-              onClick={() => setStageFilter(option.value)}
-              aria-pressed={isActive}
-              className={`rounded-full border px-3 py-1 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-strong focus-visible:ring-offset-2 focus-visible:ring-offset-background ${
-                isActive
-                  ? "border-brand-strong bg-brand text-brand-foreground"
-                  : "border-border bg-background text-muted-foreground hover:bg-muted hover:text-foreground"
-              }`}
-            >
-              {option.label}
-            </button>
-          );
-        })}
-      </div>
+            return (
+              <button
+                key={option.value}
+                type="button"
+                onClick={() => setStageFilter(option.value)}
+                aria-pressed={isActive}
+                className={`rounded-full border px-3 py-1 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-strong focus-visible:ring-offset-2 focus-visible:ring-offset-background ${
+                  isActive
+                    ? "border-brand-strong bg-brand text-brand-foreground"
+                    : "border-border bg-background text-muted-foreground hover:bg-muted hover:text-foreground"
+                }`}
+              >
+                {option.label}
+              </button>
+            );
+          })}
+        </div>
+      </fieldset>
 
       {candidates.length === 0 ? (
         <EmptyState
