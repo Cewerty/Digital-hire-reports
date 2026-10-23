@@ -45,6 +45,23 @@ const FILTER_ACTIVE_CLASSES: Record<StageFilter, string> = {
   rejected: STAGE_CLASSES.rejected,
 };
 
+// Пассивная таблетка сохраняет семантический цвет этапа, но приглушённый:
+// при наведении и активации `transition-colors` плавно переводит текст
+// в насыщенный цвет бейджа.
+const FILTER_IDLE_CLASSES: Record<StageFilter, string> = {
+  all: "text-muted-foreground hover:text-foreground",
+  uninterviewed:
+    "text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-100",
+  in_review:
+    "text-amber-700/80 hover:text-amber-900 dark:text-amber-300/80 dark:hover:text-amber-200",
+  reviewed:
+    "text-sky-700/80 hover:text-sky-900 dark:text-sky-300/80 dark:hover:text-sky-200",
+  approved:
+    "text-emerald-700/80 hover:text-emerald-900 dark:text-emerald-300/80 dark:hover:text-emerald-200",
+  rejected:
+    "text-red-700/80 hover:text-red-900 dark:text-red-300/80 dark:hover:text-red-200",
+};
+
 const STAGE_ICONS: Record<PipelineStage, LucideIcon> = {
   uninterviewed: CircleDashed,
   in_review: Clock,
@@ -114,10 +131,10 @@ export function CandidatesListPage() {
                 type="button"
                 onClick={() => setStageFilter(option.value)}
                 aria-pressed={isActive}
-                className={`rounded-full border px-3 py-1 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-strong focus-visible:ring-offset-2 focus-visible:ring-offset-background ${
+                className={`rounded-full border px-3 py-1 text-sm font-medium transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-strong focus-visible:ring-offset-2 focus-visible:ring-offset-background ${
                   isActive
                     ? FILTER_ACTIVE_CLASSES[option.value]
-                    : "border-border bg-background text-muted-foreground hover:bg-muted hover:text-foreground"
+                    : `border-border bg-background hover:bg-muted ${FILTER_IDLE_CLASSES[option.value]}`
                 }`}
               >
                 {option.label}
