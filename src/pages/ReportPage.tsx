@@ -1,3 +1,4 @@
+import type { AppOutletContext } from "@/components/layout/AppLayout";
 import { DocumentStateBadge } from "@/components/layout/DocumentStateBadge";
 import { EmptyState } from "@/components/layout/EmptyState";
 import { LoadingState } from "@/components/layout/LoadingState";
@@ -14,31 +15,33 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
-import {
-  getCandidateById,
-  getInterviewByCandidateId,
-  parseDemoViewState,
-} from "@/data/demoData";
+import { parseDemoViewState } from "@/data/demoData";
 import type { CandidateReport } from "@/types/candidateReport";
 import { ArrowLeft, ArrowRight, RotateCcw } from "lucide-react";
 import { useEffect, useState } from "react";
-import { Link, useLoaderData, useSearchParams } from "react-router-dom";
+import {
+  Link,
+  useOutletContext,
+  useParams,
+  useSearchParams,
+} from "react-router-dom";
 import { toast } from "sonner";
 
 export function ReportPage() {
-  const loaderData = useLoaderData() as {
-    report: CandidateReport;
-    onUpdateReport: (report: CandidateReport) => void;
-  };
+  const { id = "c-01" } = useParams<{ id: string }>();
+  const {
+    getCandidateById,
+    getReportById,
+    getInterviewByCandidateId,
+    updateReport,
+  } = useOutletContext<AppOutletContext>();
   const [searchParams] = useSearchParams();
   const demoState = parseDemoViewState(searchParams.get("state"));
-  const [report, setReport] = useState<CandidateReport>(loaderData.report);
   const [isLoading, setIsLoading] = useState(demoState === "loading");
 
-  // Данные резолвятся строго по `report.candidateId`, чтобы в документе
-  // и в источниках не появлялись материалы другого кандидата.
-  const candidate = getCandidateById(report.candidateId);
-  const interviewEntries = getInterviewByCandidateId(report.candidateId);
+  const candidate = getCandidateById(id);
+  const report = getReportById(id);
+  const interviewEntries = getInterviewByCandidateId(id);
 
   useEffect(() => {
     if (demoState !== "loading") {
@@ -56,7 +59,7 @@ export function ReportPage() {
       <div className="space-y-6">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <h1 className="text-xl font-semibold">Отчёт</h1>
-          <DocumentStateBadge state={report.documentState} />
+          <DocumentStateBadge state={report?.documentState ?? "draft"} />
         </div>
 
         <LoadingState label="Загрузка отчёта…" />
@@ -64,7 +67,7 @@ export function ReportPage() {
     );
   }
 
-  if (demoState === "empty") {
+  if (!candidate || !report) {
     return (
       <div className="space-y-6">
         <div className="flex flex-wrap items-center justify-between gap-3">
@@ -73,15 +76,14 @@ export function ReportPage() {
         </div>
 
         <EmptyState
-          title="Отчёт ещё не сформирован"
-          description="По этому кандидату нет сохранённого отчёта. Вернитесь в профиль и проверьте материалы интервью."
+          title="Отчёт отсутствует"
+          description="По этому кандидату нет сохранённого отчёта. Вернитесь в реестр кандидатов."
           action={
             <Link
-              to="/"
+              to="/candidates"
               className="inline-flex items-center rounded-md border border-slate-300 px-3 py-1.5 text-sm font-medium text-slate-700 transition-colors duration-200 hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-900 focus-visible:ring-offset-2"
             >
-              <ArrowLeft className="mr-2 h-4 w-4" />
-              Вернуться в профиль
+              <ArrowLeft className="mr-2 h-4 w-4" />К списку кандидатов
             </Link>
           }
         />
@@ -96,8 +98,7 @@ export function ReportPage() {
       ...report,
       documentState: "draft",
     };
-    loaderData.onUpdateReport(updatedReport);
-    setReport(updatedReport);
+    updateReport(updatedReport);
     toast.success("Документ возвращён в черновик");
   };
 
@@ -118,14 +119,14 @@ export function ReportPage() {
 
       <div className="flex flex-wrap gap-3">
         <Link
-          to="/"
+          to={`/candidates/${id}`}
           className="inline-flex items-center rounded-md border border-slate-300 px-3 py-1.5 text-sm font-medium text-slate-700 transition-colors duration-200 hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-900 focus-visible:ring-offset-2"
         >
           <ArrowLeft className="mr-2 h-4 w-4" />
           Профиль
         </Link>
         <Link
-          to="/review"
+          to={`/candidates/${id}/review`}
           className="inline-flex items-center rounded-md bg-slate-900 px-3 py-1.5 text-sm font-medium text-white transition-colors duration-200 hover:bg-slate-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-900 focus-visible:ring-offset-2"
         >
           {isApproved ? "Повторная проверка и правка" : "Перейти к проверке"}

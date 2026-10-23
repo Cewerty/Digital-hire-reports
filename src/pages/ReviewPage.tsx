@@ -1,3 +1,5 @@
+import type { AppOutletContext } from "@/components/layout/AppLayout";
+import { EmptyState } from "@/components/layout/EmptyState";
 import { ReportMetadataForm } from "@/components/layout/ReportMetadataForm";
 import { ReportSectionEditor } from "@/components/layout/ReportSectionEditor";
 import {
@@ -21,7 +23,7 @@ import {
 import type { CandidateReport } from "@/types/candidateReport";
 import { AlertCircle, Check, Save, X } from "lucide-react";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useOutletContext, useParams } from "react-router-dom";
 import { toast } from "sonner";
 
 function createWorkingCopy(report: CandidateReport): CandidateReport {
@@ -55,30 +57,41 @@ function focusField(field: string) {
   });
 }
 
-interface ReviewPageProps {
-  report: CandidateReport;
-  onUpdateReport: (report: CandidateReport) => void;
-}
-
-/**
- * Редактор работает с глубокой копией отчёта: правки не протекают
- * в сохранённый документ до явного сохранения/утверждения.
- *
- * Сброс несохранённого черновика при смене кандидата обеспечивает
- * `key={candidateId}` на элементе маршрута (см. `router.tsx`), а не
- * ручная синхронизация состояния в теле рендера. Такой подход надёжнее
- * и корректно работает при нескольких формах одного типа на странице.
- */
-export function ReviewPage({ report, onUpdateReport }: ReviewPageProps) {
+export function ReviewPage() {
+  const { id = "c-01" } = useParams<{ id: string }>();
+  const { getReportById, updateReport } = useOutletContext<AppOutletContext>();
   const navigate = useNavigate();
 
-  const [workingCopy, setWorkingCopy] = useState<CandidateReport>(() =>
-    createWorkingCopy(report),
+  const report = getReportById(id);
+
+  const [workingCopy, setWorkingCopy] = useState<CandidateReport | null>(() =>
+    report ? createWorkingCopy(report) : null,
   );
   const [isApproveDialogOpen, setIsApproveDialogOpen] = useState(false);
   const [validationErrors, setValidationErrors] = useState<
     ReportValidationError[]
   >([]);
+
+  if (!report || !workingCopy) {
+    return (
+      <div className="space-y-6">
+        <h2 className="text-xl font-semibold">Проверка и правка</h2>
+        <EmptyState
+          title="Отчёт отсутствует"
+          description="По этому кандидату нет сохранённого отчёта. Вернитесь в реестр кандидатов."
+          action={
+            <button
+              type="button"
+              onClick={() => navigate("/candidates")}
+              className="inline-flex items-center rounded-md border border-slate-300 px-3 py-1.5 text-sm font-medium text-slate-700 transition-colors duration-200 hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-900 focus-visible:ring-offset-2"
+            >
+              <X className="mr-2 h-4 w-4" />К списку кандидатов
+            </button>
+          }
+        />
+      </div>
+    );
+  }
 
   const errorForField = (field: ReportValidationError["field"]) =>
     validationErrors.find((error) => error.field === field)?.message;
@@ -93,25 +106,34 @@ export function ReviewPage({ report, onUpdateReport }: ReviewPageProps) {
     metadata: CandidateReport["metadata"],
     candidateDisplayName: string,
   ) => {
-    setWorkingCopy((prev) => ({
-      ...prev,
-      metadata,
-      candidateDisplayName,
-    }));
+    setWorkingCopy((prev) =>
+      prev
+        ? {
+            ...prev,
+            metadata,
+            candidateDisplayName,
+          }
+        : prev,
+    );
   };
 
   const handleSectionChange = (
     updatedSection: CandidateReport["sections"][number],
   ) => {
-    setWorkingCopy((prev) => ({
-      ...prev,
-      sections: prev.sections.map((section) =>
-        section.id === updatedSection.id ? updatedSection : section,
-      ),
-    }));
+    setWorkingCopy((prev) =>
+      prev
+        ? {
+            ...prev,
+            sections: prev.sections.map((section) =>
+              section.id === updatedSection.id ? updatedSection : section,
+            ),
+          }
+        : prev,
+    );
   };
 
   const handleSave = (documentState: "draft" | "approved", message: string) => {
+    if (!workingCopy) return;
     const errors = validateReport(workingCopy);
     if (errors.length > 0) {
       setValidationErrors(errors);
@@ -120,14 +142,12 @@ export function ReviewPage({ report, onUpdateReport }: ReviewPageProps) {
     }
 
     setValidationErrors([]);
-    // Передаём глубокую копию: сохранённый документ не должен делить
-    // вложенные структуры с локальным состоянием редактора.
-    onUpdateReport({
+    updateReport({
       ...createWorkingCopy(workingCopy),
       documentState,
     });
     toast.success(message);
-    navigate("/report", { replace: true });
+    navigate(`/candidates/${id}/report`, { replace: true });
   };
 
   return (
@@ -213,7 +233,7 @@ export function ReviewPage({ report, onUpdateReport }: ReviewPageProps) {
         <Button
           type="button"
           variant="outline"
-          onClick={() => navigate("/report")}
+          onClick={() => navigate(`/candidates/${id}/report`)}
           className="transition-colors duration-200"
         >
           <X className="mr-2 h-4 w-4" />

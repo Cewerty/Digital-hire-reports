@@ -1,49 +1,12 @@
-import { createBrowserRouter, useLoaderData } from "react-router-dom";
+import { Navigate, createBrowserRouter } from "react-router-dom";
 
 import { AppLayout } from "@/components/layout/AppLayout";
+import { NotFoundPage } from "@/pages/NotFoundPage";
+import { ProfilePage } from "@/pages/ProfilePage";
+import { ReportPage } from "@/pages/ReportPage";
 import { ReviewPage } from "@/pages/ReviewPage";
-import type { CandidateReport, PipelineStage } from "@/types/candidateReport";
 
-interface ReviewLoaderData {
-  report: CandidateReport;
-  onUpdateReport: (report: CandidateReport) => void;
-}
-
-/**
- * Обёртка над `ReviewPage` с `key={candidateId}`: при смене кандидата
- * редактор пересоздаётся вместе со всем локальным состоянием, и
- * несохранённый черновик отбрасывается без ручной синхронизации.
- */
-function ReviewRoute() {
-  const { report, onUpdateReport } = useLoaderData() as ReviewLoaderData;
-  return (
-    <ReviewPage
-      key={report.candidateId}
-      report={report}
-      onUpdateReport={onUpdateReport}
-    />
-  );
-}
-
-export function createRouter(
-  getReport: () => CandidateReport,
-  onUpdateReport: (report: CandidateReport) => void,
-  onUpdatePipelineStage?: (candidateId: string, stage: PipelineStage) => void,
-) {
-  const persistReport = (report: CandidateReport) => {
-    onUpdateReport(report);
-
-    // Черновик возвращает ранее утверждённого кандидата в очередь проверки,
-    // утверждение переводит его в "approved". Переход из "approved" в
-    // "in_review" допустим только для утверждённых — это проверяет
-    // обработчик на стороне вызывающей стороны.
-    if (report.documentState === "draft") {
-      onUpdatePipelineStage?.(report.candidateId, "in_review");
-    } else {
-      onUpdatePipelineStage?.(report.candidateId, "approved");
-    }
-  };
-
+export function createRouter() {
   return createBrowserRouter([
     {
       path: "/",
@@ -51,36 +14,40 @@ export function createRouter(
       children: [
         {
           index: true,
-          lazy: () =>
-            import("@/pages/ProfilePage").then((m) => ({
-              Component: m.ProfilePage,
-            })),
+          element: <Navigate to="/candidates/c-01" replace />,
+        },
+        {
+          path: "candidates",
+          children: [
+            {
+              index: true,
+              element: <Navigate to="/candidates/c-01" replace />,
+            },
+            {
+              path: ":id",
+              element: <ProfilePage />,
+            },
+            {
+              path: ":id/report",
+              element: <ReportPage />,
+            },
+            {
+              path: ":id/review",
+              element: <ReviewPage />,
+            },
+          ],
         },
         {
           path: "report",
-          lazy: () =>
-            import("@/pages/ReportPage").then((m) => ({
-              Component: m.ReportPage,
-            })),
-          loader: () => ({
-            report: getReport(),
-            onUpdateReport: persistReport,
-          }),
+          element: <Navigate to="/candidates/c-01/report" replace />,
         },
         {
           path: "review",
-          element: <ReviewRoute />,
-          loader: () => ({
-            report: getReport(),
-            onUpdateReport: persistReport,
-          }),
+          element: <Navigate to="/candidates/c-01/report" replace />,
         },
         {
           path: "*",
-          lazy: () =>
-            import("@/pages/NotFoundPage").then((m) => ({
-              Component: m.NotFoundPage,
-            })),
+          element: <NotFoundPage />,
         },
       ],
     },

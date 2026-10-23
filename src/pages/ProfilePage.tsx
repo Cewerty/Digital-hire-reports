@@ -1,27 +1,28 @@
 import { useEffect, useState } from "react";
-import { Link, useSearchParams } from "react-router-dom";
+import {
+  Link,
+  useOutletContext,
+  useParams,
+  useSearchParams,
+} from "react-router-dom";
 
+import type { AppOutletContext } from "@/components/layout/AppLayout";
 import { EmptyState } from "@/components/layout/EmptyState";
 import { LoadingState } from "@/components/layout/LoadingState";
-import {
-  candidate,
-  interviewEntries,
-  parseDemoViewState,
-} from "@/data/demoData";
-
-const candidateRows: Array<{ label: string; value: string }> = [
-  { label: "ФИО", value: candidate.fullName },
-  { label: "Предпочитаемое обращение", value: candidate.preferredName },
-  { label: "Курс", value: String(candidate.course) },
-  { label: "Группа", value: candidate.group },
-  { label: "Специальность", value: candidate.specialty },
-];
+import { parseDemoViewState } from "@/data/demoData";
+import type { InterviewEntry } from "@/types/candidateReport";
 
 export function ProfilePage() {
+  const { id = "c-01" } = useParams<{ id: string }>();
+  const { getCandidateById, getInterviewByCandidateId } =
+    useOutletContext<AppOutletContext>();
   const [searchParams] = useSearchParams();
   const demoState = parseDemoViewState(searchParams.get("state"));
   const showEmpty = demoState === "empty";
   const [isLoading, setIsLoading] = useState(demoState === "loading");
+
+  const candidate = getCandidateById(id);
+  const interviewEntries = getInterviewByCandidateId(id);
 
   useEffect(() => {
     if (demoState !== "loading") {
@@ -42,6 +43,30 @@ export function ProfilePage() {
       </div>
     );
   }
+
+  if (!candidate) {
+    return (
+      <div className="space-y-6">
+        <h2 className="text-xl font-semibold">Профиль и материалы интервью</h2>
+        <EmptyState
+          title="Кандидат не найден"
+          description="Данные профиля недоступны. Проверьте, что кандидат был импортирован из 1С."
+        />
+      </div>
+    );
+  }
+
+  const candidateRows: Array<{ label: string; value: string }> = [
+    { label: "ФИО", value: candidate.fullName },
+    { label: "Предпочитаемое обращение", value: candidate.preferredName },
+    { label: "Курс", value: String(candidate.course) },
+    { label: "Группа", value: candidate.group },
+    { label: "Специальность", value: candidate.specialty },
+  ];
+
+  const isUninterviewed =
+    candidate.pipelineStage === "uninterviewed" ||
+    interviewEntries.length === 0;
 
   return (
     <div className="space-y-6">
@@ -93,7 +118,7 @@ export function ProfilePage() {
           </div>
         ) : (
           <div className="mt-3 space-y-4">
-            {interviewEntries.map((entry) => (
+            {interviewEntries.map((entry: InterviewEntry) => (
               <article
                 key={entry.id}
                 className="rounded-md border border-slate-100 bg-slate-50 p-3"
@@ -112,8 +137,13 @@ export function ProfilePage() {
 
       {showEmpty ? null : (
         <Link
-          to="/report"
-          className="inline-flex items-center rounded-md bg-slate-900 px-3 py-1.5 text-sm font-medium text-white hover:bg-slate-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-900 focus-visible:ring-offset-2"
+          to={`/candidates/${candidate.id}/report`}
+          className={`inline-flex items-center rounded-md px-3 py-1.5 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-900 focus-visible:ring-offset-2 ${
+            isUninterviewed
+              ? "pointer-events-none bg-slate-200 text-slate-400"
+              : "bg-slate-900 text-white hover:bg-slate-800"
+          }`}
+          aria-disabled={isUninterviewed}
         >
           Перейти к отчёту
         </Link>
