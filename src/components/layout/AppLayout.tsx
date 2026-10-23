@@ -1,4 +1,4 @@
-import { PanelLeft, Users } from "lucide-react";
+import { Home, PanelLeft, Users } from "lucide-react";
 import { useCallback, useState } from "react";
 import { NavLink, Outlet, useLocation } from "react-router-dom";
 
@@ -29,9 +29,8 @@ export interface AppOutletContext {
   updateReport: (report: CandidateReport) => void;
 }
 
-// Дашборд куратора (T35) пока не реализован: пункт «Главная (Куратор)»
-// вёл в редирект и никогда не становился активным, поэтому убран.
 const NAV_ITEMS = [
+  { to: "/", label: "Главная (Куратор)", icon: Home, end: true },
   { to: "/candidates", label: "Кандидаты", icon: Users, end: false },
 ] as const;
 
