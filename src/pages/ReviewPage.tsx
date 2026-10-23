@@ -21,7 +21,7 @@ import {
 import type { CandidateReport } from "@/types/candidateReport";
 import { AlertCircle, Check, Save, X } from "lucide-react";
 import { useState } from "react";
-import { useLoaderData, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
 function createWorkingCopy(report: CandidateReport): CandidateReport {
@@ -55,26 +55,26 @@ function focusField(field: string) {
   });
 }
 
-export function ReviewPage() {
-  const loaderData = useLoaderData() as {
-    report: CandidateReport;
-    onUpdateReport: (report: CandidateReport) => void;
-  };
+interface ReviewPageProps {
+  report: CandidateReport;
+  onUpdateReport: (report: CandidateReport) => void;
+}
+
+/**
+ * Редактор работает с глубокой копией отчёта: правки не протекают
+ * в сохранённый документ до явного сохранения/утверждения.
+ *
+ * Сброс несохранённого черновика при смене кандидата обеспечивает
+ * `key={candidateId}` на элементе маршрута (см. `router.tsx`), а не
+ * ручная синхронизация состояния в теле рендера. Такой подход надёжнее
+ * и корректно работает при нескольких формах одного типа на странице.
+ */
+export function ReviewPage({ report, onUpdateReport }: ReviewPageProps) {
   const navigate = useNavigate();
 
   const [workingCopy, setWorkingCopy] = useState<CandidateReport>(() =>
-    createWorkingCopy(loaderData.report),
+    createWorkingCopy(report),
   );
-  const [workingCopyCandidateId, setWorkingCopyCandidateId] = useState(
-    loaderData.report.candidateId,
-  );
-
-  // Маршрут `/candidates/:id/review` переиспользуется при смене кандидата,
-  // поэтому несохранённый черновик сбрасывается на данные нового отчёта.
-  if (workingCopyCandidateId !== loaderData.report.candidateId) {
-    setWorkingCopyCandidateId(loaderData.report.candidateId);
-    setWorkingCopy(createWorkingCopy(loaderData.report));
-  }
   const [isApproveDialogOpen, setIsApproveDialogOpen] = useState(false);
   const [validationErrors, setValidationErrors] = useState<
     ReportValidationError[]
@@ -120,8 +120,10 @@ export function ReviewPage() {
     }
 
     setValidationErrors([]);
-    loaderData.onUpdateReport({
-      ...workingCopy,
+    // Передаём глубокую копию: сохранённый документ не должен делить
+    // вложенные структуры с локальным состоянием редактора.
+    onUpdateReport({
+      ...createWorkingCopy(workingCopy),
       documentState,
     });
     toast.success(message);

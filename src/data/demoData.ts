@@ -368,11 +368,30 @@ export function getCandidateById(id: string): Candidate | undefined {
   return demoCandidates.find((item) => item.id === id);
 }
 
-/** Возвращает отчёт кандидата или `undefined`, если отчёт ещё не создан. */
+/**
+ * Глубокая копия отчёта: вызывающая сторона не должна получать ссылку
+ * на исходные демонстрационные данные и мутировать их.
+ */
+function cloneReport(report: CandidateReport): CandidateReport {
+  return {
+    ...report,
+    metadata: { ...report.metadata },
+    sections: report.sections.map((section) => ({
+      ...section,
+      sourceEntryIds: [...section.sourceEntryIds],
+    })),
+  };
+}
+
+/**
+ * Возвращает глубокую копию отчёта кандидата или `undefined`, если отчёт
+ * ещё не создан.
+ */
 export function getReportByCandidateId(
   id: string,
 ): CandidateReport | undefined {
-  return demoReports[id];
+  const report = demoReports[id];
+  return report ? cloneReport(report) : undefined;
 }
 
 /** Возвращает материалы интервью кандидата; пустой массив, если их нет. */
