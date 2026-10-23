@@ -7,7 +7,6 @@ import { DocumentStateBadge } from "@/components/layout/DocumentStateBadge";
 import {
   demoCandidates,
   demoCurator,
-  demoReport,
   getCandidateById,
   getInterviewByCandidateId,
   getReportByCandidateId,
@@ -49,13 +48,14 @@ export function AppLayout() {
   const location = useLocation();
   const [reports, setReports] = useState<Record<string, CandidateReport>>(
     () => {
+      // `getReportByCandidateId` возвращает глубокую копию, поэтому словарь
+      // не делит состояние с демонстрационными данными модуля.
       const initial: Record<string, CandidateReport> = {};
-      // Отчёт для c-01
-      initial[demoReport.candidateId] = demoReport;
-      // Отчёт для c-02 (если есть)
-      const reportC02 = getReportByCandidateId("c-02");
-      if (reportC02) {
-        initial[reportC02.candidateId] = reportC02;
+      for (const candidate of demoCandidates) {
+        const report = getReportByCandidateId(candidate.id);
+        if (report) {
+          initial[candidate.id] = report;
+        }
       }
       return initial;
     },
@@ -67,37 +67,50 @@ export function AppLayout() {
     : undefined;
   const headerDocumentState = activeReport?.documentState;
 
-  const updateReport = useCallback((updatedReport: CandidateReport) => {
-    setReports((prev) => ({
-      ...prev,
-      [updatedReport.candidateId]: updatedReport,
-    }));
+  const updateReport = useCallback(
+    (updatedReport: CandidateReport) => {
+      const previousReport = reports[updatedReport.candidateId];
+      // Повторное утверждение уже утверждённого документа не должно
+      // дублировать событие в ленте куратора.
+      const isNewlyApproved =
+        updatedReport.documentState === "approved" &&
+        previousReport?.documentState !== "approved";
 
-    if (updatedReport.documentState === "approved") {
-      // Обновляем pipelineStage кандидата
+      setReports((prev) => ({
+        ...prev,
+        [updatedReport.candidateId]: updatedReport,
+      }));
+
+      if (!isNewlyApproved) {
+        return;
+      }
+
+      // Отклонённого кандидата утверждение документа не переводит
+      // в «Подтверждён»: явное решение куратора не отменяется молча.
       setCandidates((prevCandidates) =>
         prevCandidates.map((candidate) =>
-          candidate.id === updatedReport.candidateId
+          candidate.id === updatedReport.candidateId &&
+          candidate.pipelineStage !== "rejected"
             ? { ...candidate, pipelineStage: "approved" as PipelineStage }
             : candidate,
         ),
       );
 
-      // Добавляем событие в ленту куратора
       setCurator((prevCurator) => ({
         ...prevCurator,
         recentEvents: [
           {
             id: `evt-${Date.now()}`,
-            timestamp: "Только что",
+            timestamp: new Date().toISOString(),
             text: `Утверждён отчёт кандидата: ${updatedReport.candidateDisplayName}`,
             candidateId: updatedReport.candidateId,
           },
           ...prevCurator.recentEvents,
         ],
       }));
-    }
-  }, []);
+    },
+    [reports],
+  );
 
   const contextValue: AppOutletContext = {
     candidates,
@@ -142,7 +155,7 @@ export function AppLayout() {
                 ? "Развернуть боковое меню"
                 : "Свернуть боковое меню"
             }
-            className="rounded-lg p-2 text-muted-foreground transition-colors duration-150 hover:bg-background hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E5BA41] focus-visible:ring-offset-1 focus-visible:ring-offset-background"
+            className="rounded-lg p-2 text-muted-foreground transition-colors duration-150 hover:bg-background hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-strong focus-visible:ring-offset-1 focus-visible:ring-offset-background"
           >
             <PanelLeft className="h-4 w-4" aria-hidden="true" />
           </button>
@@ -160,13 +173,13 @@ export function AppLayout() {
               aria-label={isSidebarCollapsed ? item.label : undefined}
               title={isSidebarCollapsed ? item.label : undefined}
               className={({ isActive }) =>
-                `flex items-center rounded-xl text-sm transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E5BA41] focus-visible:ring-offset-1 ${
+                `flex items-center rounded-xl text-sm transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-strong focus-visible:ring-offset-1 ${
                   isSidebarCollapsed
                     ? "justify-center px-0 py-2.5"
                     : "gap-2.5 px-3 py-2"
                 } ${
                   isActive
-                    ? "bg-[#F2CA52] font-medium text-[#1E2028]"
+                    ? "bg-brand font-medium text-brand-foreground"
                     : "text-muted-foreground hover:bg-background hover:text-foreground"
                 }`
               }

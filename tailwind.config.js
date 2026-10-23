@@ -45,6 +45,12 @@ export default {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
+        brand: {
+          DEFAULT: "hsl(var(--brand) / <alpha-value>)",
+          strong: "hsl(var(--brand-strong) / <alpha-value>)",
+          soft: "hsl(var(--brand-soft) / <alpha-value>)",
+          foreground: "hsl(var(--brand-foreground) / <alpha-value>)",
+        },
       },
       keyframes: {
         "fade-in": {
