@@ -1,0 +1,30 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+/node_modules
+tsconfig.node.tsbuildinfo
+tsconfig.app.tsbuildinfo
+
+# Virtual environments
+.venv
+/dist 
+
+# Собираемая статика (создаётся collectstatic, не коммитим)                                                                                                                  
+.DS_Store                                                                                                                  
+*.local 
+
+# Локальная БД
+*.sqlite3
+.aider.conf.yml
+.aider*
+
+# environment                                                                                                              
+.env                                                                                                                       
+.env.*                                                                                                                     
+!.env.example
+.vscode
+Цифровой_профиль_кликабельный_прототип.html
