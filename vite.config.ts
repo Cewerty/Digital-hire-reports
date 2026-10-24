@@ -11,7 +11,7 @@ import { defineConfig } from "vite";
  * файл `vitest.config.ts`.
  */
 export default defineConfig({
-  base: process.env.GITHUB_PAGES === "true" ? "/vite-profile/" : "/",
+  base: process.env.GITHUB_PAGES === "true" ? "/Digital-hire-reports/" : "/",
   plugins: [react()],
   resolve: {
     alias: {
