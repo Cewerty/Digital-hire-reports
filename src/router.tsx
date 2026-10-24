@@ -52,6 +52,6 @@ export function createRouter() {
           element: <NotFoundPage />,
         },
       ],
-    },
-  ]);
+    }
+  ],  {basename: import.meta.env.BASE_URL,});
 }
