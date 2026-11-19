@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.urls import path as django_path
-from dmr.openapi import build_schema
+from dmr.openapi import OpenAPIConfig, build_schema
 from dmr.openapi.views import OpenAPIJsonView, SwaggerView
 from dmr.routing import Router, path
 
@@ -17,7 +17,14 @@ api_v1_router = Router(
 )
 
 # Схема OpenAPI строится из роутера
-schema = build_schema(api_v1_router)
+schema = build_schema(
+    api_v1_router,
+    config=OpenAPIConfig(
+        title="Digital Hire API",
+        version="1.0.0",
+        description="REST API платформы Digital Hire.",
+    ),
+)
 
 urlpatterns = [
     # Классическая админка
